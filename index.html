@@ -11,7 +11,7 @@
 <style>
 *{box-sizing:border-box;margin:0;-webkit-tap-highlight-color:transparent}
 [hidden]{display:none!important}
-:root{--bg:#020502;--p:#071009;--b:#143a22;--g:#1e8a4c;--l:#3ddc84;--t:#cfe9d6;--d:2;--fs:13px;--lh:20px}
+:root{--bg:#07130b;--p:#102719;--b:#315d3e;--g:#54a96d;--l:#8be6a2;--t:#e0f3e4;--d:2;--fs:13px;--lh:20px}
 html,body{height:100%;overflow:hidden;overscroll-behavior:none;touch-action:manipulation;background:var(--bg);color:var(--t);font:12px system-ui,sans-serif;-webkit-text-size-adjust:100%}
 #app{display:flex;flex-direction:column;height:100dvh}
 header{flex:none;height:46px;display:flex;align-items:center;justify-content:space-between;padding:0 4px 0 10px;background:var(--p);border-bottom:1px solid var(--b)}
@@ -22,6 +22,12 @@ header span{font-size:11px;letter-spacing:.4px;color:var(--g)}
 #mn.on{display:block}
 #mn button{display:block;width:100%;padding:12px 14px;border:0;border-radius:8px;background:none;color:var(--t);font:15px system-ui,sans-serif;text-align:left}
 #mn hr{border:0;border-top:1px solid var(--b);margin:5px 4px}
+#eb{flex:none;display:flex;align-items:center;gap:5px;padding:5px 7px;background:var(--p);border-bottom:1px solid var(--b)}
+#es{min-width:0;flex:1;padding:6px 7px;background:var(--bg);color:var(--t);border:1px solid var(--b);border-radius:6px;font:12px system-ui}
+#na{padding:6px 10px;border:1px solid var(--b);border-radius:6px;background:none;color:var(--l);font-size:12px}
+#lm{display:flex;gap:5px;padding:5px 7px;background:var(--p);border-bottom:1px solid var(--b)}
+#lm button{flex:1;padding:6px 4px;border:1px solid var(--b);border-radius:6px;background:none;color:var(--t);font-size:11px}
+#lm button.active{background:var(--g);color:#06150a;border-color:var(--g);font-weight:700}
 #ed{position:relative;flex:1;min-height:0;overflow:hidden}
 #ta,#hl,#gt,#ms{font:var(--fs)/var(--lh) ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace;font-variant-ligatures:none;letter-spacing:0;tab-size:2;white-space:pre}
 #ta{position:absolute;inset:0;width:100%;height:100%;padding:0 20px 30vh calc(var(--d)*1ch + 22px);border:0;outline:0;resize:none;overflow:auto;background:none;color:transparent;-webkit-text-fill-color:transparent;caret-color:var(--l);scrollbar-width:thin;scrollbar-color:var(--g) var(--bg)}
@@ -62,6 +68,8 @@ i{font-style:normal}.t{color:#3ddc84}.a{color:#9be9b8}.v{color:#a3e06c}.c{color:
 <body>
 <div id="app">
 <header><span>HTML VIEWER</span><button id="mb" aria-label="Menu"><svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="2.2"/><circle cx="12" cy="12" r="2.2"/><circle cx="12" cy="19" r="2.2"/></svg></button></header>
+<div id="eb"><select id="es" aria-label="Choose editor"></select><button id="na">+ Editor</button></div>
+<div id="lm"><button data-mode="html" class="active">HTML</button><button data-mode="css">CSS</button><button data-mode="js">JavaScript</button></div>
 <div id="ed"><textarea id="ta" wrap="off" spellcheck="false" autocapitalize="off" autocomplete="off" autocorrect="off" aria-label="Code"></textarea><div id="mk"></div><pre id="hl"></pre><div id="gb"></div><pre id="gt"></pre><pre id="ms"></pre></div>
 <div id="sb"><span id="ps"></span><span id="inf"></span></div>
 </div>
@@ -79,7 +87,7 @@ i{font-style:normal}.t{color:#3ddc84}.a{color:#9be9b8}.v{color:#a3e06c}.c{color:
 <hr>
 <button data-a="undo">Undo</button>
 <button data-a="redo">Redo</button>
-<button data-a="copy">Copy all</button>
+<button data-a="copy">Copy all</button>\n<button data-a="keep" id="keepb">Keep code on reopen: OFF</button>
 <button data-a="sz" id="szb">Text size</button>
 <button data-a="clr">Clear all</button>
 <button data-a="inst" id="ins" hidden>Install app</button>
@@ -96,6 +104,50 @@ const ls=(k,v)=>{try{return v===undefined?localStorage.getItem(k):localStorage.s
 const FS=[11,12,13,14,16],VOID=new Set('area base br col embed hr img input link meta param source track wbr'.split(' ')),OPT=new Set('p li td th tr thead tbody tfoot option dt dd head body html colgroup'.split(' '));
 const SAMPLE='<!DOCTYPE html>\n<html lang="en">\n<head>\n  <meta charset="UTF-8">\n  <title>Hello</title>\n  <style>\n    body { background: #000; color: #3ddc84; font-family: sans-serif; text-align: center; }\n  </style>\n</head>\n<body>\n  <h1 id="t">Hello, world!</h1>\n  <button onclick="document.getElementById(\'t\').textContent=\'It works!\'">Click me</button>\n</body>\n</html>\n';
 let LH=20,CW=8,lines=[''],sts=[0],rs=0,re=0,dirty=1,dg=2,mk=null,tt,ft,sv,sr,fi=(v=>v==null?2:+v)(ls('hv.fs')),ip;
+let workspaces=[],activeId='',mode='html',keepCode=ls('hv.keep')==='1',previewHistory=false;
+const editorData=()=>workspaces.find(x=>x.id===activeId);
+const readMode=()=>{const e=editorData();return e?e[mode]||'':''};
+function writeMode(v){const e=editorData();if(e)e[mode]=v}
+function makeEditor(name='Editor',html='',css='',js=''){return{id:'e'+Date.now().toString(36)+Math.random().toString(36).slice(2,6),name,html,css,js}}
+function persist(){if(!keepCode)return;try{ls('hv.workspaces',JSON.stringify(workspaces));ls('hv.active',activeId);ls('hv.mode',mode)}catch(e){}}
+function renderEditors(){
+ const sel=$('#es');sel.innerHTML='';
+ workspaces.forEach(e=>{const o=document.createElement('option');o.value=e.id;o.textContent=e.name;sel.append(o)});
+ sel.value=activeId;
+ $('#lm').querySelectorAll('button').forEach(b=>b.classList.toggle('active',b.dataset.mode===mode));
+}
+function loadActive(){
+ const e=editorData();if(!e)return;
+ ta.value=e[mode]||'';renderEditors();upd();stat();ta.scrollTop=ta.scrollLeft=0;
+}
+function switchMode(next){if(!['html','css','js'].includes(next)||next===mode)return;writeMode(ta.value);mode=next;loadActive();persist()}
+function addEditor(name='Editor'){
+ writeMode(ta.value);const e=makeEditor(name);workspaces.push(e);activeId=e.id;mode='html';loadActive();persist();toast('New editor added')
+}
+function combinedSource(e=editorData()){
+ if(!e)return '';
+ let html=e.html||'';
+ const css=e.css?'<style>\n'+e.css+'\n</style>':'';
+ const js=e.js?'<script>\n'+e.js+'\n<\/script>':'';
+ if(css){
+  if(/<\/head\s*>/i.test(html))html=html.replace(/<\/head\s*>/i,css+'\n</head>');
+  else if(/<head\b[^>]*>/i.test(html))html=html.replace(/<head\b[^>]*>/i,m=>m+'\n'+css);
+  else if(/<!doctype[^>]*>/i.test(html))html=html.replace(/<!doctype[^>]*>/i,m=>m+'\n<head>'+css+'</head>');
+  else html='<head>'+css+'</head>\n'+html;
+ }
+ if(/<\/body\s*>/i.test(html))html=html.replace(/<\/body\s*>/i,js+'\n</body>');
+ else html+='\n'+js;
+ return html;
+}
+function closeMainPreview(){
+ if(!$('#pv').classList.contains('on'))return;
+ $('#pv').classList.remove('on');$('#pf').srcdoc='';
+ if(previewHistory){previewHistory=false;history.back()}
+}
+function openMainPreview(){
+ writeMode(ta.value);$('#pf').srcdoc=combinedSource();$('#pv').classList.add('on');
+ history.pushState({htmlViewerPreview:true},'','#preview');previewHistory=true;
+}
 
 /* ---------- syntax colouring (only the visible lines are ever drawn) ---------- */
 const TG=/<\/?([a-zA-Z][\w:-]*)/y,AT=/(\s+)|(\/?>)|(=)|("[^"]*"?)|('[^']*'?)|([^\s=>"'\/]+)|(.)/y,RS=/<\/script/gi,RT=/<\/style/gi,
@@ -169,7 +221,7 @@ function upd(){
  clearTimeout(sv);sv=setTimeout(save,700);
  if(FL.classList.contains('on')){clearTimeout(ft);ft=setTimeout(fu,500)}
 }
-function save(){if(ta.value.length<4.5e6)ls('hv.d',ta.value)}
+function save(){writeMode(ta.value);persist()}
 function sched(){if(!sr)sr=requestAnimationFrame(()=>{sr=0;stat()})}
 function stat(){const p=ta.selectionStart,v=ta.value;let l=1,q=0,x;while((x=v.indexOf('\n',q))!==-1&&x<p){l++;q=x+1}
  $('#ps').textContent='Ln '+l+', Col '+(p-q+1);$('#inf').textContent=lines.length+' lines, '+v.length+' chars'}
@@ -206,26 +258,61 @@ function dlg(t,h,b){
 
 /* ---------- find mistakes ---------- */
 function lint(){
- const t=ta.value,res=[],S=[],ids={},rx=/<!--|<(\/?)([a-zA-Z][\w:-]*)((?:"[^"]*"|'[^']*'|[^>"'])*)>/g;
- let q=0,ln=1,m;
- const L=i=>{let p;while((p=t.indexOf('\n',q))!==-1&&p<i){ln++;q=p+1}return ln};
- if(!/^\s*<!doctype html/i.test(t))res.push([1,'Missing <!DOCTYPE html> at the top']);
- while(m=rx.exec(t)){
-  if(m[0]=='<'+'!--'){const e=t.indexOf('-->',rx.lastIndex);if(e<0){res.push([L(m.index),'Comment is never closed (missing -->)']);break}rx.lastIndex=e+3;continue}
-  const c=m[1],n=m[2].toLowerCase(),l=L(m.index),a=m[3];
-  if(c){let k=S.length-1;while(k>=0&&S[k][0]!=n)k--;
-   if(k<0)res.push([l,'Closing </'+n+'> has no opening tag']);
-   else{for(let j=S.length-1;j>k;j--)if(!OPT.has(S[j][0]))res.push([S[j][1],'<'+S[j][0]+'> is never closed']);S.length=k}
-  }else{
-   const im=/\sid\s*=\s*(?:"([^"]*)"|'([^']*)')/i.exec(a);
-   if(im){const id=im[1]??im[2];if(ids[id])res.push([l,'Duplicate id "'+id+'" (first used on line '+ids[id]+')']);else ids[id]=l}
-   if(n=='img'&&!/\salt\s*=/i.test(a))res.push([l,'<img> has no alt text']);
-   if(!VOID.has(n)&&!/\/\s*$/.test(a)){S.push([n,l]);
-    if(n=='script'||n=='style'||n=='textarea'||n=='title'){const g=new RegExp('</'+n,'ig');g.lastIndex=rx.lastIndex;const x=g.exec(t);rx.lastIndex=x?x.index:t.length}}
+ const e=editorData(),out=[];
+ const add=(kind,line,msg)=>out.push([Math.max(1,line||1),kind,msg]);
+ const lineAt=(src,pos)=>src.slice(0,pos).split('\n').length;
+ if(!e)return out;
+ // HTML structure and common authoring errors.
+ if(e.html.trim()){
+  const t=e.html,stack=[],ids=new Map(),voids=VOID;
+  const tagRe=/<!--[\s\S]*?-->|<!--[\s\S]*$|<\/?([a-zA-Z][\w:-]*)\b([^>]*?)>/g;
+  let m;
+  while((m=tagRe.exec(t))){
+   if(m[0].startsWith('<!--')){if(!m[0].endsWith('-->'))add('HTML',lineAt(t,m.index),'Unclosed HTML comment');continue}
+   const closing=m[0][1]==='/',name=m[1].toLowerCase(),attrs=m[2]||'',ln=lineAt(t,m.index);
+   if(closing){
+    const idx=stack.map(x=>x.name).lastIndexOf(name);
+    if(idx<0)add('HTML',ln,`Closing </${name}> has no matching opening tag`);
+    else{for(let k=stack.length-1;k>idx;k--){const x=stack[k];if(!OPT.has(x.name))add('HTML',x.line,`<${x.name}> is not closed before </${name}>`)}stack.length=idx}
+   }else{
+    const id=/\bid\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s>]+))/i.exec(attrs);
+    if(id){const val=id[1]??id[2]??id[3];if(ids.has(val))add('HTML',ln,`Duplicate id "${val}" (first used on line ${ids.get(val)})`);else ids.set(val,ln)}
+    if(name==='img'&&!/\balt\s*=/i.test(attrs))add('HTML',ln,'<img> is missing alt text');
+    if(name==='script'||name==='style'){
+     const close=t.toLowerCase().indexOf('</'+name,tagRe.lastIndex);
+     if(close<0)add('HTML',ln,'<'+name+'> is missing its closing tag');
+     else{const end=t.indexOf('>',close);tagRe.lastIndex=end<0?t.length:end+1}
+     continue;
+    }
+    if(!voids.has(name)&&! /\/\s*$/.test(attrs))stack.push({name,line:ln});
+   }
+  }
+  stack.forEach(x=>{if(!OPT.has(x.name))add('HTML',x.line,`<${x.name}> is not closed`)});
+  if(!/^\s*<!doctype\s+html/i.test(t))add('HTML',1,'Missing <!DOCTYPE html> declaration');
+ }
+ // CSS parser checks; insertRule reports actual syntax failures.
+ if(e.css.trim()){
+  const sheet=document.implementation.createHTMLDocument('').createElement('style');
+  sheet.textContent=e.css;
+  const doc=document.implementation.createHTMLDocument('');doc.head.append(sheet);
+  try{
+   const rules=sheet.sheet?.cssRules;
+   if(!rules&&e.css.trim())add('CSS',1,'CSS could not be parsed');
+  }catch(err){add('CSS',lineAt(e.css,Math.max(0,(err.lineNumber||1)-1)),err.message||'Invalid CSS syntax')}
+  // Catch malformed blocks and declarations that browsers silently discard.
+  let depth=0,quote='',escaped=false,cssLine=1;
+  for(let i=0;i<e.css.length;i++){const ch=e.css[i];if(ch==='\n')cssLine++;if(quote){if(ch===quote&&!escaped)quote='';escaped=ch==='\\'&&!escaped;continue}if(ch==='\"'||ch==="'"){quote=ch;continue}if(ch==='{')depth++;if(ch==='}')depth--;if(depth<0){add('CSS',cssLine,'Unexpected closing brace');depth=0}}
+  if(depth>0)add('CSS',lineAt(e.css,e.css.length),'Missing closing brace }');
+  e.css.split('\n').forEach((ln,i)=>{const x=ln.trim();if(x&&!x.startsWith('/*')&&!x.startsWith('*')&&!x.startsWith('//')&&depth>=0&&x.includes(';')&&!x.includes(':')&&!x.startsWith('@'))add('CSS',i+1,'CSS declaration is missing a colon')});
+ }
+ // JavaScript syntax check without executing the user's code.
+ if(e.js.trim()){
+  try{new Function(e.js)}catch(err){
+   const match=String(err.stack||'').match(/<anonymous>:(\d+):(\d+)/);
+   add('JavaScript',match?Math.max(1,+match[1]-2):1,err.message||'JavaScript syntax error');
   }
  }
- S.forEach(([n,l])=>{if(!OPT.has(n))res.push([l,'<'+n+'> is never closed'])});
- return res.sort((a,b)=>a[0]-b[0])
+ return out.sort((a,b)=>a[0]-b[0]||a[1].localeCompare(b[1]));
 }
 
 /* ---------- format code ---------- */
@@ -258,13 +345,15 @@ function format(){
 /* ---------- menu actions ---------- */
 const A={
  imp:()=>fin.click(),
- exp:()=>dlg('Export file','<input type="text" id="nm" value="html viewer by alian.html">',[['Cancel'],['Download',()=>{
-  let n=$('#nm').value.trim().replace(/[\\/:*?"<>|]+/g,'')||'html viewer by alian.html';
-  if(!/\.[a-z0-9]{1,5}$/i.test(n))n+='.html';
-  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([ta.value],{type:'text/html;charset=utf-8'}));a.download=n;
-  document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),5e3);toast('Saved: '+n)},1]]),
- pv:()=>{$('#pf').srcdoc=ta.value;$('#pv').classList.add('on')},
- fl:()=>{FL.classList.add('on');fu()},
+ exp:()=>{writeMode(ta.value);const ext=mode==='js'?'js':mode==='css'?'css':'html';const base=(editorData()?.name||'editor').replace(/\.[^.]+$/,'').replace(/[\\/:*?"<>|]+/g,'')||'editor';dlg('Export '+mode.toUpperCase()+' file','<input type="text" id="nm" value="'+base+'.'+ext+'">',[['Cancel'],['Download',()=>{
+  let n=$('#nm').value.trim().replace(/[\\/:*?"<>|]+/g,'')||base+'.'+ext;
+  if(!/\.[a-z0-9]{1,5}$/i.test(n))n+='.'+ext;
+  const content=mode==='html'?combinedSource():readMode();
+  const mime=mode==='js'?'text/javascript':mode==='css'?'text/css':'text/html';
+  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([content],{type:mime+';charset=utf-8'}));a.download=n;
+  document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),5e3);toast('Saved: '+n)},1]])},
+ pv:openMainPreview,
+ fl:()=>{writeMode(ta.value);FL.classList.add('on');fu()},
  rep:()=>{
   const rg=()=>{const q=$('#fq').value;if(!q){$('#rm').textContent='Type a word first';return}return new RegExp(q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),$('#mc').checked?'g':'gi')};
   const next=()=>{const r=rg();if(!r)return false;const v=ta.value;r.lastIndex=ta.selectionEnd;let x=r.exec(v);if(!x){r.lastIndex=0;x=r.exec(v)}
@@ -278,22 +367,23 @@ const A={
  },
  go:()=>dlg('Go to line','<input type="number" id="gl" min="1" placeholder="Line number (1-'+lines.length+')">',[['Cancel'],['Go',()=>{jump(+$('#gl').value)},1]]),
  fix:()=>{
-  const res=lint(),h=res.length?res.slice(0,200).map(([l,m])=>'<div class="r" data-l="'+l+'"><b>Line '+l+'</b> &middot; '+E(m)+'</div>').join(''):'<span style="color:#3ddc84">No mistakes found.</span>';
+  const res=lint(),h=res.length?res.map(([l,k,m])=>'<div class="r" data-l="'+l+'" data-mode="'+k.toLowerCase()+'"><b>'+E(k)+' · Line '+l+'</b> &middot; '+E(m)+'</div>').join(''):'<span style="color:#3ddc84">No mistakes found.</span>';
   const o=dlg(res.length?res.length+' possible mistake'+(res.length>1?'s':''):'Find mistakes',h,[['Close']]);
-  o.querySelectorAll('.r').forEach(e=>e.onclick=()=>{o.remove();jump(+e.dataset.l)})
+  o.querySelectorAll('.r').forEach(e=>e.onclick=()=>{const ln=+e.dataset.l,k=e.dataset.mode;o.remove();if(k==='css'||k==='javascript'||k==='html')switchMode(k==='javascript'?'js':k==='css'?'css':'html');jump(ln)})
  },
- fmt:format,
+ fmt:()=>{if(mode!=='html'){toast('Format is currently available for HTML');return}format()},
  undo:()=>{ta.focus();document.execCommand('undo')},
  redo:()=>{ta.focus();document.execCommand('redo')},
- copy:()=>{const t=ta.value;(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(()=>toast('Copied all'),()=>{ta.focus();ta.select();document.execCommand('copy');toast('Copied all')})},
+ copy:()=>{writeMode(ta.value);const t=mode==='html'?combinedSource():readMode();(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(()=>toast('Copied all'),()=>{ta.focus();ta.select();document.execCommand('copy');toast('Copied all')})},
  sz:()=>{fi=(fi+1)%FS.length;ls('hv.fs',fi);setSz();toast('Text size '+FS[fi])},
- clr:()=>{if(confirm('Clear all code?')){put('',1);toast('Cleared')}},
+ clr:()=>{if(confirm('Clear all editors and code?')){workspaces=[makeEditor('Editor 1')];activeId=workspaces[0].id;mode='html';loadActive();persist();toast('All editors cleared')}},
+  keep:()=>{keepCode=!keepCode;ls('hv.keep',keepCode?'1':'0');$('#keepb').textContent='Keep code on reopen: '+(keepCode?'ON':'OFF');if(keepCode){writeMode(ta.value);persist();toast('Code will be kept when reopened')}else{ls('hv.workspaces','');ls('hv.active','');ls('hv.mode','');toast('Code will clear when reopened')}}, 
  inst:()=>{if(ip){ip.prompt();ip=null}$('#ins').hidden=true}
 };
 
 /* ---------- previews ---------- */
-function fu(){if(FL.classList.contains('on'))FF.srcdoc=ta.value}
-$('#px').onclick=()=>{$('#pv').classList.remove('on');$('#pf').srcdoc=''};
+function fu(){if(FL.classList.contains('on'))FF.srcdoc=combinedSource()}
+$('#px').onclick=closeMainPreview;
 $('#fx').onclick=()=>{FL.classList.remove('on');FF.srcdoc=''};
 $('#fr').onclick=fu;
 function drag(h,go,mv){h.addEventListener('pointerdown',e=>{if(e.target.closest('button'))return;e.preventDefault();h.setPointerCapture(e.pointerId);
@@ -303,9 +393,19 @@ drag($('#fz'),()=>[FL.offsetWidth,FL.offsetHeight],(s,dx,dy)=>{FL.style.width=Ma
 
 /* ---------- wiring ---------- */
 $('#mb').onclick=()=>mn.classList.toggle('on');
-mn.onclick=e=>{const b=e.target.closest('button');if(b){mn.classList.remove('on');A[b.dataset.a]()}};
+$('#na').onclick=()=>{const name=prompt('Name this editor','Editor '+(workspaces.length+1));if(name!==null)addEditor(name.trim()||'Editor '+(workspaces.length+1))};
+$('#es').onchange=()=>{writeMode(ta.value);activeId=$('#es').value;loadActive();persist()};
+$('#lm').onclick=e=>{const b=e.target.closest('button[data-mode]');if(b)switchMode(b.dataset.mode)};
+addEventListener('popstate',()=>{if($('#pv').classList.contains('on')){previewHistory=false;$('#pv').classList.remove('on');$('#pf').srcdoc=''}});
+$('#keepb').textContent='Keep code on reopen: '+(keepCode?'ON':'OFF');
+mn.onclick=e=>{const b=e.target.closest('button');if(b){writeMode(ta.value);mn.classList.remove('on');A[b.dataset.a]()}};
 document.addEventListener('pointerdown',e=>{if(!e.target.closest('#mn,#mb'))mn.classList.remove('on')});
-fin.onchange=async()=>{const f=fin.files[0];if(!f)return;try{put(await f.text(),1);toast('Imported '+f.name)}catch(e){toast('Could not read that file')}fin.value=''};
+fin.onchange=async()=>{const f=fin.files[0];if(!f)return;try{
+ const text=await f.text(),ext=(f.name.split('.').pop()||'html').toLowerCase();
+ const e=makeEditor(f.name);
+ if(ext==='css'){e.css=text;mode='css'}else if(ext==='js'){e.js=text;mode='js'}else{e.html=text;mode='html'}
+ workspaces.push(e);activeId=e.id;loadActive();persist();toast('Imported into new editor: '+f.name)
+ }catch(e){toast('Could not read that file')}fin.value=''};
 ta.addEventListener('scroll',draw,{passive:true});
 ta.addEventListener('input',upd);
 ['keyup','pointerup','focus'].forEach(e=>ta.addEventListener(e,sched));
@@ -318,7 +418,13 @@ addEventListener('visibilitychange',()=>{if(document.hidden){clearTimeout(sv);sa
 addEventListener('beforeinstallprompt',e=>{e.preventDefault();ip=e;$('#ins').hidden=false});
 addEventListener('appinstalled',()=>{$('#ins').hidden=true});
 if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWorker.register('service-worker.js').catch(()=>{}));
-ta.value=ls('hv.d')??'';setSz();upd();stat();
+try{
+ if(keepCode){const saved=JSON.parse(ls('hv.workspaces')||'[]');if(Array.isArray(saved))workspaces=saved.filter(x=>x&&x.id)}
+}catch(e){workspaces=[]}
+ if(!workspaces.length)workspaces=[makeEditor('Editor 1')];
+ activeId=workspaces.some(x=>x.id===ls('hv.active'))?ls('hv.active'):workspaces[0].id;
+ mode=['html','css','js'].includes(ls('hv.mode'))?ls('hv.mode'):'html';
+ renderEditors();ta.value=readMode();setSz();upd();stat();
 </script>
 </body>
 </html>
