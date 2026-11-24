@@ -3,8 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,interactive-widget=resizes-content">
-<title>HTML Viewer</title>
+<title>HTML Viewer – HTML, CSS and JavaScript editor with live preview</title>
 <meta name="theme-color" content="#071009">
+<meta name="color-scheme" content="dark">
+<meta name="description" content="Write HTML, CSS and JavaScript, check them for mistakes, format them and preview the result. Runs in your browser.">
+<meta property="og:title" content="HTML Viewer">
+<meta property="og:description" content="Write HTML, CSS and JavaScript, check them for mistakes, format them and preview the result.">
+<meta property="og:type" content="website">
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon.png">
 <link rel="apple-touch-icon" href="icons/icon-192.png">
@@ -63,39 +68,94 @@ i{font-style:normal}.t{color:#3ddc84}.a{color:#9be9b8}.v{color:#a3e06c}.c{color:
 #fz{position:absolute;right:0;bottom:0;width:22px;height:22px;touch-action:none;cursor:nwse-resize;background:linear-gradient(135deg,transparent 50%,var(--g) 50%)}
 #ts{position:fixed;z-index:50;left:50%;bottom:34px;transform:translateX(-50%);padding:6px 12px;border-radius:14px;background:var(--g);color:#000;font-size:11px;font-weight:600;opacity:0;pointer-events:none;transition:opacity .2s}
 #ts.on{opacity:1}
+
+:root{color-scheme:dark}
+.sr{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+.sk{position:fixed;left:8px;top:-60px;z-index:60;padding:9px 14px;border-radius:8px;background:var(--g);color:#000;font:600 13px system-ui,sans-serif;text-decoration:none}
+.sk:focus{top:8px}
+header h1{font:inherit;font-weight:400}
+button:focus-visible,select:focus-visible,input:focus-visible,a:focus-visible,.r:focus-visible{outline:2px solid var(--l);outline-offset:2px}
+#mn button:focus-visible{outline-offset:-2px;background:#12301c}
+#ed:focus-within{box-shadow:inset 0 0 0 1px #3f8a5c}
+#mn{width:max-content;max-width:min(290px,calc(100vw - 12px))}
+#mn button small{display:block;margin-top:2px;font-size:11px;line-height:1.35;color:#8fc3a0}
+#mn kbd{float:right;margin:2px 0 0 14px;padding:0 5px;border:1px solid var(--b);border-radius:4px;font:11px ui-monospace,Menlo,Consolas,monospace;color:#8fc3a0}
+@media (hover:none) and (pointer:coarse){#mn kbd{display:none}}
+#sb{color:#5fb07c}
+#gt{color:#4a9d68}
+.c{color:#60906f}
+#gt b{font-weight:400}
+#gt b.g1{color:#ff8a8a;text-decoration:underline}
+#gt b.g2{color:#f0c060;text-decoration:underline}
+#gt b.g3{color:#7cc0ff}
+u.eu{text-decoration:underline wavy;text-decoration-thickness:1px;text-underline-offset:3px}
+u.e1{text-decoration-color:#ff6b6b}
+u.e2{text-decoration-color:#e6b450}
+u.e3{text-decoration-color:#6bb6ff}
+#pb{border:0;border-radius:4px;background:none;color:inherit;font:inherit;padding:2px 8px}
+#pb.s1{color:#ff8a8a}
+#pb.s2{color:#f0c060}
+#pb.s3{color:#7cc0ff}
+#pb.st{opacity:.55}
+#ac{position:absolute;z-index:6;min-width:130px;max-width:min(300px,94%);max-height:216px;overflow:auto;padding:3px;background:var(--p);border:1px solid var(--g);border-radius:8px;box-shadow:0 8px 24px #000c}
+.ai{display:flex;align-items:baseline;gap:10px;padding:6px 8px;border-radius:5px;font:12px ui-monospace,Menlo,Consolas,monospace;color:var(--t);white-space:nowrap}
+.ai.on{background:#1e8a4c88}
+.ai small{margin-left:auto;font:10px system-ui,sans-serif;color:#8fc3a0}
+.bd select{padding:8px;font:13px system-ui,sans-serif;color:var(--t);background:var(--bg);border:1px solid var(--b);border-radius:6px}
+.bd label.fl{display:flex;justify-content:space-between;gap:12px;align-items:center}
+.bd label.cb{align-items:flex-start}
+.bd input[type=checkbox]{accent-color:var(--g);margin-top:2px}
+.bd label>span{display:flex;flex-direction:column;gap:2px}
+.note{display:block;font-size:11px;line-height:1.4;color:#8fc3a0}
+.ok{color:#3ddc84}
+.sv{display:inline-block;padding:0 6px;border-radius:9px;font-size:10px;font-weight:700;color:#000;vertical-align:1px}
+.sv.s1{background:#ff8a8a}
+.sv.s2{background:#f0c060}
+.sv.s3{background:#7cc0ff}
+.kt{width:100%;border-collapse:collapse}
+.kt th{font-weight:400;text-align:left;padding:5px 0;color:var(--t)}
+.kt td{text-align:right;padding:5px 0}
+.kt kbd{padding:1px 6px;border:1px solid var(--b);border-radius:4px;font:12px ui-monospace,Menlo,Consolas,monospace;color:var(--l)}
+.bd a{color:var(--l)}
+@media (prefers-reduced-motion:reduce){#ts{transition:none}}
 </style>
 </head>
 <body>
+<a class="sk" href="#ta">Skip to the code editor</a>
 <div id="app">
-<header><span>HTML VIEWER</span><button id="mb" aria-label="Menu"><svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="2.2"/><circle cx="12" cy="12" r="2.2"/><circle cx="12" cy="19" r="2.2"/></svg></button></header>
-<div id="eb"><select id="es" aria-label="Choose editor"></select><button id="na">+ Editor</button></div>
-<div id="lm"><button data-mode="html" class="active">HTML</button><button data-mode="css">CSS</button><button data-mode="js">JavaScript</button></div>
-<div id="ed"><textarea id="ta" wrap="off" spellcheck="false" autocapitalize="off" autocomplete="off" autocorrect="off" aria-label="Code"></textarea><div id="mk"></div><pre id="hl"></pre><div id="gb"></div><pre id="gt"></pre><pre id="ms"></pre></div>
-<div id="sb"><span id="ps"></span><span id="inf"></span></div>
+<header><h1><span>HTML VIEWER</span></h1><button id="mb" aria-label="Menu" title="Menu" aria-haspopup="true" aria-expanded="false" aria-controls="mn"><svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="2.2"/><circle cx="12" cy="12" r="2.2"/><circle cx="12" cy="19" r="2.2"/></svg></button></header>
+<div id="eb" role="group" aria-label="Editors"><select id="es" aria-label="Choose editor"></select><button id="na" title="Add a new editor">+ Editor</button></div>
+<div id="lm" role="tablist" aria-label="Code language"><button data-mode="html" class="active" role="tab" aria-selected="true">HTML</button><button data-mode="css" role="tab" aria-selected="false">CSS</button><button data-mode="js" role="tab" aria-selected="false">JavaScript</button></div>
+<main id="ed"><textarea id="ta" wrap="off" spellcheck="false" autocapitalize="off" autocomplete="off" autocorrect="off" aria-label="HTML code" aria-describedby="eh"></textarea><div id="mk" aria-hidden="true"></div><pre id="hl" aria-hidden="true"></pre><div id="gb" aria-hidden="true"></div><pre id="gt" aria-hidden="true"></pre><pre id="ms" aria-hidden="true"></pre><p id="eh" class="sr">Press Escape, then Tab, to leave the editor. Control plus Space shows suggestions. Alt plus Shift plus F formats the code. Alt plus Shift plus C finds mistakes.</p></main>
+<footer id="sb"><span id="ps"></span><button id="pb" type="button" hidden></button><span id="inf"></span></footer>
 </div>
-<div id="mn">
+<div id="mn" role="group" aria-label="Menu">
 <button data-a="imp">Import file</button>
-<button data-a="exp">Export file</button>
+<button data-a="exp">Export file<kbd>Ctrl+S</kbd></button>
+<button data-a="shr">Share link<small>Make a link that opens this code for anyone</small></button>
 <hr>
-<button data-a="pv">Preview</button>
+<button data-a="pv">Preview<kbd>Ctrl+Enter</kbd></button>
 <button data-a="fl">Floating preview</button>
 <hr>
-<button data-a="rep">Replace words</button>
-<button data-a="go">Go to line</button>
-<button data-a="fix">Find mistakes</button>
-<button data-a="fmt">Format code</button>
+<button data-a="rep">Find &amp; replace words<small>Search the current tab and replace what you find</small><kbd>Ctrl+H</kbd></button>
+<button data-a="go">Go to line<kbd>Ctrl+G</kbd></button>
+<button data-a="fix">Find mistakes (HTML, CSS, JS)<small>Checks tags, CSS properties and JavaScript syntax in all three tabs</small><kbd>Alt+Shift+C</kbd></button>
+<button data-a="fmt">Format code (HTML, CSS, JS)<small>Tidies the tab you are on: HTML, CSS or JavaScript</small><kbd>Alt+Shift+F</kbd></button>
 <hr>
-<button data-a="undo">Undo</button>
-<button data-a="redo">Redo</button>
+<button data-a="undo">Undo<kbd>Ctrl+Z</kbd></button>
+<button data-a="redo">Redo<kbd>Ctrl+Shift+Z</kbd></button>
 <button data-a="copy">Copy all</button>\n<button data-a="keep" id="keepb">Keep code on reopen: OFF</button>
 <button data-a="sz" id="szb">Text size</button>
+<button data-a="set">Settings<small>Indent size, suggestions, auto-closing and more</small></button>
+<button data-a="kbd">Keyboard shortcuts</button>
+<button data-a="abt">About, license &amp; contact</button>
 <button data-a="clr">Clear all</button>
 <button data-a="inst" id="ins" hidden>Install app</button>
 </div>
 <input type="file" id="fin" hidden accept=".html,.htm,.xhtml,.txt,.css,.js,.xml,.svg,text/*">
-<div id="pv"><div class="hd"><span>Preview</span><button id="px">Close</button></div><iframe id="pf" sandbox="allow-scripts allow-forms allow-modals allow-popups allow-downloads allow-pointer-lock"></iframe></div>
-<div id="fl"><div class="hd" id="fh"><span>Floating preview</span><span><button id="fr">Reload</button><button id="fx">Close</button></span></div><iframe id="ff" sandbox="allow-scripts allow-forms allow-modals allow-popups allow-downloads allow-pointer-lock"></iframe><div id="fz"></div></div>
-<div id="ts"></div>
+<div id="pv" role="dialog" aria-label="Preview"><div class="hd"><span>Preview</span><button id="px">Close</button></div><iframe id="pf" title="Preview of your page" sandbox="allow-scripts allow-forms allow-modals allow-popups allow-downloads allow-pointer-lock"></iframe></div>
+<div id="fl" role="group" aria-label="Floating preview"><div class="hd" id="fh"><span>Floating preview</span><span><button id="fr">Reload</button><button id="fx">Close</button></span></div><iframe id="ff" title="Floating preview of your page" sandbox="allow-scripts allow-forms allow-modals allow-popups allow-downloads allow-pointer-lock"></iframe><div id="fz"></div></div>
+<div id="ts" role="status" aria-live="polite"></div>
 <script>
 "use strict";
 const $=s=>document.querySelector(s),ta=$('#ta'),hlp=$('#hl'),gt=$('#gt'),ed=$('#ed'),M=$('#mk'),mn=$('#mn'),fin=$('#fin'),FL=$('#fl'),FF=$('#ff'),DE=document.documentElement;
@@ -114,7 +174,8 @@ function renderEditors(){
  const sel=$('#es');sel.innerHTML='';
  workspaces.forEach(e=>{const o=document.createElement('option');o.value=e.id;o.textContent=e.name;sel.append(o)});
  sel.value=activeId;
- $('#lm').querySelectorAll('button').forEach(b=>b.classList.toggle('active',b.dataset.mode===mode));
+ $('#lm').querySelectorAll('button').forEach(b=>{b.classList.toggle('active',b.dataset.mode===mode);b.setAttribute('aria-selected',b.dataset.mode===mode?'true':'false')});
+ ta.setAttribute('aria-label',TABN[mode]+' code');
 }
 function loadActive(){
  const e=editorData();if(!e)return;
@@ -146,7 +207,7 @@ function closeMainPreview(){
 }
 function openMainPreview(){
  writeMode(ta.value);$('#pf').srcdoc=combinedSource();$('#pv').classList.add('on');
- history.pushState({htmlViewerPreview:true},'','#preview');previewHistory=true;
+ history.pushState({htmlViewerPreview:true},'','#preview');previewHistory=true;$('#px').focus();
 }
 
 /* ---------- syntax colouring (only the visible lines are ever drawn) ---------- */
@@ -202,8 +263,8 @@ function draw(){
   rs=Math.min(Math.max(0,f-50),n);re=Math.min(n,f+v+50);
   while(sts.length<=rs)sts.push(nx(lines[sts.length-1],sts[sts.length-1]));
   let st=sts[rs],h='',g='',i,r;
-  for(i=rs;i<re;i++){r=hi(lines[i],st);h+=r[0]+'\n';st=r[1];g+=(i+1)+'\n';if(sts.length==i+1)sts.push(st)}
-  hlp.innerHTML=h;gt.textContent=g;dirty=0
+  for(i=rs;i<re;i++){r=hi(lines[i],st);const dd=dm&&dm.get(i+1);h+=(dd?mkU(r[0],dd.sev):r[0])+'\n';st=r[1];g+=(dd?'<b class="g'+SEVN[dd.sev]+'">'+(i+1)+'</b>':(i+1))+'\n';if(sts.length==i+1)sts.push(st)}
+  hlp.innerHTML=h;gt.innerHTML=g;dirty=0
  }
  const y=rs*LH-top;
  hlp.style.transform='translate('+-ta.scrollLeft+'px,'+y+'px)';gt.style.transform='translateY('+y+'px)';
@@ -217,7 +278,7 @@ function upd(){
  while(k<n&&o[k]===lines[k])k++;
  if(sts.length>k+1)sts.length=k+1;
  const d=Math.max(2,String(lines.length).length);if(d!=dg){dg=d;ed.style.setProperty('--d',d)}
- dirty=1;mk=null;draw();sched();
+ dm=null;dirty=1;mk=null;draw();sched();lintSoon();
  clearTimeout(sv);sv=setTimeout(save,700);
  if(FL.classList.contains('on')){clearTimeout(ft);ft=setTimeout(fu,500)}
 }
@@ -245,101 +306,1684 @@ function show(a,b){
  draw();stat()
 }
 function jump(l){const v=ta.value;l=Math.max(1,Math.min(l|0,lines.length));let p=0;for(let k=1;k<l;k++)p=v.indexOf('\n',p)+1;const e=v.indexOf('\n',p);show(p,e<0?v.length:e)}
+let dlgN=0;
 function dlg(t,h,b){
- const o=document.createElement('div');o.className='ov';
- o.innerHTML='<div class="bx"><b>'+t+'</b><div class="bd">'+h+'</div><div class="bt"></div></div>';
- const bt=o.querySelector('.bt');
- b.forEach(([l,f,p])=>{const x=document.createElement('button');x.textContent=l;if(p)x.className='pr';x.onclick=()=>{if(!f||f()!==false)o.remove()};bt.append(x)});
+ const o=document.createElement('div'),had=document.activeElement,tid='dt'+(++dlgN);o.className='ov';
+ o.innerHTML='<div class="bx" role="dialog" aria-modal="true" aria-labelledby="'+tid+'"><b id="'+tid+'">'+t+'</b><div class="bd">'+h+'</div><div class="bt"></div></div>';
+ const bt=o.querySelector('.bt'),rm=o.remove.bind(o);let gone=0;
+ o.remove=()=>{if(gone)return;gone=1;rm();if(had&&had.focus&&had.offsetParent!==null&&document.contains(had))had.focus()};
+ b.forEach(([l,f,p])=>{const x=document.createElement('button');x.type='button';x.textContent=l;if(p)x.className='pr';x.onclick=()=>{if(!f||f()!==false)o.remove()};bt.append(x)});
  o.onclick=e=>{if(e.target==o)o.remove()};
- o.onkeydown=e=>{if(e.key=='Escape')o.remove();else if(e.key=='Enter'&&e.target.tagName=='INPUT'&&e.target.type!='checkbox'){e.preventDefault();const p=bt.querySelector('.pr');p&&p.click()}};
- document.body.append(o);const i=o.querySelector('input');if(i&&i.type!='checkbox'){i.focus();i.select()}
+ o.onkeydown=e=>{
+  if(e.key=='Escape'){e.stopPropagation();o.remove();return}
+  if(e.key=='Enter'&&e.target.tagName=='INPUT'&&e.target.type!='checkbox'){e.preventDefault();const p=bt.querySelector('.pr');p&&p.click();return}
+  if(e.key=='Tab'){const f=Array.from(o.querySelectorAll('button,input,select,textarea,a[href],[tabindex="0"]')).filter(x=>!x.disabled&&x.offsetParent!==null);if(!f.length)return;const k=f.indexOf(document.activeElement);if(e.shiftKey&&k<=0){e.preventDefault();f[f.length-1].focus()}else if(!e.shiftKey&&k===f.length-1){e.preventDefault();f[0].focus()}}
+ };
+ document.body.append(o);
+ const i=o.querySelector('input:not([type=checkbox]),select');
+ if(i){i.focus();if(i.tagName=='INPUT')i.select()}else{const f=o.querySelector('.pr')||o.querySelector('button');f&&f.focus()}
  return o
 }
 
-/* ---------- find mistakes ---------- */
-function lint(){
- const e=editorData(),out=[];
- const add=(kind,line,msg)=>out.push([Math.max(1,line||1),kind,msg]);
- const lineAt=(src,pos)=>src.slice(0,pos).split('\n').length;
- if(!e)return out;
- // HTML structure and common authoring errors.
- if(e.html.trim()){
-  const t=e.html,stack=[],ids=new Map(),voids=VOID;
-  const tagRe=/<!--[\s\S]*?-->|<!--[\s\S]*$|<\/?([a-zA-Z][\w:-]*)\b([^>]*?)>/g;
-  let m;
-  while((m=tagRe.exec(t))){
-   if(m[0].startsWith('<!--')){if(!m[0].endsWith('-->'))add('HTML',lineAt(t,m.index),'Unclosed HTML comment');continue}
-   const closing=m[0][1]==='/',name=m[1].toLowerCase(),attrs=m[2]||'',ln=lineAt(t,m.index);
-   if(closing){
-    const idx=stack.map(x=>x.name).lastIndexOf(name);
-    if(idx<0)add('HTML',ln,`Closing </${name}> has no matching opening tag`);
-    else{for(let k=stack.length-1;k>idx;k--){const x=stack[k];if(!OPT.has(x.name))add('HTML',x.line,`<${x.name}> is not closed before </${name}>`)}stack.length=idx}
-   }else{
-    const id=/\bid\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s>]+))/i.exec(attrs);
-    if(id){const val=id[1]??id[2]??id[3];if(ids.has(val))add('HTML',ln,`Duplicate id "${val}" (first used on line ${ids.get(val)})`);else ids.set(val,ln)}
-    if(name==='img'&&!/\balt\s*=/i.test(attrs))add('HTML',ln,'<img> is missing alt text');
-    if(name==='script'||name==='style'){
-     const close=t.toLowerCase().indexOf('</'+name,tagRe.lastIndex);
-     if(close<0)add('HTML',ln,'<'+name+'> is missing its closing tag');
-     else{const end=t.indexOf('>',close);tagRe.lastIndex=end<0?t.length:end+1}
-     continue;
+/* ---------- code tools (checker + formatters), see "What's new" in about.html ---------- */
+const HV=(()=>{
+/* ===== JavaScript: tokenizer + formatter ===== */
+const W=s=>new Set(s.split(' '));
+const JS_RE_AFTER=W('return typeof instanceof in of new delete void throw case do else yield await extends');
+const JS_KEYWORDS=W('return typeof instanceof in of new delete void throw case do else yield await extends if for while switch catch with function class var let const import export default try finally break continue debugger');
+const JS_PUNCT=/(?:>>>=|\.\.\.|===|!==|\*\*=|<<=|>>=|>>>|&&=|\|\|=|\?\?=|=>|==|!=|<=|>=|&&|\|\||\?\?|\?\.(?!\d)|\+\+|--|\+=|-=|\*=|\/=|%=|&=|\|=|\^=|<<|>>|\*\*|[{}()\[\];,<>+\-*\/%&|^!~?:=.@#])/y;
+const JS_BLOCKKW=W('else try finally do catch'); const JS_OBJKW=W('return typeof case in of new delete void throw yield await default export import const let var instanceof extends'); const JS_ID=/[A-Za-z_$\u00a1-\uffff][\w$\u00a1-\uffff]*/y;
+const JS_NUM=/0[xX][\da-fA-F_]+n?|0[bB][01_]+n?|0[oO][0-7_]+n?|(?:\d[\d_]*\.?[\d_]*|\.\d[\d_]*)(?:[eE][+-]?\d[\d_]*)?n?/y;
+
+function jsTokens(src){
+  const T=[],n=src.length;
+  let i=0,nl=0,prev=null;
+  const lineAt=p=>src.slice(0,p).split('\n').length;
+  const err=(m,p)=>{const e=new Error(m);e.line=lineAt(p);throw e};
+  const operandEnd=p=>!!p&&(p.k==='num'||p.k==='str'||p.k==='tpl'||p.k==='re'||(p.k==='id'&&(p.prop||!JS_KEYWORDS.has(p.v)))||(p.k==='p'&&((p.v===')'&&!p.ctlClose)||p.v===']'||(p.v==='}'&&!p.blockClose)||((p.v==='++'||p.v==='--')&&p.postfix))));
+  const parens=[],braces=[];let prev2=null;
+  const braceIsBlock=p=>{
+    if(!p)return true;
+    if(p.k==='p')return p.v===')'||p.v==='=>'||p.v==='{'||p.v===';'||p.v==='}';
+    if(p.k==='id'){if(p.prop)return false;if(JS_BLOCKKW.has(p.v))return true;if(JS_OBJKW.has(p.v))return false;return true}
+    return false;
+  };
+  const push=(k,v,s)=>{
+    const t={k,v,s,nl};
+    if(k==='id'&&prev&&prev.k==='p'&&(prev.v==='.'||prev.v==='?.'))t.prop=true;
+    if(k==='p'&&(t.v==='++'||t.v==='--'))t.postfix=operandEnd(prev)&&nl===0;
+    if(k==='p'&&(t.v==='+'||t.v==='-'))t.unary=!operandEnd(prev);
+    if(k==='p'&&t.v==='('){const ctl=!!prev&&prev.k==='id'&&!prev.prop&&(prev.v==='if'||prev.v==='for'||prev.v==='while'||prev.v==='with'||(prev.v==='await'&&!!prev2&&prev2.k==='id'&&prev2.v==='for'));parens.push(ctl)}
+    if(k==='p'&&t.v===')')t.ctlClose=!!parens.pop();
+    if(k==='p'&&t.v==='{')braces.push(braceIsBlock(prev));
+    if(k==='p'&&t.v==='}')t.blockClose=!!braces.pop();
+    nl=0;T.push(t);if(k!=='lc'&&k!=='bc'){prev2=prev;prev=t}return t;
+  };
+  const skipStr=j=>{const q=src[j];j++;for(;;){if(j>=n)err('String is never closed',j);const d=src[j];if(d==='\\'){j+=2;continue}if(d===q)return j+1;if(d==='\n')err('String is never closed',j);j++}};
+  let scanTpl;
+  const skipBraces=j=>{let depth=1;for(;;){if(j>=n)err('A ${ in a template string is never closed',j);const d=src[j];
+    if(d==='"'||d==="'"){j=skipStr(j);continue}
+    if(d==='`'){j=scanTpl(j);continue}
+    if(d==='/'&&src[j+1]==='/'){const e=src.indexOf('\n',j);j=e<0?n:e;continue}
+    if(d==='/'&&src[j+1]==='*'){const e=src.indexOf('*/',j+2);if(e<0)err('Comment is never closed',j);j=e+2;continue}
+    if(d==='{')depth++;else if(d==='}'){depth--;if(!depth)return j+1}
+    j++}};
+  scanTpl=i0=>{let j=i0+1;for(;;){if(j>=n)err('Template string is never closed',i0);const d=src[j];
+    if(d==='\\'){j+=2;continue}
+    if(d==='`')return j+1;
+    if(d==='$'&&src[j+1]==='{'){j=skipBraces(j+2);continue}
+    j++}};
+  const scanRegex=i0=>{let j=i0+1,cls=false;
+    for(;;){if(j>=n)return -1;const d=src[j];if(d==='\n')return -1;if(d==='\\'){j+=2;continue}
+      if(cls){if(d===']')cls=false}else if(d==='[')cls=true;else if(d==='/')break;j++}
+    const body=src.slice(i0+1,j);j++;const fs=j;while(j<n&&/[a-z]/i.test(src[j]))j++;
+    try{new RegExp(body,src.slice(fs,j))}catch(e){return -1}
+    return j};
+  const regexOK=p=>!p||(p.k==='p'?(p.v===')'?!!p.ctlClose:p.v==='}'?!!p.blockClose:(p.v!==']'&&p.v!=='++'&&p.v!=='--')):(p.k==='id'&&!p.prop&&JS_RE_AFTER.has(p.v)));
+  if(src.startsWith('#!')){let e=src.indexOf('\n');if(e<0)e=n;push('lc',src.slice(0,e).replace(/\s+$/,''),0);i=e}
+  while(i<n){
+    const c=src[i];
+    if(c==='\n'||c==='\u2028'||c==='\u2029'){nl++;i++;continue}
+    if(c===' '||c==='\t'||c==='\r'||c==='\f'||c==='\v'||c==='\u00a0'||c==='\ufeff'){i++;continue}
+    if(c==='/'&&src[i+1]==='/'){let e=src.indexOf('\n',i);if(e<0)e=n;push('lc',src.slice(i,e).replace(/\s+$/,''),i);i=e;continue}
+    if(c==='/'&&src[i+1]==='*'){const e=src.indexOf('*/',i+2);if(e<0)err('Comment is never closed',i);push('bc',src.slice(i,e+2),i);i=e+2;continue}
+    if(c==='"'||c==="'"){const j=skipStr(i);push('str',src.slice(i,j),i);i=j;continue}
+    if(c==='`'){const j=scanTpl(i);push('tpl',src.slice(i,j),i);i=j;continue}
+    if(c>='0'&&c<='9'||(c==='.'&&src[i+1]>='0'&&src[i+1]<='9')){JS_NUM.lastIndex=i;const m=JS_NUM.exec(src);push('num',m[0],i);i+=m[0].length;continue}
+    if(c==='#'){JS_ID.lastIndex=i+1;const m=JS_ID.exec(src);if(m&&m.index===i+1){push('id','#'+m[0],i);i+=m[0].length+1;continue}}
+    JS_ID.lastIndex=i;
+    {const m=JS_ID.exec(src);if(m&&m.index===i){push('id',m[0],i);i+=m[0].length;continue}}
+    if(c==='/'&&regexOK(prev)){const j=scanRegex(i);if(j>0){push('re',src.slice(i,j),i);i=j;continue}}
+    JS_PUNCT.lastIndex=i;
+    const m=JS_PUNCT.exec(src);
+    if(!m||m.index!==i){if(/\s/.test(c)){i++;continue}err('Unexpected character "'+c+'"',i)}
+    push('p',m[0],i);i+=m[0].length;
+  }
+  return T;
+}
+
+const JS_BIN=W('+ - * / % ** == === != !== < > <= >= && || ?? & | ^ << >> >>> = += -= *= /= %= **= &&= ||= ??= <<= >>= >>>= &= |= ^= in instanceof');
+const JS_PARENSP=W('if for while switch catch with return typeof await yield in of instanceof case new delete void throw else do function async');
+
+function jsMatch(T){
+  const M=new Array(T.length).fill(-1),st=[];
+  const pair={')':'(',']':'[','}':'{'};
+  T.forEach((t,i)=>{
+    if(t.k!=='p')return;
+    if(t.v==='('||t.v==='['||t.v==='{')st.push(i);
+    else if(t.v===')'||t.v===']'||t.v==='}'){
+      const o=st.pop();
+      if(o==null||T[o].v!==pair[t.v]){const e=new Error('Brackets do not match near "'+t.v+'"');e.line=0;throw e}
+      M[o]=i;M[i]=o;
     }
-    if(!voids.has(name)&&! /\/\s*$/.test(attrs))stack.push({name,line:ln});
-   }
+  });
+  if(st.length){const e=new Error('A "'+T[st[st.length-1]].v+'" is never closed');e.line=0;throw e}
+  return M;
+}
+
+function fmtJS(src,unit,base){
+  unit=unit||'  ';base=base||0;
+  const T=jsTokens(src);
+  if(!T.length)return '';
+  const M=jsMatch(T);
+  const out=[];
+  let cur='',curInd=0,pend=false,prev=null,prevIdx=-1,afterCmt=false;
+  const R={base:-1,kind:'root',tern:0,multi:true,inCase:false};
+  const stack=[];
+  const top=()=>stack.length?stack[stack.length-1]:R;
+  const flush=()=>{if(cur!==''){out.push(unit.repeat(curInd+base)+cur);cur=''}};
+  const nextSig=i=>{for(let j=i+1;j<T.length;j++)if(T[j].k!=='lc'&&T[j].k!=='bc')return T[j];return null};
+  const isOpen=t=>t.k==='p'&&(t.v==='('||t.v==='['||t.v==='{');
+  const isCloseTok=t=>t.k==='p'&&(t.v===')'||t.v===']'||t.v==='}');
+  const kwId=t=>t&&t.k==='id'&&!t.prop;
+
+  const braceKind=(p,pIdx)=>{
+    if(!p)return 'block';
+    if(p.k==='p'){
+      if(p.v===':'&&p.caseColon)return 'block';
+      if(p.v===')'||p.v==='=>'||p.v==='{'||p.v===';'||p.v==='}'){
+        if(p.v===')'){const o=M[pIdx];const b=o>0?T[o-1]:null;if(kwId(b)&&b.v==='switch')return 'switch'}
+        return 'block';
+      }
+      return 'obj';
+    }
+    if(p.k==='id'){
+      if(p.prop)return 'obj';
+      if(JS_BLOCKKW.has(p.v))return 'block';
+      if(JS_OBJKW.has(p.v))return 'obj';
+      return 'block';
+    }
+    return 'obj';
+  };
+  const objMulti=(idx)=>{
+    const c=M[idx];if(c===idx+1)return false;
+    if(T[idx+1].nl>0)return true;
+    let len=0;
+    for(let j=idx;j<=c;j++){const t=T[j];len+=t.v.length+1;if(t.k==='lc'||(t.k==='p'&&(t.v===';'||t.v==='=>'))||(t.k==='id'&&t.v==='function'&&!t.prop))return true}
+    return len>80;
+  };
+  const needSpace=(p,t,ent)=>{
+    if(!p)return false;
+    const pv=p.v,tv=t.v;
+    if(t.k==='p'){
+      if(tv===','||tv===';'||tv===')'||tv===']'||tv==='.'||tv==='?.')return false;
+      if(tv==='}')return !!ent&&ent.kind==='obj'&&!ent.multi&&!ent.empty;
+      if(tv===':')return !!t.ternColon;
+      if((tv==='++'||tv==='--')&&t.postfix)return false;
+      if(tv==='*'&&p.k==='id'&&(pv==='function'||pv==='yield')&&!p.prop)return false;
+    }
+    if(p.k==='p'){
+      if(pv==='('||pv==='['||pv==='.'||pv==='?.'||pv==='!'||pv==='~'||pv==='...'||pv==='@'||pv==='#')return false;
+      if(pv==='{')return !!p.objInline;
+      if((pv==='++'||pv==='--')&&!p.postfix)return false;
+      if((pv==='+'||pv==='-')&&p.unary)return t.k==='p'&&tv[0]===pv;
+      if(pv==='*'&&p.gen)return p.gen==='f';
+    }
+    if(t.k==='p'&&tv==='('){
+      if(p.k==='id')return JS_PARENSP.has(pv)&&!p.prop;
+      if(p.k==='p')return !(pv===')'||pv===']'||pv==='}'||pv==='?.');
+      return false;
+    }
+    if(t.k==='p'&&tv==='['){
+      if(p.k==='id')return JS_PARENSP.has(pv)&&!p.prop;
+      if(p.k==='p')return !(pv===')'||pv===']'||pv==='}');
+      return false;
+    }
+    if(t.k==='tpl'&&p.k==='id'&&!JS_KEYWORDS.has(pv))return false;
+    return true;
+  };
+  const continuation=(p,t)=>{
+    if(p.k==='p'){
+      if(JS_BIN.has(p.v)||p.v==='=>'||p.v==='?'||(p.v===':'&&p.ternColon))return true;
+      if(p.v===','){const tp=top();return tp.kind==='root'||tp.kind==='block'||tp.kind==='switch'}
+      if(p.v===')'&&p.ctl&&!(t.k==='p'&&t.v==='{'))return true;
+    }else if(kwId(p)&&(p.v==='else'||p.v==='do')&&!(t.k==='p'&&t.v==='{')&&!(kwId(t)&&t.v==='if'))return true;
+    if(t.k==='p'&&(t.v==='.'||t.v==='?.'||t.v==='?'||JS_BIN.has(t.v)||(t.v===':'&&top().tern>0)||t.v==='=>'))return true;
+    if(kwId(t)&&(t.v==='in'||t.v==='instanceof'))return true;
+    return false;
+  };
+  const reindentComment=(t,ind)=>{
+    const ls=t.v.split('\n');
+    const lineStart=src.lastIndexOf('\n',t.s-1)+1;
+    const ow=/^[ \t]*/.exec(src.slice(lineStart,t.s))[0].length;
+    const pad=unit.repeat(ind+base);
+    return ls.map((l,k)=>{
+      l=l.replace(/\s+$/,'');
+      if(k===0)return pad+l.replace(/^\s+/,'');
+      if(!l.trim())return '';
+      if(/^\s*\*/.test(l))return pad+' '+l.replace(/^\s+/,'');
+      const m=/^[ \t]*/.exec(l)[0].length;
+      return pad+l.slice(Math.min(m,ow));
+    });
+  };
+
+  for(let idx=0;idx<T.length;idx++){
+    const t=T[idx];
+    if(t.k==='lc'||t.k==='bc'){
+      afterCmt=true;
+      const tp=top();
+      const trailing=t.nl===0&&cur!=='';
+      if(t.k==='lc'){
+        if(trailing){cur+=' '+t.v;pend=true;continue}
+        flush();
+        if(t.nl>1&&out.length&&!(prev&&prev.k==='p'&&(prev.v==='{'||prev.v==='('||prev.v==='[')))out.push('');
+        curInd=tp.base+1+(tp.inCase?1:0);cur=t.v;pend=true;continue;
+      }
+      const multiLine=t.v.indexOf('\n')>=0;
+      if(trailing&&!multiLine){cur+=' '+t.v;continue}
+      flush();
+      if(t.nl>1&&out.length&&!(prev&&prev.k==='p'&&(prev.v==='{'||prev.v==='('||prev.v==='[')))out.push('');
+      curInd=tp.base+1+(tp.inCase?1:0);
+      if(multiLine){reindentComment(t,curInd).forEach(l=>out.push(l));cur='';pend=true}
+      else{cur=t.v;}
+      continue;
+    }
+    const closing=isCloseTok(t);
+    const ent=closing?stack.pop():null;
+    if(t.k==='p'&&t.v==='?')top().tern++;
+    if(t.k==='p'&&t.v===':'){
+      const tp=top();
+      if(tp.labelPending&&tp.tern===0){t.caseColon=true}
+      else if(tp.tern>0){t.ternColon=true;tp.tern--}
+    }
+    if(t.k==='p'&&t.v==='*'){
+      if(prev&&kwId(prev)&&(prev.v==='function'||prev.v==='yield'))t.gen='f';
+      else if(!prev||(prev.k==='p'&&(prev.v==='{'||prev.v==='}'||prev.v===';'||prev.v===','))||(kwId(prev)&&(prev.v==='static'||prev.v==='async'))){
+        const g=nextSig(idx);if(g&&(g.k==='id'||g.k==='str'||g.k==='num'||(g.k==='p'&&g.v==='[')))t.gen='m';
+      }
+    }
+    const tp0=top();
+    const caseLabel=kwId(t)&&tp0.kind==='switch'&&(t.v==='case'||(t.v==='default'&&nextSig(idx)&&nextSig(idx).v===':'));
+    let brk=pend||t.nl>0||caseLabel;
+    if(closing&&ent.multi)brk=true;
+    if(closing&&!ent.multi&&!(t.nl>0))brk=false;
+    if(closing&&ent.empty)brk=false;
+    if(prev&&!afterCmt&&prev.v==='}'&&prev.blk&&kwId(t)&&(t.v==='else'||t.v==='catch'||t.v==='finally'||(t.v==='while'&&prev.doEnd))){brk=false;if(t.v==='while')t.dw=true}
+    if(idx===0)brk=false;
+    if(brk&&cur===''&&out.length===0&&idx===0)brk=false;
+    if(brk){
+      const orig=!pend&&!caseLabel&&!closing;
+      flush();
+      if(t.nl>1&&out.length&&!closing&&!(prev&&prev.k==='p'&&(prev.v==='{'||prev.v==='('||prev.v==='[')))out.push('');
+      if(closing)curInd=ent.base;
+      else{
+        if(caseLabel)tp0.inCase=false;
+        curInd=tp0.base+1+(tp0.inCase?1:0)+((orig&&prev&&continuation(prev,t))?1:0);
+      }
+    }else if(cur!==''&&needSpace(prev,t,ent))cur+=' ';
+    cur+=t.v;
+    pend=false;
+    if(closing){
+      if(t.v===')'){const o=M[idx];const b=o>0?T[o-1]:null;t.ctl=!!(b&&kwId(b)&&(b.v==='if'||b.v==='for'||(b.v==='while'&&!b.dw)||b.v==='with'))||!!(b&&b.k==='id'&&b.v==='await'&&o>1&&kwId(T[o-2])&&T[o-2].v==='for')}
+      if(t.v==='}'){
+        const blk=ent.kind==='block'||ent.kind==='switch';
+        t.blk=blk;t.doEnd=!!ent.doBlock;
+        if(blk){
+          const nt=nextSig(idx);
+          let no=false;
+          if(!nt)no=true;
+          else if(nt.k==='p'&&(nt.v===')'||nt.v===']'||nt.v==='}'||nt.v===','||nt.v===';'||nt.v==='.'||nt.v==='?.'||nt.v===':'||nt.v==='('))no=true;
+          else if(kwId(nt)&&(nt.v==='else'||nt.v==='catch'||nt.v==='finally'||(nt.v==='while'&&ent.doBlock)))no=true;
+          pend=!no;
+        }
+      }
+    }else if(isOpen(t)){
+      const e={ch:t.v,base:curInd,kind:'br',tern:0,inCase:false,multi:false,labelPending:false};
+      const nt=T[idx+1];
+      const empty=M[idx]===idx+1;
+      if(t.v==='{'){
+        e.kind=braceKind(prev,prevIdx);
+        e.empty=empty;
+        if(e.kind==='obj')e.multi=!empty&&objMulti(idx);else e.multi=!empty;
+        e.doBlock=!!(prev&&kwId(prev)&&prev.v==='do');
+        t.objInline=e.kind==='obj'&&!e.multi&&!empty;
+        if(e.multi)pend=true;
+      }else{
+        e.multi=!empty&&!!nt&&nt.nl>0;
+        if(t.v==='('&&prev&&((kwId(prev)&&prev.v==='for')||(kwId(prev)&&prev.v==='await'&&idx>1&&kwId(T[idx-2])&&T[idx-2].v==='for')))e.forParen=true;
+      }
+      stack.push(e);
+    }else if(t.k==='p'&&t.v===';'){
+      if(!top().forParen)pend=true;
+    }else if(t.k==='p'&&t.v===','){
+      const tp=top();if(tp.kind==='obj'&&tp.multi)pend=true;
+    }else if(t.k==='p'&&t.v===':'&&t.caseColon){
+      const tp=top();tp.inCase=true;tp.labelPending=false;pend=true;
+    }else if(caseLabel){
+      top().labelPending=true;
+    }
+    prev=t;prevIdx=idx;afterCmt=false;
   }
-  stack.forEach(x=>{if(!OPT.has(x.name))add('HTML',x.line,`<${x.name}> is not closed`)});
-  if(!/^\s*<!doctype\s+html/i.test(t))add('HTML',1,'Missing <!DOCTYPE html> declaration');
- }
- // CSS parser checks; insertRule reports actual syntax failures.
- if(e.css.trim()){
-  const sheet=document.implementation.createHTMLDocument('').createElement('style');
-  sheet.textContent=e.css;
-  const doc=document.implementation.createHTMLDocument('');doc.head.append(sheet);
+  flush();
+  const res=out.join('\n')+'\n';
+  // safety: the formatted code must contain exactly the same tokens as the original
+  const T2=jsTokens(res);
+  if(T2.length!==T.length)throw new Error('Safety check failed (token count changed)');
+  const norm=t=>t.k==='bc'?t.v.replace(/[ \t\r]*\n[ \t]*/g,'\n'):t.v;
+  for(let k=0;k<T.length;k++)if(T2[k].k!==T[k].k||norm(T2[k])!==norm(T[k]))throw new Error('Safety check failed near "'+T[k].v.slice(0,20)+'"');
+  return res;
+}
+
+/* ===== CSS: formatter + checker ===== */
+const CDO='<'+'!--';
+const CWS_RE=/[ \t\n\r\f]/;
+const ctrim=s=>s.replace(/^[ \t\n\r\f]+|[ \t\n\r\f]+$/g,'');
+
+const CSS_AT_KNOWN=W('charset import namespace media supports font-face font-feature-values font-palette-values keyframes page layer container property counter-style scope starting-style position-try view-transition document viewport custom-media custom-selector -webkit-keyframes -moz-keyframes -o-keyframes -ms-keyframes -moz-document -webkit-document -ms-viewport');
+const CSS_AT_DESC=W('font-face property counter-style font-feature-values font-palette-values position-try view-transition viewport -ms-viewport page');
+const CSS_AT_KF=W('keyframes -webkit-keyframes -moz-keyframes -o-keyframes -ms-keyframes');
+
+/* Walks a stylesheet and calls h.open / h.decl / h.stmt / h.close / h.err.
+   Mirrors the browser's own rules: comments, strings, url(), () nesting. */
+function cssWalk(src,h){
+  const n=src.length;
+  let i=0,line=1,buf='',bl=0,paren=0,parenLine=0,started=false;
+  const stack=[];
+  const add=(c,ln)=>{if(!started&&CWS_RE.test(c))return;if(!started){started=true;bl=ln}buf+=c};
+  const reset=()=>{buf='';started=false};
+  while(i<n){
+    const c=src[i];
+    if(c==='\n'){line++;if(started)buf+=c;i++;continue}
+    if(c==='/'&&src[i+1]==='*'){
+      const e=src.indexOf('*/',i+2);
+      if(e<0){h.err('e',line,'Comment is never closed: add */ to end it (everything after it is ignored)');return}
+      for(let k=i;k<e+2;k++)if(src[k]==='\n')line++;
+      if(started)buf+=' ';
+      i=e+2;continue;
+    }
+    if(c==='"'||c==="'"){
+      let j=i+1,bad=false;
+      for(;;){
+        if(j>=n){bad=true;break}
+        const d=src[j];
+        if(d==='\\'){if(src[j+1]==='\n')line++;j+=2;continue}
+        if(d===c){j++;break}
+        if(d==='\n'){bad=true;break}
+        j++;
+      }
+      if(bad)h.err('e',line,'A quote ('+c+') is never closed on this line');
+      const chunk=src.slice(i,j);
+      add(chunk[0],line);buf+=chunk.slice(1);
+      i=j;continue;
+    }
+    if((c==='u'||c==='U')&&/^url\(/i.test(src.slice(i,i+4))){
+      let j=i+4;while(j<n&&CWS_RE.test(src[j])){if(src[j]==='\n')line++;j++}
+      if(src[j]!=='"'&&src[j]!=="'"){
+        const e=src.indexOf(')',j);
+        if(e<0){h.err('e',line,'url( is never closed: add )');return}
+        for(let k=i;k<e+1;k++)if(src[k]==='\n')line++;
+        add('u',line);buf+=src.slice(i+1,e+1);i=e+1;continue;
+      }
+    }
+    if(c==='('){if(!paren)parenLine=line;paren++;add(c,line);i++;continue}
+    if(c===')'){if(paren>0)paren--;add(c,line);i++;continue}
+    if(paren>0){add(c,line);i++;continue}
+    if(c==='{'){
+      h.open(ctrim(buf),bl||line,stack);
+      reset();i++;continue;
+    }
+    if(c==='}'){
+      if(!stack.length){h.err('e',line,'Unexpected } — there is no matching { before it')}
+      else{if(ctrim(buf))h.decl(ctrim(buf),bl||line,stack);h.close(stack)}
+      reset();i++;continue;
+    }
+    if(c===';'){
+      if(ctrim(buf))h.stmt(ctrim(buf),bl||line,stack);
+      reset();i++;continue;
+    }
+    if(!stack.length&&(src.startsWith(CDO,i)||src.startsWith('-->',i))){i+=src.startsWith(CDO,i)?4:3;continue}
+    add(c,line);i++;
+  }
+  if(paren>0)h.err('e',parenLine,'A ( is never closed: add ) — the browser ignores everything after it');
+  if(ctrim(buf)){
+    if(stack.length)h.decl(ctrim(buf),bl||line,stack);
+    else if(paren===0)h.err('e',bl||line,'"'+trunc(ctrim(buf),40)+'" is not finished: a rule needs { } and a declaration needs ;');
+  }
+  while(stack.length){const o=stack[stack.length-1];h.err('e',o.line,'This { is never closed: add } to end the block');stack.pop()}
+}
+
+function trunc(s,n){s=String(s).replace(/\s+/g,' ');return s.length>n?s.slice(0,n-1)+'…':s}
+
+/* ---- checker ---- */
+const CSS_PROP_FALLBACK='align-content align-items align-self animation animation-delay animation-direction animation-duration animation-fill-mode animation-iteration-count animation-name animation-play-state animation-timing-function aspect-ratio backdrop-filter backface-visibility background background-attachment background-clip background-color background-image background-origin background-position background-repeat background-size border border-bottom border-bottom-color border-bottom-left-radius border-bottom-right-radius border-bottom-style border-bottom-width border-collapse border-color border-left border-radius border-right border-spacing border-style border-top border-top-left-radius border-top-right-radius border-width bottom box-shadow box-sizing caret-color clear clip-path color column-count column-gap columns content cursor direction display fill filter flex flex-basis flex-direction flex-flow flex-grow flex-shrink flex-wrap float font font-family font-size font-style font-variant font-weight gap grid grid-area grid-auto-columns grid-auto-flow grid-auto-rows grid-column grid-row grid-template grid-template-areas grid-template-columns grid-template-rows height inset isolation justify-content justify-items justify-self left letter-spacing line-height list-style list-style-type margin margin-bottom margin-left margin-right margin-top max-height max-width min-height min-width mix-blend-mode object-fit object-position opacity order outline outline-color outline-offset outline-style outline-width overflow overflow-x overflow-y overscroll-behavior padding padding-bottom padding-left padding-right padding-top perspective place-content place-items pointer-events position resize right rotate row-gap scale scroll-behavior scroll-snap-type stroke stroke-width table-layout text-align text-decoration text-indent text-overflow text-shadow text-transform top touch-action transform transform-origin transition transition-delay transition-duration transition-property transition-timing-function translate user-select vertical-align visibility white-space width will-change word-break word-spacing writing-mode z-index';
+let cssProps=null;
+function cssPropList(){
+  if(cssProps)return cssProps;
+  cssProps=[];
   try{
-   const rules=sheet.sheet?.cssRules;
-   if(!rules&&e.css.trim())add('CSS',1,'CSS could not be parsed');
-  }catch(err){add('CSS',lineAt(e.css,Math.max(0,(err.lineNumber||1)-1)),err.message||'Invalid CSS syntax')}
-  // Catch malformed blocks and declarations that browsers silently discard.
-  let depth=0,quote='',escaped=false,cssLine=1;
-  for(let i=0;i<e.css.length;i++){const ch=e.css[i];if(ch==='\n')cssLine++;if(quote){if(ch===quote&&!escaped)quote='';escaped=ch==='\\'&&!escaped;continue}if(ch==='\"'||ch==="'"){quote=ch;continue}if(ch==='{')depth++;if(ch==='}')depth--;if(depth<0){add('CSS',cssLine,'Unexpected closing brace');depth=0}}
-  if(depth>0)add('CSS',lineAt(e.css,e.css.length),'Missing closing brace }');
-  e.css.split('\n').forEach((ln,i)=>{const x=ln.trim();if(x&&!x.startsWith('/*')&&!x.startsWith('*')&&!x.startsWith('//')&&depth>=0&&x.includes(';')&&!x.includes(':')&&!x.startsWith('@'))add('CSS',i+1,'CSS declaration is missing a colon')});
- }
- // JavaScript syntax check without executing the user's code.
- if(e.js.trim()){
-  try{new Function(e.js)}catch(err){
-   const match=String(err.stack||'').match(/<anonymous>:(\d+):(\d+)/);
-   add('JavaScript',match?Math.max(1,+match[1]-2):1,err.message||'JavaScript syntax error');
+    const cs=getComputedStyle(document.documentElement);
+    for(let i=0;i<cs.length;i++){const p=cs[i];if(p&&p[0]!=='-')cssProps.push(p)}
+    if(!cssProps.length)throw 0;
+    cssProps=[...new Set(cssProps)].sort();
+  }catch(e){
+    cssProps=CSS_PROP_FALLBACK.split(' ');
   }
- }
- return out.sort((a,b)=>a[0]-b[0]||a[1].localeCompare(b[1]));
+  return cssProps;
+}
+function lev(a,b){
+  if(Math.abs(a.length-b.length)>2)return 9;
+  const d=[];for(let i=0;i<=a.length;i++){d[i]=[i]}for(let j=0;j<=b.length;j++)d[0][j]=j;
+  for(let i=1;i<=a.length;i++)for(let j=1;j<=b.length;j++)d[i][j]=Math.min(d[i-1][j]+1,d[i][j-1]+1,d[i-1][j-1]+(a[i-1]===b[j-1]?0:1));
+  return d[a.length][b.length];
+}
+function cssSuggest(p){
+  let best=null,bd=3;
+  for(const q of cssPropList()){const d=lev(p,q);if(d<bd){bd=d;best=q}}
+  return bd<=2&&p.length>3?best:(bd<=1?best:null);
+}
+function splitTop(s,sep){
+  const out=[];let depth=0,q='',cur='';
+  for(let i=0;i<s.length;i++){
+    const c=s[i];
+    if(q){cur+=c;if(c==='\\'){cur+=s[++i]||''}else if(c===q)q='';continue}
+    if(c==='"'||c==="'"){q=c;cur+=c;continue}
+    if(c==='('||c==='[')depth++;
+    else if(c===')'||c===']')depth--;
+    if(c===sep&&depth===0){out.push(cur);cur='';continue}
+    cur+=c;
+  }
+  out.push(cur);return out;
+}
+function topColon(s){
+  let depth=0,q='';
+  for(let i=0;i<s.length;i++){
+    const c=s[i];
+    if(q){if(c==='\\')i++;else if(c===q)q='';continue}
+    if(c==='"'||c==="'"){q=c;continue}
+    if(c==='(')depth++;else if(c===')')depth--;
+    else if(c===':'&&depth===0)return i;
+  }
+  return -1;
+}
+const HAS_SUPPORTS=()=>typeof CSS!=='undefined'&&CSS&&typeof CSS.supports==='function';
+const HAS_SELFN=()=>{try{return HAS_SUPPORTS()&&CSS.supports('selector(a)')}catch(e){return false}};
+
+/* returns [{line,sev,msg}] for a stylesheet; `decls`=true when text is a list of declarations (style="" attribute) */
+function cssCheck(src,decls){
+  const out=[];
+  const err=(sev,line,msg)=>out.push({line,sev,msg});
+  const sup=HAS_SUPPORTS(),selFn=HAS_SELFN();
+  let seenRule=false;
+  const ok=(p,v)=>{try{return CSS.supports(p,v)}catch(e){return true}};
+  const selOK=s=>{try{return CSS.supports('selector('+s+')')}catch(e){return true}};
+  const checkSelector=(prel,line,nested)=>{
+    const list=splitTop(prel,',');
+    for(const raw of list){
+      const s=ctrim(raw);
+      if(!s){err('e',line,'There is an empty selector (a stray comma?) in "'+trunc(prel,50)+'"');continue}
+      if(!selFn)continue;
+      let good=selOK(s);
+      if(!good&&nested)good=selOK('& '+s)||selOK('&'+s);
+      if(!good){
+        const vendor=/::?-(webkit|moz|ms|o)-/i.test(s);
+        err(vendor?'i':'e',line,vendor?'"'+trunc(s,50)+'" uses a browser-specific part this browser does not know (it may work in other browsers)':'Invalid selector "'+trunc(s,60)+'": the browser ignores this whole rule');
+      }
+    }
+  };
+  const checkDecl=(text,line)=>{
+    const ci=topColon(text);
+    if(ci<0){err('e',line,'"'+trunc(text,50)+'" is missing a colon (:) — a declaration looks like  property: value;');return}
+    const prop=ctrim(text.slice(0,ci));let val=ctrim(text.slice(ci+1));
+    if(!prop){err('e',line,'There is a value but no property name before the colon');return}
+    if(prop.startsWith('--'))return;
+    const m=/[ \t\n\r\f]*![ \t\n\r\f]*important[ \t\n\r\f]*$/i.exec(val);
+    if(m)val=ctrim(val.slice(0,m.index));
+    if(val===''){err('e',line,'"'+prop+'" has no value');return}
+    if(!sup)return;
+    const p=prop.toLowerCase();
+    if(ok(p,val))return;
+    let known=false;try{known=CSS.supports(p,'initial')}catch(e){}
+    if(!known){
+      if(/^-(webkit|moz|ms|o|khtml)-/.test(p))err('i',line,'"'+prop+'" is browser-specific and this browser does not know it (it may work in other browsers)');
+      else{const s=cssSuggest(p);err('e',line,'Unknown property "'+prop+'"'+(s?' — did you mean "'+s+'"? ':'. ')+'The browser ignores it.')}
+      return;
+    }
+    if(/(^|[ \t\n\r\f,(])-(webkit|moz|ms|o)-[a-z]/i.test(val)){err('i',line,''+p+': the value "'+trunc(val,40)+'" is browser-specific and this browser does not know it (it may work in other browsers)');return}
+    let hint='';
+    if(/^[-+]?[\d.]+(\s+[-+]?[\d.]+)*$/.test(val)&&ok(p,val.replace(/([\d.])(?=\s|$)/g,'$1px')))hint=' (a number needs a unit, for example 10px)';
+    else{
+      const c2=topColon(val);
+      if(c2>0){const w=val.slice(0,c2).trim().split(/\s+/).pop();hint=' (is a ; missing before "'+w+':"?)'}
+    }
+    err('e',line,'Invalid value for '+p+': "'+trunc(val,60)+'"'+hint+'. The browser ignores this line.');
+  };
+  const checkMedia=(q,line)=>{
+    q=q.trim();if(!q)return;
+    try{const m=matchMedia(q).media;if(m==='not all'&&!/^not\s+all$/i.test(q))err('w',line,'The media query "'+trunc(q,60)+'" is not valid (or this browser does not know it), so the whole @media block is ignored')}catch(e){}
+  };
+  cssWalk(src,{
+    err,
+    open(prel,line,stack){
+      const parent=stack[stack.length-1]||{k:'root',decl:false};
+      if(prel.startsWith('@')){
+        const m=/^@([\w-]+)/.exec(prel),name=m?m[1].toLowerCase():'';
+        if(!CSS_AT_KNOWN.has(name))err(name[0]==='-'?'i':'w',line,'Unknown @-rule "@'+name+'"');
+        if(name==='media')checkMedia(prel.slice(6),line);
+        if(!stack.length&&name!=='charset'&&name!=='import'&&name!=='layer'&&name!=='namespace')seenRule=true;
+        const k=CSS_AT_KF.has(name)?'kf':CSS_AT_DESC.has(name)?'desc':'grp';
+        stack.push({k,line,decl:k==='grp'?!!parent.decl:false});
+      }else{
+        if(!prel)err('e',line,'There is a { without a selector in front of it');
+        else if(parent.k==='kf'){
+          if(!/^\s*(from|to|(\d+(\.\d+)?|\.\d+)%)\s*(,\s*(from|to|(\d+(\.\d+)?|\.\d+)%)\s*)*$/i.test(prel))err('e',line,'"'+trunc(prel,40)+'" is not a valid keyframe selector (use from, to or a percentage)');
+        }else if(parent.k!=='desc')checkSelector(prel,line,parent.k==='rule'||!!parent.decl);
+        if(!stack.length)seenRule=true;
+        stack.push({k:'rule',line,decl:true});
+      }
+    },
+    decl(text,line,stack){
+      const top=stack[stack.length-1];
+      if(!top||!top.decl)return;
+      if(text.startsWith('@'))return;
+      checkDecl(text,line);
+    },
+    stmt(text,line,stack){
+      if(text.startsWith('@')){
+        const m=/^@([\w-]+)/.exec(text),name=m?m[1].toLowerCase():'';
+        if(!CSS_AT_KNOWN.has(name))err(name[0]==='-'?'i':'w',line,'Unknown @-rule "@'+name+'"');
+        if(name==='import'&&!stack.length&&seenRule)err('w',line,'@import must come before all other rules, so the browser ignores this one');
+        if(!stack.length&&name!=='charset'&&name!=='import'&&name!=='layer'&&name!=='namespace')seenRule=true;
+        return;
+      }
+      if(!stack.length){err('e',line,'"'+trunc(text,50)+'" is outside any rule: put it inside a { } block, or add the missing { }');return}
+      const top=stack[stack.length-1];
+      if(top.decl)checkDecl(text,line);
+    },
+    close(stack){stack.pop()},
+  });
+  return out;
+}
+function cssDeclCheck(text){
+  const wrapped='x{'+text+'\n}';
+  return cssCheck(wrapped).map(o=>({line:Math.max(1,o.line),sev:o.sev,msg:o.msg}));
+}
+
+/* ---- formatter ---- */
+function cssNorm(s){return s.replace(/[ \t\n\r\f]+/g,'').replace(/;+/g,';').replace(/;}/g,'}').toLowerCase()}
+function fmtCSS(src,unit,base){
+  unit=unit||'  ';
+  const out=[];
+  let depth=base||0,buf='',paren=0,i=0,nlSince=0,blank=false,wantBlank=false;
+  const n=src.length;
+  const kinds=[];
+  const ind=()=>unit.repeat(depth);
+  const parentKind=()=>kinds.length?kinds[kinds.length-1]:'root';
+  const emit=text=>{
+    if((blank||wantBlank)&&out.length&&!/\{$/.test(out[out.length-1])&&text!=='}')out.push('');
+    blank=false;wantBlank=false;nlSince=0;
+    const lines=text.split('\n');
+    lines.forEach(l=>out.push(l===''?'':ind()+l));
+  };
+  const normSpace=t=>{
+    // collapse whitespace outside strings and url()
+    let o='',q='',k=0;
+    while(k<t.length){
+      const c=t[k];
+      if(q){o+=c;if(c==='\\'){o+=t[++k]||''}else if(c===q)q='';k++;continue}
+      if(c==='"'||c==="'"){q=c;o+=c;k++;continue}
+      if((c==='u'||c==='U')&&/^url\([ \t\n\r\f]*[^ \t\n\r\f"']/i.test(t.slice(k,k+40))){
+        const e=t.indexOf(')',k);
+        if(e>0){o+=t.slice(k,e+1);k=e+1;continue}
+      }
+      if(CWS_RE.test(c)){if(o&&!/[ \t\n\r\f]$/.test(o))o+=' ';k++;continue}
+      o+=c;k++;
+    }
+    return ctrim(o);
+  };
+  const normValue=v=>{
+    let t=normSpace(v);
+    // outside strings/url: tidy commas, parentheses and !important
+    let o='',q='',k=0;
+    while(k<t.length){
+      const c=t[k];
+      if(q){o+=c;if(c==='\\'){o+=t[++k]||''}else if(c===q)q='';k++;continue}
+      if(c==='"'||c==="'"){q=c;o+=c;k++;continue}
+      if((c==='u'||c==='U')&&/^url\([ \t\n\r\f]*[^ \t\n\r\f"']/i.test(t.slice(k,k+40))){
+        const e=t.indexOf(')',k);
+        if(e>0){o+=t.slice(k,e+1);k=e+1;continue}
+      }
+      if(c===','){o=o.replace(/[ \t\n\r\f]+$/,'')+', ';k++;while(t[k]===' ')k++;continue}
+      if(c==='('){o+=c;k++;while(t[k]===' ')k++;continue}
+      if(c===')'){o=o.replace(/[ \t\n\r\f]+$/,'')+c;k++;continue}
+      if(c==='!'){o=o.replace(/[ \t\n\r\f]+$/,'')+' !';k++;while(t[k]===' ')k++;continue}
+      o+=c;k++;
+    }
+    return ctrim(o.replace(/![ \t\n\r\f]*important/ig,'!important'));
+  };
+  const normDecl=t=>{
+    const ci=topColon(t);
+    if(ci<0)return normSpace(t);
+    const prop=ctrim(t.slice(0,ci)),val=t.slice(ci+1);
+    if(prop.startsWith('--'))return prop+': '+ctrim(normSpace(val));
+    return prop+': '+normValue(val);
+  };
+  const normPrelude=p=>{
+    if(p[0]==='@'){
+      let t=normSpace(p);
+      if(/^@(media|supports|container|import|-webkit-document|-moz-document)\b/i.test(t))t=t.replace(/\([ \t\n\r\f]*([\w-]+)[ \t\n\r\f]*:[ \t\n\r\f]*/g,'($1: ').replace(/[ \t\n\r\f]+\)/g,')').replace(/\([ \t\n\r\f]+/g,'(').replace(/\band\(/gi,'and (');
+      return t;
+    }
+    return splitTop(p,',').map(x=>normSpace(x)).join(',\n');
+  };
+  const kindOf=prel=>{
+    if(prel[0]==='@'){const m=/^@([\w-]+)/.exec(prel),nm=m?m[1].toLowerCase():'';return CSS_AT_KF.has(nm)?'kf':CSS_AT_DESC.has(nm)?'desc':'grp'}
+    return 'rule';
+  };
+  const flushDecl=()=>{
+    const t=ctrim(buf);buf='';
+    if(!t)return;
+    emit(t[0]==='@'?normSpace(t)+';':normDecl(t)+';');
+  };
+  let lastCommentTrail=false;
+  while(i<n){
+    const c=src[i];
+    if(c==='\n'){nlSince++;if(nlSince>=2&&!ctrim(buf))blank=true;if(buf)buf+=c;i++;continue}
+    if(c==='/'&&src[i+1]==='*'){
+      const e=src.indexOf('*/',i+2);
+      if(e<0)throw new Error('A comment is never closed');
+      const cm=src.slice(i,e+2);
+      if(ctrim(buf)){buf+=' '+cm.replace(/[ \t\n\r\f]*\n[ \t\n\r\f]*/g,' ')+' '}
+      else{
+        const trailing=nlSince===0&&out.length>0&&!blank;
+        if(trailing&&cm.indexOf('\n')<0){out[out.length-1]+=' '+cm}
+        else{
+          const ls0=src.lastIndexOf('\n',i-1)+1,pre=src.slice(ls0,i);
+          const ow=/^[ \t]*$/.test(pre)?pre.length:0;
+          emit(cm.split('\n').map((l,k)=>{
+            l=l.replace(/[ \t\n\r\f]+$/,'');
+            if(k===0)return l;
+            const m=/^[ \t]*/.exec(l)[0].length;
+            return l.slice(Math.min(m,ow));
+          }).join('\n'));
+        }
+        nlSince=0;
+      }
+      i=e+2;continue;
+    }
+    if(c==='"'||c==="'"){
+      let j=i+1;
+      for(;;){if(j>=n)throw new Error('A quote is never closed');const d=src[j];if(d==='\\'){j+=2;continue}if(d===c){j++;break}if(d==='\n')throw new Error('A quote is never closed on one line');j++}
+      if(src.slice(i,j).indexOf('\n')>=0)throw new Error('A string continues on the next line (not supported by the formatter)');
+      buf+=src.slice(i,j);i=j;continue;
+    }
+    if((c==='u'||c==='U')&&/^url\(/i.test(src.slice(i,i+4))){
+      let j=i+4;while(j<n&&CWS_RE.test(src[j]))j++;
+      if(src[j]!=='"'&&src[j]!=="'"){const e=src.indexOf(')',j);if(e<0)throw new Error('url( is never closed');buf+=src.slice(i,e+1);i=e+1;continue}
+    }
+    if(c==='('){paren++;buf+=c;i++;continue}
+    if(c===')'){if(paren>0)paren--;buf+=c;i++;continue}
+    if(paren>0){buf+=c;i++;continue}
+    if(c==='{'){
+      const prel=ctrim(buf);buf='';
+      const pk=parentKind();
+      if(prel){
+        const np=normPrelude(prel);
+        emit(np.replace(/\n/g,'\n')+' {');
+      }else emit('{');
+      kinds.push(kindOf(prel));depth++;
+      void pk;
+      i++;continue;
+    }
+    if(c==='}'){
+      if(!kinds.length)throw new Error('There is a } with no matching {');
+      flushDecl();
+      depth--;kinds.pop();
+      if(out.length&&/(^|[ \t])\{$/.test(out[out.length-1])){out[out.length-1]+='}';blank=false;nlSince=0}
+      else emit('}');
+      if(parentKind()==='root'||parentKind()==='grp')wantBlank=true;
+      i++;continue;
+    }
+    if(c===';'){flushDecl();i++;continue}
+    buf+=c;i++;
+  }
+  if(paren>0)throw new Error('A ( is never closed');
+  if(kinds.length)throw new Error('A { is never closed');
+  if(ctrim(buf))flushDecl();
+  const res=out.join('\n').replace(/\n{3,}/g,'\n\n').replace(/[ \t\n\r\f]+$/,'')+'\n';
+  if(cssNorm(res)!==cssNorm(src))throw new Error('Safety check failed (the CSS content would change)');
+  return res;
+}
+
+/* ===== HTML: tokenizer, tree builder, formatter ===== */
+const H_CDO='<'+'!--';
+const HNS=/[^ \t\n\f\r]/,HLEAD=/^[ \t\n\f\r]/,HTRAIL=/[ \t\n\f\r]$/,HSPLIT=/[ \t\n\f\r]+/;
+const H_VOID=W('area base br col embed hr img input link meta param source track wbr basefont bgsound frame keygen');
+const H_RAW=W('script style textarea title xmp iframe noembed noframes');
+const H_ELEMENTS=W('a abbr address area article aside audio b base bdi bdo blockquote body br button canvas caption cite code col colgroup data datalist dd del details dfn dialog div dl dt em embed fieldset figcaption figure footer form h1 h2 h3 h4 h5 h6 head header hgroup hr html i iframe img input ins kbd label legend li link main map mark menu meta meter nav noscript object ol optgroup option output p param picture pre progress q rp rt ruby s samp script search section select slot small source span strong style sub summary sup svg table tbody td template textarea tfoot th thead time title tr track u ul var video wbr math');
+const H_OBSOLETE=W('acronym applet basefont bgsound big blink center dir font frame frameset isindex keygen listing marquee menuitem multicol nextid nobr noembed noframes plaintext rb rtc spacer strike tt xmp');
+const H_P_CLOSERS=W('address article aside blockquote center details dialog dir div dl fieldset figcaption figure footer form h1 h2 h3 h4 h5 h6 header hgroup hr li dd dt listing main menu nav ol p plaintext pre search section summary table ul xmp');
+const H_SPECIAL=W('address applet area article aside base basefont bgsound blockquote body br button caption center col colgroup dd details dir div dl dt embed fieldset figcaption figure footer form frame frameset h1 h2 h3 h4 h5 h6 head header hgroup hr html iframe img input keygen li link listing main marquee menu meta nav noembed noframes noscript object ol p param plaintext pre script search section select source style summary table tbody td template textarea tfoot th thead title tr track ul wbr xmp');
+const H_SCOPE_STOP=W('applet caption html table td th marquee object template');
+const H_BTN_STOP=W('applet caption html table td th marquee object template button');
+const H_END_OPT=W('html head body p li dt dd tr td th thead tbody tfoot option optgroup colgroup caption rt rp rb rtc');
+const H_HEAD_OK=W('base basefont bgsound link meta noscript script style template title');
+const H_HEADINGS=W('h1 h2 h3 h4 h5 h6');
+const H_PARENTS={li:['ul','ol','menu'],dt:['dl','div'],dd:['dl','div'],tr:['table','thead','tbody','tfoot'],td:['tr'],th:['tr'],thead:['table'],tbody:['table'],tfoot:['table'],caption:['table'],colgroup:['table'],col:['colgroup','table'],option:['select','datalist','optgroup'],optgroup:['select'],summary:['details'],legend:['fieldset'],figcaption:['figure'],source:['picture','video','audio'],track:['video','audio']};
+const H_CHILDREN={ul:W('li script template'),ol:W('li script template'),menu:W('li script template'),table:W('caption colgroup thead tbody tfoot tr script template style'),thead:W('tr script template'),tbody:W('tr script template'),tfoot:W('tr script template'),tr:W('td th script template'),colgroup:W('col template'),select:W('option optgroup hr script template'),dl:W('dt dd div script template')};
+const H_TEXT_BAD=W('table thead tbody tfoot tr colgroup ul ol menu select dl');
+
+function htmlTokens(src,err){
+  const n=src.length,toks=[];
+  let i=0;
+  const ws=c=>c===' '||c==='\n'||c==='\t'||c==='\r'||c==='\f';
+  const alpha=c=>(c>='a'&&c<='z')||(c>='A'&&c<='Z');
+  const text=(a,b)=>{if(b>a)toks.push({t:'text',s:a,e:b})};
+  const rawRe={};
+  function parseTag(i0,isEnd){
+    let j=i0+(isEnd?2:1);const ns=j;
+    while(j<n&&!ws(src[j])&&src[j]!=='/'&&src[j]!=='>')j++;
+    const raw=src.slice(ns,j);
+    const attrs=[];let selfClosing=false,closed=false;
+    for(;;){
+      while(j<n&&(ws(src[j])||(src[j]==='/'&&src[j+1]!=='>')))j++;
+      if(j>=n)break;
+      if(src[j]==='>'){closed=true;j++;break}
+      if(src[j]==='/'){selfClosing=true;closed=true;j+=2;break}
+      const as=j;
+      if(src[j]==='=')j++;
+      while(j<n&&!ws(src[j])&&src[j]!=='/'&&src[j]!=='>'&&src[j]!=='=')j++;
+      const name=src.slice(as,j);
+      let k=j;while(k<n&&ws(src[k]))k++;
+      let value=null,quote='',ve=j,un=false;
+      if(src[k]==='='){
+        k++;while(k<n&&ws(src[k]))k++;
+        if(src[k]==='"'||src[k]==="'"){
+          quote=src[k];const q=src.indexOf(quote,k+1);
+          if(q<0){value=src.slice(k+1);ve=n;j=n;un=true}
+          else{value=src.slice(k+1,q);ve=q+1;j=ve}
+        }else{
+          let m=k;while(m<n&&!ws(src[m])&&src[m]!=='>')m++;
+          value=src.slice(k,m);ve=m;j=m;
+          if(/["'<=`]/.test(value))err('e',as,'The value of attribute "'+name+'" has a quote or other special character in it: put the value inside quotes');
+        }
+      }
+      attrs.push({n:name,l:name.toLowerCase(),v:value,q:quote,s:as,e:ve});
+      if(/["'<]/.test(name))err('e',as,'The attribute name "'+trunc(name,20)+'" contains a quote or "<": check your quotes');
+      if(un){err('e',as,'The value of attribute "'+name+'" is missing its closing quote ('+quote+')',true);break}
+      if(quote&&j<n&&!ws(src[j])&&src[j]!=='/'&&src[j]!=='>')err('w',j,'Add a space between attributes');
+    }
+    return {raw,attrs,selfClosing,closed,end:j};
+  }
+  while(i<n){
+    const lt=src.indexOf('<',i);
+    if(lt<0){text(i,n);break}
+    text(i,lt);i=lt;
+    const c=src[i+1];
+    if(c==='!'){
+      if(src.startsWith(H_CDO,i)){
+        if(src.startsWith(H_CDO+'>',i)){err('w',i,'An empty comment: write <\!-- text --> instead');toks.push({t:'comment',s:i,e:i+5});i+=5;continue}
+        const e=src.indexOf('-->',i+4);
+        if(e<0){err('e',i,'This comment is never closed: add --> to end it',true);toks.push({t:'comment',s:i,e:n});i=n;break}
+        toks.push({t:'comment',s:i,e:e+3});i=e+3;continue;
+      }
+      if(src.startsWith('<![CDATA[',i)){const e=src.indexOf(']]>',i+9);const end=e<0?n:e+3;toks.push({t:'cdata',s:i,e:end});i=end;continue}
+      const e=src.indexOf('>',i),end=e<0?n:e+1;
+      if(/^<!doctype/i.test(src.slice(i,i+9))){toks.push({t:'doctype',s:i,e:end});if(e<0)err('e',i,'This <!DOCTYPE is never closed with ">"',true)}
+      else{err('e',i,'"<!" is not valid here (comments are written <\!-- like this -->)',true);toks.push({t:'comment',s:i,e:end})}
+      i=end;continue;
+    }
+    if(c==='?'){
+      err('e',i,'"<?" is not valid in HTML (the browser turns it into a comment). Remove it or use <\!-- -->',true);
+      const e=src.indexOf('>',i),end=e<0?n:e+1;toks.push({t:'comment',s:i,e:end});i=end;continue;
+    }
+    if(c==='/'){
+      if(alpha(src[i+2])){
+        const tg=parseTag(i,true);
+        if(!tg.closed)err('e',i,'This closing tag is never finished: add ">"',true);
+        if(tg.attrs.length)err('w',i,'A closing tag like </'+tg.raw+'> should not have attributes');
+        toks.push({t:'end',name:tg.raw.toLowerCase(),raw:tg.raw,s:i,e:tg.end,attrs:tg.attrs});
+        i=tg.end;continue;
+      }
+      if(src[i+2]==='>'){err('e',i,'"</>" has no tag name',true);toks.push({t:'text',s:i,e:i+3});i+=3;continue}
+      err('e',i,'"</" must be followed by a tag name (to write the characters, use &lt;/)',true);
+      const e=src.indexOf('>',i),end=e<0?n:e+1;toks.push({t:'comment',s:i,e:end});i=end;continue;
+    }
+    if(alpha(c)){
+      const tg=parseTag(i,false);
+      const name=tg.raw.toLowerCase();
+      if(!tg.closed){err('e',i,'This tag is never closed: add ">"',true)}
+      toks.push({t:'start',name,raw:tg.raw,s:i,e:tg.end,attrs:tg.attrs,selfClosing:tg.selfClosing,unclosed:!tg.closed});
+      i=tg.end;
+      if(tg.closed&&H_RAW.has(name)){
+        const re=rawRe[name]||(rawRe[name]=new RegExp('</'+name+'(?=[ \\t\\n\\f\\r/>])','ig'));
+        re.lastIndex=i;const m=re.exec(src);
+        const ce=m?m.index:n;
+        if(!m)err('e',toks[toks.length-1].s,'<'+name+'> is never closed: add </'+name+'> (the browser treats everything after it as '+name+' content)',true);
+        if(ce>i)toks.push({t:name==='title'?'text':'raw',s:i,e:ce,tag:name});
+        if(!m)toks[toks.length-1].unclosedRaw=true;
+        i=ce;
+      }
+      continue;
+    }
+    err('w',i,'A "<" in text should be written as &lt; (otherwise the browser may treat it as the start of a tag)');
+    text(i,i+1);i++;
+  }
+  return toks;
+}
+
+function htmlParse(src){
+  const errs=[];
+  const err=(sev,pos,msg,fatal)=>errs.push({sev,pos,msg,fatal:!!fatal});
+  const toks=htmlTokens(src,err);
+  const hasDoctype=toks.some(t=>t.t==='doctype');
+  const root={type:'root',name:'#root',children:[],foreign:false};
+  const stack=[root];
+  const ids=new Map();
+  let curPos=0;
+  const top=()=>stack[stack.length-1];
+  const integ=el=>el.foreign&&(el.name==='foreignobject'||el.name==='desc'||(el.name==='title'));
+  const foreignCtx=()=>{const t=top();return t.foreign&&!integ(t)};
+  const inScope=(name,stop)=>{
+    for(let k=stack.length-1;k>0;k--){
+      const el=stack[k];
+      if(el.name===name&&!el.foreign)return true;
+      if(!el.foreign&&stop.has(el.name))return false;
+    }
+    return false;
+  };
+  const closeImpl=(el)=>{el.closed=false;el.e=curPos};
+  const popImpl=()=>{const el=stack.pop();closeImpl(el);return el};
+  const popUntil=el=>{while(stack.length>1){const x=popImpl();if(x===el)break}};
+  const reportUnclosedBetween=(k,why)=>{
+    for(let m=stack.length-1;m>k;m--){
+      const nd=stack[m];
+      if(!H_END_OPT.has(nd.name)&&!nd.foreign||nd.foreign)err('e',nd.tag.s,'<'+nd.name+'> is not closed before '+why);
+    }
+  };
+
+  function implied(name){
+    if(H_P_CLOSERS.has(name)&&!(name==='table'&&!hasDoctype)&&inScope('p',H_BTN_STOP)){
+      while(top().name!=='p')popImpl();
+      popImpl();
+      if(name!=='p')err('w',curPos,'<'+name+'> cannot go inside <p>: the browser ends the paragraph first, so a later </p> will not match');
+    }
+    const t=top();
+    if(t.name==='head'&&!H_HEAD_OK.has(name)&&name!=='head')popImpl();
+    switch(name){
+      case 'li':
+        for(let k=stack.length-1;k>0;k--){const el=stack[k];if(el.name==='li'){popUntil(el);break}if(H_SPECIAL.has(el.name)&&el.name!=='address'&&el.name!=='div'&&el.name!=='p')break}
+        break;
+      case 'dd':case 'dt':
+        for(let k=stack.length-1;k>0;k--){const el=stack[k];if(el.name==='dd'||el.name==='dt'){popUntil(el);break}if(H_SPECIAL.has(el.name)&&el.name!=='address'&&el.name!=='div'&&el.name!=='p')break}
+        break;
+      case 'option':if(top().name==='option')popImpl();break;
+      case 'optgroup':if(top().name==='option')popImpl();if(top().name==='optgroup')popImpl();break;
+      case 'tr':while(top().name==='td'||top().name==='th')popImpl();if(top().name==='tr')popImpl();break;
+      case 'td':case 'th':if(top().name==='td'||top().name==='th')popImpl();break;
+      case 'thead':case 'tbody':case 'tfoot':
+        while(top().name==='td'||top().name==='th'||top().name==='tr')popImpl();
+        if(top().name==='thead'||top().name==='tbody'||top().name==='tfoot')popImpl();
+        break;
+      case 'caption':case 'colgroup':if(top().name==='colgroup'||top().name==='caption')popImpl();break;
+      case 'rt':case 'rp':if(top().name==='rt'||top().name==='rp')popImpl();break;
+      case 'a':
+        for(let k=stack.length-1;k>0;k--){
+          const el=stack[k];
+          if(el.name==='a'&&!el.foreign){err('e',curPos,'A link (<a>) cannot contain another link: close the first <a> before starting a new one');popUntil(el);break}
+          if(!el.foreign&&H_SCOPE_STOP.has(el.name))break;
+        }
+        break;
+      case 'button':
+        if(inScope('button',H_SCOPE_STOP)){err('e',curPos,'A <button> cannot contain another <button>');for(let k=stack.length-1;k>0;k--)if(stack[k].name==='button'){popUntil(stack[k]);break}}
+        break;
+      case 'form':
+        if(stack.some(el=>el.name==='form'))err('e',curPos,'A <form> cannot contain another <form>');
+        break;
+      default:
+        if(H_HEADINGS.has(name)&&H_HEADINGS.has(top().name)){err('w',curPos,'A heading (<'+name+'>) cannot be inside another heading (<'+top().name+'>)');popImpl()}
+    }
+  }
+
+  function modelCheck(el,par){
+    if(par.type==='root'||el.foreign||(par.foreign&&!integ(par)))return;
+    const name=el.name,pn=par.name;
+    if(pn==='template'||pn.indexOf('-')>=0)return;
+    const need=H_PARENTS[name];
+    if(need&&need.indexOf(pn)<0)err('w',el.tag.s,'<'+name+'> belongs inside '+need.map(x=>'<'+x+'>').join(' or ')+', but it is inside <'+pn+'>');
+    const allowed=H_CHILDREN[pn];
+    if(allowed&&!allowed.has(name)&&!(need&&need.indexOf(pn)>=0)){
+      const tbl=pn==='table'||pn==='tbody'||pn==='thead'||pn==='tfoot'||pn==='tr';
+      err('w',el.tag.s,tbl?'<'+name+'> is not allowed directly inside <'+pn+'>: the browser moves it out of the table':'<'+name+'> is not allowed directly inside <'+pn+'> (only '+Array.from(allowed).filter(x=>x!=='script'&&x!=='template').map(x=>'<'+x+'>').join(', ')+')');
+    }
+  }
+
+  function startTag(tok){
+    curPos=tok.s;
+    const name=tok.name;
+    if(!foreignCtx())implied(name);
+    const par=top();
+    const fctx=par.foreign&&!integ(par);
+    const el={type:'el',name,raw:tok.raw,tag:tok,attrs:tok.attrs,children:[],parent:par,closed:false,s:tok.s,e:tok.e,foreign:name==='svg'||name==='math'?true:fctx,void:false};
+    el.void=!el.foreign&&H_VOID.has(name);
+    // attribute rules
+    const seen=new Set();
+    for(const a of tok.attrs){
+      if(seen.has(a.l))err('e',a.s,'Duplicate attribute "'+a.n+'" on <'+name+'>: only the first one is used');
+      seen.add(a.l);
+      if(a.l==='id'&&a.v!=null&&a.v!==''){
+        if(ids.has(a.v))err('e',a.s,'Duplicate id "'+a.v+'" (first used on line \u0000'+ids.get(a.v).pos+'\u0000)');
+        else ids.set(a.v,{pos:a.s});
+      }
+    }
+    if(!el.foreign){
+      if(!H_ELEMENTS.has(name)&&name.indexOf('-')<0){
+        if(H_OBSOLETE.has(name))err('i',tok.s,'<'+name+'> is obsolete: use CSS instead');
+        else err('w',tok.s,'Unknown tag <'+name+'> (not an HTML tag; custom tags need a hyphen, like <my-tag>)');
+      }else if(H_OBSOLETE.has(name)&&H_ELEMENTS.has(name)===false)err('i',tok.s,'<'+name+'> is obsolete: use CSS instead');
+      if(name==='img'&&!tok.attrs.some(a=>a.l==='alt'))err('w',tok.s,'<img> is missing alt text (describe the image for people who cannot see it)');
+      modelCheck(el,par);
+    }
+    par.children.push(el);
+    if(el.void){el.closed=true;el.e=tok.e;return}
+    if(tok.selfClosing){
+      if(el.foreign){el.closed=true;el.selfClosed=true;return}
+      err('w',tok.s,'<'+name+'/> is not self-closing in HTML: the "/" is ignored and <'+name+'> stays open. Write <'+name+'></'+name+'> instead');
+    }
+    stack.push(el);
+    if(tok.unclosed)el.unclosedTag=true;
+  }
+
+  function stray(tok,msg){
+    err('e',tok.s,msg||('Closing </'+tok.raw+'> has no matching opening tag'));
+    top().children.push({type:'stray',s:tok.s,e:tok.e,name:tok.name,raw:tok.raw});
+  }
+
+  function endTag(tok){
+    curPos=tok.s;
+    const name=tok.name;
+    if(top().foreign){
+      for(let k=stack.length-1;k>0;k--){
+        const nd=stack[k];
+        if(!nd.foreign)break;
+        if(nd.name===name){reportUnclosedBetween(k,'</'+tok.raw+'>');while(stack.length>k+1)popImpl();const el=stack.pop();el.closed=true;el.e=tok.e;el.endTok=tok;return}
+      }
+    }
+    if(H_VOID.has(name)){
+      if(name==='br')err('e',tok.s,'</br> is not valid: write <br>');
+      else err('e',tok.s,'<'+name+'> has no closing tag (it is a "void" element): remove </'+tok.raw+'>');
+      top().children.push({type:'stray',s:tok.s,e:tok.e,name,raw:tok.raw,void:true});
+      return;
+    }
+    let k=-1;
+    if(name==='p'){
+      if(!inScope('p',H_BTN_STOP)){stray(tok,'</p> has no matching <p> (a block tag such as <div> or <ul> inside a paragraph closes it early)');return}
+    }
+    for(let m=stack.length-1;m>0;m--){
+      const nd=stack[m];
+      if(nd.name===name&&!nd.foreign){k=m;break}
+      if(!nd.foreign&&H_SCOPE_STOP.has(nd.name)&&name!=='table'&&name!=='td'&&name!=='th'&&name!=='tr'&&name!=='caption'){k=-1;break}
+    }
+    if(k<0){stray(tok);return}
+    reportUnclosedBetween(k,'</'+tok.raw+'>');
+    while(stack.length>k+1)popImpl();
+    const el=stack.pop();el.closed=true;el.e=tok.e;el.endTok=tok;
+  }
+
+  for(const tok of toks){
+    curPos=tok.s;
+    switch(tok.t){
+      case 'text':{
+        const par=top();
+        if(!par.foreign&&H_TEXT_BAD.has(par.name)&&par.type==='el'&&HNS.test(src.slice(tok.s,tok.e))&&!tok.bad)err('w',tok.s,'Text is not allowed directly inside <'+par.name+'>'+(par.name==='table'||par.name==='tr'||par.name==='tbody'||par.name==='thead'||par.name==='tfoot'?': the browser moves it out of the table':' (wrap it in the right tag)'));
+        par.children.push({type:'text',s:tok.s,e:tok.e,bad:!!tok.bad});break;
+      }
+      case 'raw':top().children.push({type:'raw',s:tok.s,e:tok.e});break;
+      case 'comment':top().children.push({type:'comment',s:tok.s,e:tok.e});break;
+      case 'doctype':top().children.push({type:'doctype',s:tok.s,e:tok.e});break;
+      case 'cdata':
+        if(!top().foreign)err('w',tok.s,'<![CDATA[ ... ]]> only works inside <svg> or <math>; in HTML it becomes a comment');
+        top().children.push({type:'cdata',s:tok.s,e:tok.e});break;
+      case 'start':startTag(tok);break;
+      case 'end':endTag(tok);break;
+    }
+  }
+  curPos=src.length;
+  const openNames=stack.slice(1).map(el=>el.raw);
+  for(let k=stack.length-1;k>0;k--){
+    const el=stack[k];
+    if(!H_END_OPT.has(el.name)&&!el.tag.unclosedRaw)err('e',el.tag.s,'<'+el.name+'> is never closed (add </'+el.raw+'>)');
+  }
+  while(stack.length>1)popImpl();
+  return {root,errs,toks,hasDoctype,ids,openNames};
+}
+
+/* ---- formatter ---- */
+const H_BLOCK=W('address article aside blockquote body caption center col colgroup dd details dialog dir div dl dt fieldset figcaption figure footer form h1 h2 h3 h4 h5 h6 head header hgroup hr html legend li link main menu meta nav noscript ol p pre search section summary table tbody td template tfoot th thead title tr ul base script style');
+const H_STRUCT=W('svg math select datalist picture video audio object canvas map');
+const H_STRUCT_EXCEPT=W('text tspan textpath a');
+const H_VERBATIM=W('pre listing plaintext xmp textarea');
+const H_JS_TYPE=/^(|module|(text|application)\/(x-)?(java|ecma)script|text\/jsx)$/i;
+
+function domSig(html){
+  const doc=new DOMParser().parseFromString(html,'text/html');
+  const toks=[],cms=[];
+  const RAWT=W('pre textarea listing plaintext xmp');
+  const NS_SVG='http://www.w3.org/2000/svg',NS_MATH='http://www.w3.org/1998/Math/MathML';
+  const NOREND=W('source track param');
+  const memo=new Map();
+  const hasBlk=el=>{
+    if(memo.has(el))return memo.get(el);
+    let r=false;
+    for(let c=el.firstElementChild;c;c=c.nextElementSibling){
+      if((c.namespaceURI!==NS_SVG&&c.namespaceURI!==NS_MATH&&H_BLOCK.has(c.localName))||hasBlk(c)){r=true;break}
+    }
+    memo.set(el,r);return r;
+  };
+  const walk=(nd,mode,skipWs)=>{
+    for(let c=nd.firstChild;c;c=c.nextSibling){
+      if(c.nodeType===3){
+        const d=c.data;
+        if(skipWs&&!HNS.test(d))continue;
+        toks.push({t:'t',raw:mode==='raw',v:mode==='raw'?d:mode==='css'?cssNorm(d):mode==='js'?d.replace(/[ \t\n\f\r]+/g,''):d.replace(/[ \t\n\f\r]+/g,' ')});
+      }else if(c.nodeType===8){
+        cms.push(c.data.replace(/[ \t\n\f\r]+/g,' ').replace(/^ | $/g,''));
+      }else if(c.nodeType===1){
+        const nm=c.localName,ln=nm.toLowerCase(),ns=c.namespaceURI;
+        let tag='<'+nm;
+        for(const a of c.attributes)tag+=' '+a.name+'='+JSON.stringify(a.value);
+        tag+='>';
+        const htmlEl=ns!==NS_SVG&&ns!==NS_MATH;
+        const blk=nm==='br'||(htmlEl&&(H_BLOCK.has(nm)||NOREND.has(nm)||H_STRUCT.has(nm)||hasBlk(c)));
+        toks.push({t:'o',v:tag,b:blk});
+        const foreignStruct=!htmlEl&&!H_STRUCT_EXCEPT.has(ln)&&ln!=='foreignobject';
+        const childMode=RAWT.has(nm)?'raw':nm==='style'?'css':nm==='script'?'js':mode;
+        walk(nm==='template'&&c.content?c.content:c,childMode,foreignStruct||(H_STRUCT.has(nm)&&htmlEl));
+        toks.push({t:'e',v:'</'+nm+'>',b:blk});
+      }
+    }
+  };
+  walk(doc.documentElement,'flow');
+  const out=[];
+  for(const t of toks){
+    if(t.t==='t'){
+      if(t.v==='')continue;
+      const last=out[out.length-1];
+      if(last&&last.t==='t'&&last.raw===!!t.raw)last.v+=t.v;else out.push({t:'t',v:t.v,raw:!!t.raw});
+    }else out.push(t);
+  }
+  out.forEach(t=>{if(t.t==='t'&&!t.raw)t.v=t.v.replace(/ {2,}/g,' ')});
+  const res=[];
+  for(let k=0;k<out.length;k++){
+    const t=out[k];
+    if(t.t==='t'){
+      let v=t.v;
+      const p=out[k-1],nx=out[k+1];
+      const inRaw=p&&p.t==='o'&&/^<(pre|textarea|listing|plaintext|xmp)[ >]/.test(p.v);
+      if(!inRaw){
+        if(!p||p.b)v=v.replace(/^ +/,'');
+        if(!nx||nx.b)v=v.replace(/ +$/,'');
+      }
+      if(v!=='')res.push('T'+v);
+    }else res.push('X'+t.v);
+  }
+  return res.join('\u0001')+'\u0002'+cms.join('\u0001');
+}
+
+function htmlFormat(src,unit,fmt){
+  unit=unit||'  ';
+  const P=htmlParse(src);
+  const fatal=P.errs.find(e=>e.fatal);
+  if(fatal){const e=new Error(fatal.msg);e.pos=fatal.pos;e.fatal=true;throw e}
+  const out=[];
+  const WIDTH=100;
+  const ind=d=>unit.repeat(d);
+  const txt=nd=>src.slice(nd.s,nd.e);
+  const attrOf=(el,nm)=>{const a=el.attrs.find(x=>x.l===nm);return a?(a.v||''):null};
+
+  const openTag=el=>{
+    const t=el.tag;let s='<'+t.raw;
+    for(const a of t.attrs)s+=' '+src.slice(a.s,a.e);
+    if(t.selfClosing)s+=/[ \t\n\f\r]\/>$/.test(src.slice(t.s,t.e))?' />':'/>';else s+='>';
+    return s;
+  };
+  const closeTag=el=>el.closed&&el.endTok?'</'+el.endTok.raw+'>':'';
+
+  // elements that draw nothing but sit between text/inline content with no whitespace must stay glued there
+  const NONREND=W('script style meta link base template');
+  const markGlue=node=>{
+    const list=node.children;if(!list)return;
+    list.forEach((c,k)=>{
+      if(c.type==='el'&&!c.foreign&&NONREND.has(c.name)){
+        const p=list[k-1],nx=list[k+1];
+        const touches=(x,before)=>{
+          if(!x)return false;
+          if(x.type==='text')return before?!HTRAIL.test(src.slice(x.s,x.e)):!HLEAD.test(src.slice(x.s,x.e));
+          if(x.type==='el')return !x.foreign&&!H_BLOCK.has(x.name)&&!H_VERBATIM.has(x.name)||x.foreign;
+          return x.type==='raw';
+        };
+        if(touches(p,true)||touches(nx,false))c._glue=true;
+      }
+      markGlue(c);
+    });
+  };
+  markGlue(P.root);
+
+  // classification
+  const hasBlockDesc=el=>{
+    if(el._hb!==undefined)return el._hb;
+    let r=false;
+    for(const c of el.children){
+      if(c.type!=='el')continue;
+      if((!c.foreign&&H_BLOCK.has(c.name))||hasBlockDesc(c)){r=true;break}
+    }
+    return el._hb=r;
+  };
+  const isBlockEl=el=>{
+    if(el.foreign||el._glue)return false;
+    if(H_BLOCK.has(el.name))return true;
+    if(H_VERBATIM.has(el.name)&&el.name!=='textarea')return true;
+    if(H_STRUCT.has(el.name))return false;
+    return hasBlockDesc(el);
+  };
+  const isStruct=el=>(H_STRUCT.has(el.name)&&!el.foreign)||(el.name==='svg'||el.name==='math')||(el.foreign&&!H_STRUCT_EXCEPT.has(el.name)&&el.children.some(c=>c.type==='el'));
+  const isBlockNode=nd=>nd.type==='el'&&isBlockEl(nd);
+  // a comment/doctype with whitespace or a block around it can sit on its own line
+  const standalone=(list,k)=>{
+    const nd=list[k];
+    if(nd.type==='doctype')return true;
+    if(nd.type!=='comment')return false;
+    const p=list[k-1],nx=list[k+1];
+    if(!p||!nx)return true;
+    if(isBlockNode(p)||isBlockNode(nx))return true;
+    if(p.type==='text'&&HTRAIL.test(txt(p)))return true;
+    if(nx.type==='text'&&HLEAD.test(txt(nx)))return true;
+    return false;
+  };
+
+  const joinFlat=toks=>{let s='';toks.forEach((t,k)=>{s+=(k&&t.sp?' ':'')+t.t});return s};
+
+  // inline tokens
+  function tokensFor(nodes,st,toks,rel,list){
+    nodes.forEach((nd,k)=>{
+      const push=tk=>{if(st.forceBr){tk.br=true;st.forceBr=false}toks.push(tk)};
+      if(nd.type==='text'){
+        const t=txt(nd);
+        const words=t.split(HSPLIT).filter(Boolean);
+        if(!words.length){if(t.length)st.sp=true;return}
+        if(HLEAD.test(t))st.sp=true;
+        words.forEach((w,j)=>{push({t:w,sp:j>0||st.sp,ind:rel});st.sp=false});
+        if(HTRAIL.test(t))st.sp=true;
+      }else if(nd.type==='comment'||nd.type==='cdata'||nd.type==='doctype'||nd.type==='stray'){
+        const ls0=src.lastIndexOf('\n',nd.s-1)+1,pre=src.slice(ls0,nd.s);
+        push({t:txt(nd),sp:st.sp,ind:rel,cm:nd.type==='comment',ow:/^[ \t]*$/.test(pre)?pre.length:0});st.sp=false;
+      }else if(nd.type==='el'){
+        elTokens(nd,st,toks,rel,push);
+      }else if(nd.type==='raw'){
+        push({t:txt(nd),sp:st.sp,ind:rel,raw:true});st.sp=false;
+      }
+    });
+  }
+  function elTokens(el,st,toks,rel,push){
+    const open=openTag(el),cl=closeTag(el);
+    if(el.void||el.selfClosed){
+      push({t:open,sp:st.sp,ind:rel});st.sp=false;
+      if(el.name==='br'&&!el.foreign)st.forceBr=true;
+      return;
+    }
+    if((H_VERBATIM.has(el.name)&&!el.foreign)||el._glue){
+      push({t:src.slice(el.s,el.e),sp:st.sp,ind:rel,raw:true});st.sp=false;return;
+    }
+    if(!el.children.length){push({t:open+cl,sp:st.sp,ind:rel});st.sp=false;return}
+    if(el.children.every(c=>c.type==='text'&&!HNS.test(txt(c)))&&(el.foreign||H_STRUCT.has(el.name))){push({t:open+cl,sp:st.sp,ind:rel});st.sp=false;return}
+    if(isStruct(el)){
+      const kids=el.children.filter(c=>!(c.type==='text'&&!HNS.test(txt(c))));
+      const ft=[];tokensFor(kids,{sp:false},ft,0);
+      if(ft.length)ft[0].sp=false;
+      const flat=open+joinFlat(ft)+cl;
+      if(cl&&flat.length<=60&&flat.indexOf('\n')<0&&!ft.some(t=>t.br)){
+        push({t:flat,sp:st.sp,ind:rel});st.sp=false;return;
+      }
+      push({t:open,sp:st.sp,ind:rel});st.sp=false;
+      kids.forEach(kd=>{
+        const mark=toks.length;
+        tokensFor([kd],{sp:false},toks,rel+1);
+        if(toks.length>mark)toks[mark].br=true;
+      });
+      if(cl)push({t:cl,sp:false,ind:rel,br:true});
+      return;
+    }
+    push({t:open,sp:st.sp,ind:rel});st.sp=false;
+    tokensFor(el.children,st,toks,rel);
+    if(cl){push({t:cl,sp:st.sp,ind:rel});st.sp=false}
+  }
+
+  function assemble(toks,depth){
+    const lines=[];
+    let cur=null,lineInd=0;
+    const openL=i=>{cur='';lineInd=depth+i};
+    const closeL=()=>{if(cur!==null&&cur!=='')lines.push((lineInd?ind(lineInd):'')+cur);cur=null};
+    toks.forEach((t,k)=>{
+      if(cur===null)openL(t.ind||0);
+      else if(t.br){closeL();openL(t.ind||0)}
+      else if(t.sp){
+        const room=WIDTH-unit.length*lineInd-cur.length-1;
+        if(t.t.indexOf('\n')<0&&t.t.length>room&&cur!==''){closeL();openL(t.ind||0)}else cur+=' ';
+      }
+      if(t.t.indexOf('\n')>=0){
+        const parts=t.t.split('\n');
+        cur+=parts[0];
+        lines.push((lineInd?ind(lineInd):'')+cur);
+        for(let j=1;j<parts.length-1;j++){
+          let l=parts[j];
+          if(t.cm){l=l.replace(/[ \t\n\f\r]+$/,'');const m=/^[ \t]*/.exec(l)[0].length;l=HNS.test(l)?ind(lineInd)+l.slice(Math.min(m,t.ow||0)):''}
+          lines.push(l);
+        }
+        let last=parts[parts.length-1];
+        if(t.cm){last=last.replace(/[ \t\n\f\r]+$/,'');const m=/^[ \t]*/.exec(last)[0].length;last=ind(lineInd)+last.slice(Math.min(m,t.ow||0))}
+        cur=last;lineInd=0;
+      }else cur+=t.t;
+    });
+    closeL();
+    return lines;
+  }
+
+  let pendingBlank=false;
+  const pushLines=(lines)=>{
+    if(pendingBlank&&out.length&&out[out.length-1]!=='')out.push('');
+    pendingBlank=false;
+    lines.forEach(l=>out.push(l));
+  };
+
+  function layout(children,depth){
+    let run=[];
+    const flush=()=>{
+      if(!run.length)return;
+      const toks=[];const st={sp:false};
+      tokensFor(run,st,toks,0);
+      run=[];
+      if(!toks.length)return;
+      toks[0].sp=false;
+      pushLines(assemble(toks,depth));
+    };
+    const list=children;
+    list.forEach((nd,k)=>{
+      if(nd.type==='text'&&!HNS.test(txt(nd))){
+        if((txt(nd).match(/\n/g)||[]).length>=2&&!run.length)pendingBlank=true;
+        if(run.length)run.push(nd);
+        return;
+      }
+      if(nd.type==='el'&&isBlockEl(nd)){flush();emitBlock(nd,depth);return}
+      if(standalone(list,k)){
+        flush();
+        if(nd.type==='comment'){
+          const ls0=src.lastIndexOf('\n',nd.s-1)+1,pre=src.slice(ls0,nd.s);
+          const ow=/^[ \t]*$/.test(pre)?pre.length:0;
+          const toks=[{t:txt(nd),sp:false,ind:0,cm:true,ow}];
+          pushLines(assemble(toks,depth));
+        }else pushLines([ind(depth)+txt(nd).trim()]);
+        return;
+      }
+      run.push(nd);
+    });
+    flush();
+  }
+
+  function emitCode(el,depth){
+    const open=openTag(el),cl=closeTag(el);
+    const raw=el.children.length?txt(el.children[0]):'';
+    if(!raw.trim()){pushLines([ind(depth)+open+cl]);return}
+    const type=(attrOf(el,'type')||'').trim().toLowerCase();
+    let body=null;
+    try{
+      if(/<!\[CDATA\[/.test(raw)||/<\!--/.test(raw))body=null;
+      else if(el.name==='style')body=fmt&&fmt.css?fmt.css(raw,depth+1):null;
+      else if(H_JS_TYPE.test(type)&&type!=='text/jsx')body=fmt&&fmt.js?fmt.js(raw,depth+1):null;
+      else if(/json|importmap|speculationrules/.test(type)){const j=JSON.stringify(JSON.parse(raw),null,unit.length);body=j.split('\n').map(l=>ind(depth+1)+l).join('\n')+'\n'}
+    }catch(e){body=null}
+    const lines=[ind(depth)+open];
+    if(body!==null)lines.push(body.replace(/\n+$/,''));
+    else{
+      // keep the code exactly as written (only blank edges are trimmed)
+      lines.push(raw.replace(/^[ \t]*\n/,'').replace(/[ \t\n\f\r]+$/,''));
+    }
+    if(cl)lines.push(ind(depth)+cl);
+    pushLines(lines);
+  }
+
+  function emitBlock(el,depth){
+    const open=openTag(el),cl=closeTag(el);
+    if(H_VERBATIM.has(el.name)){pushLines([ind(depth)+src.slice(el.s,el.e)]);return}
+    if(el.void||el.selfClosed){pushLines([ind(depth)+open]);return}
+    if(el.name==='script'||el.name==='style'){emitCode(el,depth);return}
+    const kids=el.children;
+    if(!kids.length||kids.every(c=>c.type==='text'&&!HNS.test(txt(c)))){pushLines([ind(depth)+open+cl]);return}
+    const allInline=kids.every((c,k)=>c.type==='text'||c.type==='raw'||(c.type==='el'&&!isBlockEl(c))||((c.type==='comment'||c.type==='cdata'||c.type==='stray')&&!standalone(kids,k)));
+    if(allInline){
+      const toks=[];const st={sp:false};
+      tokensFor(kids,st,toks,0);
+      if(toks.length)toks[0].sp=false;
+      const flat=open+joinFlat(toks)+cl;
+      if(depth*unit.length+flat.length<=WIDTH&&flat.indexOf('\n')<0&&!toks.some(t=>t.br)){pushLines([ind(depth)+flat]);return}
+      pushLines([ind(depth)+open]);
+      pushLines(assemble(toks,depth+1));
+      if(cl)pushLines([ind(depth)+cl]);
+      return;
+    }
+    pushLines([ind(depth)+open]);
+    pendingBlank=false;
+    layout(kids,depth+1);
+    if(cl)pushLines([ind(depth)+cl]);
+  }
+
+  layout(P.root.children,0);
+  const res=out.join('\n').replace(/[ \t\n\f\r]+$/,'')+'\n';
+  if(typeof DOMParser!=='undefined'){
+    if(domSig(res)!==domSig(src))throw new Error('Safety check failed (the page would render differently)');
+  }
+  return res;
+}
+
+/* ===== checker: puts HTML + CSS + JavaScript checks together ===== */
+function lineIndex(src){const a=[0];for(let i=src.indexOf('\n');i>=0;i=src.indexOf('\n',i+1))a.push(i+1);return a}
+function lineOf(idx,pos){let lo=0,hi=idx.length-1;while(lo<hi){const m=(lo+hi+1)>>1;if(idx[m]<=pos)lo=m;else hi=m-1}return lo+1}
+let _decTa=null;
+function decodeEnt(s){
+  if(s.indexOf('&')<0)return s;
+  try{_decTa=_decTa||document.createElement('textarea');_decTa.innerHTML=s;return _decTa.value}catch(e){return s}
+}
+const _entCache=new Map();
+function knownEntity(name){
+  if(_entCache.has(name))return _entCache.get(name);
+  let ok=true;
+  try{const t=document.createElement('textarea');t.innerHTML='&'+name+';';ok=t.value!=='&'+name+';'}catch(e){}
+  _entCache.set(name,ok);return ok;
+}
+function cleanJsMsg(m){return String(m||'').replace(/^Uncaught\s+/,'').replace(/^SyntaxError:\s*/,'')}
+
+/* Parses JavaScript the way a script tag does, WITHOUT running it, and reports the exact line.
+   The code is wrapped in if(0){ ... } inside a Worker, so nothing in it can execute. */
+function jsParse(code){
+  return new Promise(resolve=>{
+    let url=null,w=null,done=false,tm=0;
+    const fin=r=>{
+      if(done)return;done=true;clearTimeout(tm);
+      try{w&&w.terminate()}catch(e){}
+      try{url&&URL.revokeObjectURL(url)}catch(e){}
+      resolve(r);
+    };
+    const fallback=()=>{
+      try{new Function(code)}catch(e){if(e instanceof SyntaxError)return {line:(e.lineNumber&&e.lineNumber>0)?e.lineNumber:1,col:e.columnNumber||1,msg:cleanJsMsg(e.message),approx:true}}
+      return null;
+    };
+    if(typeof Worker==='undefined'||typeof Blob==='undefined'||typeof URL==='undefined'||!URL.createObjectURL)return fin(fallback());
+    const strict=/^\s*(?:\/\*[\s\S]*?\*\/\s*|\/\/[^\n]*\n\s*)*(['"])use strict\1/.test(code);
+    const pre=(strict?'"use strict";':'')+'if(0){\n';
+    const total=code.split('\n').length;
+    try{
+      url=URL.createObjectURL(new Blob([pre+code+'\n}\npostMessage(1)'],{type:'text/javascript'}));
+      w=new Worker(url);
+    }catch(e){return fin(fallback())}
+    w.onmessage=()=>fin(null);
+    w.onerror=ev=>{
+      try{ev.preventDefault()}catch(e){}
+      const raw=(ev.lineno||2)-1;
+      let line=raw;
+      if(line<1)line=1;if(line>total)line=total;
+      let msg=cleanJsMsg(ev.message);
+      if(raw>total)msg='Something is not finished: a bracket ( [ { or a quote was opened but never closed (the browser only noticed at the end of the code: "'+msg+'")';
+      fin({line,col:ev.colno||1,msg});
+    };
+    tm=setTimeout(()=>fin(fallback()),4000);
+  });
+}
+
+const SEV_ORDER={e:0,w:1,i:2};
+
+async function checkHTMLSource(src){
+  const items=[];
+  if(!/\S/.test(src))return items;
+  const P=htmlParse(src);
+  const idx=lineIndex(src);const L=pos=>lineOf(idx,Math.max(0,Math.min(pos,src.length)));
+  const add=(sev,pos,msg,kind,line)=>items.push({line:line||L(pos),sev,msg,kind:kind||'HTML',tab:'html'});
+  P.errs.forEach(e=>add(e.sev,e.pos,e.msg.replace(/\u0000(\d+)\u0000/g,(m,q)=>L(+q))));
+  if(!P.hasDoctype)add('w',0,'Missing <!DOCTYPE html> at the top: without it the browser uses "quirks mode", which can change how the page looks','HTML',1);
+  const startTags=P.toks.filter(t=>t.t==='start');
+  const hasHtmlOrHead=startTags.some(t=>t.name==='html'||t.name==='head');
+  if(hasHtmlOrHead){
+    const htmlTag=startTags.find(t=>t.name==='html');
+    if(htmlTag&&!htmlTag.attrs.some(a=>a.l==='lang'))add('i',htmlTag.s,'<html> has no lang attribute (for example <html lang="en">): it helps screen readers and translation');
+    if(!startTags.some(t=>t.name==='title'))add('i',0,'The page has no <title>','HTML',1);
+    if(!startTags.some(t=>t.name==='meta'&&t.attrs.some(a=>a.l==='charset'||(a.l==='http-equiv'&&/content-type/i.test(a.v||'')))))add('i',0,'No <meta charset="utf-8">: special characters may look wrong','HTML',1);
+    if(!startTags.some(t=>t.name==='meta'&&t.attrs.some(a=>a.l==='name'&&/^viewport$/i.test(a.v||''))))add('i',0,'No <meta name="viewport" content="width=device-width, initial-scale=1">: the page may not fit phone screens','HTML',1);
+  }
+  const jobs=[];
+  const stack=[P.root];
+  while(stack.length){
+    const nd=stack.pop();
+    for(let k=nd.children.length-1;k>=0;k--){
+      const c=nd.children[k];
+      if(c.type==='el')stack.push(c);
+    }
+    for(const c of nd.children){
+      if(c.type==='text'&&!c.bad){
+        const t=src.slice(c.s,c.e);
+        if(t.indexOf('&')>=0){
+          const re=/&([a-zA-Z][a-zA-Z0-9]*);/g;let m;
+          while((m=re.exec(t))){if(!knownEntity(m[1]))add('w',c.s+m.index,'Unknown character code &'+m[1]+'; (the browser shows it as plain text)')}
+        }
+      }else if(c.type==='el'&&!c.foreign){
+        for(const a of c.attrs){
+          if(a.v==null||a.v==='')continue;
+          if(a.l==='style'){
+            cssDeclCheck(decodeEnt(a.v)).forEach(it=>add(it.sev,a.s,it.msg,'CSS',L(a.s)+it.line-1));
+          }else if(/^on[a-z]+$/.test(a.l)){
+            try{new Function('event',decodeEnt(a.v))}catch(e){if(e instanceof SyntaxError){const mm=cleanJsMsg(e.message);add('e',a.s,'Syntax error in '+a.n+'="…": '+(/Unexpected token '\}'|end of input/.test(mm)?'the code looks unfinished (check that every ( [ { and quote is closed)':mm),'JavaScript')}}
+          }
+        }
+        if(c.name==='script'||c.name==='style'){
+          const raw=c.children.find(x=>x.type==='raw');
+          const hasSrc=c.attrs.some(a=>a.l==='src');
+          if(!raw||!/\S/.test(src.slice(raw.s,raw.e)))continue;
+          const code=src.slice(raw.s,raw.e);
+          const base=L(raw.s);
+          if(c.name==='style'){
+            if(code.indexOf('<![CDATA[')>=0)continue;
+            cssCheck(code).forEach(it=>add(it.sev,raw.s,it.msg,'CSS',base+it.line-1));
+          }else{
+            const type=((c.attrs.find(a=>a.l==='type')||{}).v||'').trim().toLowerCase();
+            if(hasSrc)add('w',c.tag.s,'This <'+'script> has a src, so the code written inside it is ignored');
+            if(type===''||/^(text|application)\/(x-)?(java|ecma)script$/.test(type)){
+              if(code.indexOf('<![CDATA[')<0)jobs.push(jsParse(code).then(r=>{if(r)add('e',raw.s,'Syntax error: '+r.msg,'JavaScript',base+r.line-1)}));
+            }else if(/json|importmap|speculationrules/.test(type)){
+              try{JSON.parse(code)}catch(e){
+                const m=/position (\d+)/.exec(e.message||'');
+                const ln=m?base+(code.slice(0,+m[1]).split('\n').length-1):base;
+                add('e',raw.s,'This JSON is not valid: '+cleanJsMsg(e.message),'JavaScript',ln);
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  await Promise.all(jobs);
+  return items;
+}
+
+async function checkCSSSource(src){
+  const items=[];
+  if(!/\S/.test(src))return items;
+  if(/<\/style/i.test(src)){
+    const idx=lineIndex(src);const m=/<\/style/i.exec(src);
+    items.push({line:lineOf(idx,m.index),sev:'e',msg:'"</style" inside CSS ends the style block early and breaks the page',kind:'CSS',tab:'css'});
+  }
+  cssCheck(src).forEach(it=>items.push({line:it.line,sev:it.sev,msg:it.msg,kind:'CSS',tab:'css'}));
+  return items;
+}
+
+async function checkJSSource(src){
+  const items=[];
+  if(!/\S/.test(src))return items;
+  const idx=lineIndex(src);
+  const m=/<\/script/i.exec(src);
+  if(m)items.push({line:lineOf(idx,m.index),sev:'e',msg:'"<\/script" inside JavaScript ends the script early and breaks the page (write <\\/script instead)',kind:'JavaScript',tab:'js'});
+  const r=await jsParse(src);
+  if(r)items.push({line:r.line,sev:'e',msg:'Syntax error: '+r.msg+' (the browser stops at the first error, so fix it and check again)',kind:'JavaScript',tab:'js'});
+  return items;
+}
+
+function sortItems(items){
+  return items.sort((a,b)=>a.line-b.line||SEV_ORDER[a.sev]-SEV_ORDER[b.sev]);
+}
+async function checkTab(tab,text){
+  const r=tab==='html'?await checkHTMLSource(text):tab==='css'?await checkCSSSource(text):await checkJSSource(text);
+  return sortItems(r);
+}
+async function checkAll(e){
+  const parts=await Promise.all([checkHTMLSource(e.html||''),checkCSSSource(e.css||''),checkJSSource(e.js||'')]);
+  return parts.map(sortItems).flat();
+}
+
+return {fmtJS,fmtCSS,htmlFormat,checkTab,checkAll,jsParse,cssPropList,htmlTags:()=>Array.from(H_ELEMENTS),openNames:s=>htmlParse(s).openNames,VOIDS:H_VOID};
+})();
+
+
+/* ---------- settings (saved in this browser) ---------- */
+const SET={ac:1,pair:1,live:1,tabk:1,ind:2};
+try{Object.assign(SET,JSON.parse(ls('hv.set')||'{}'))}catch(e){}
+const saveSet=()=>ls('hv.set',JSON.stringify(SET));
+const IND=()=>' '.repeat(SET.ind===4?4:2);
+const MAC=/Mac|iPhone|iPad|iPod/.test(navigator.platform||navigator.userAgent||'');
+const KEY=s=>MAC?s.replace(/Ctrl\+/g,'⌘').replace(/Alt\+/g,'⌥').replace(/Shift\+/g,'⇧'):s;
+const TABN={html:'HTML',css:'CSS',js:'JavaScript'};
+document.querySelectorAll('#mn kbd').forEach(k=>{k.textContent=KEY(k.textContent)});
+
+/* ---------- live problem markers ---------- */
+const SEVN={e:1,w:2,i:3},SEVR={e:0,w:1,i:2},SEVT={e:'Error',w:'Warning',i:'Tip'};
+let dm=null,lt=0,lseq=0;
+const pb=$('#pb');
+const mkU=(h,s)=>{const m=/^[ \t]*/.exec(h)[0];return m+'<u class="eu e'+SEVN[s]+'">'+h.slice(m.length)+'</u>'};
+function setPb(items){
+  if(!items){pb.hidden=true;return}
+  const c={e:0,w:0,i:0};items.forEach(x=>c[x.sev]++);
+  const parts=[];
+  if(c.e)parts.push(c.e+(c.e>1?' errors':' error'));
+  if(c.w)parts.push(c.w+(c.w>1?' warnings':' warning'));
+  if(c.i)parts.push(c.i+(c.i>1?' tips':' tip'));
+  const label=parts.length?parts.join(', '):'0 problems';
+  pb.textContent=label;
+  pb.className=c.e?'s1':c.w?'s2':c.i?'s3':'';
+  pb.setAttribute('aria-label',label+' in this tab. Open the list of mistakes.');
+  pb.hidden=false;
+}
+function lintSoon(){
+  clearTimeout(lt);
+  if(!pb.hidden)pb.classList.add('st');
+  if(!SET.live){if(dm){dm=null;dirty=1}setPb(null);return}
+  lt=setTimeout(runLive,900);
+}
+async function runLive(){
+  if(!SET.live)return;
+  const text=ta.value,md=mode,seq=++lseq;
+  if(!/\S/.test(text)||text.length>400000){if(dm){dm=null;dirty=1;draw()}setPb(null);return}
+  let items;
+  try{items=await HV.checkTab(md,text)}catch(e){return}
+  if(seq!==lseq||md!==mode||ta.value!==text)return;
+  const m=new Map();
+  items.forEach(it=>{if(it.tab!==md)return;const c=m.get(it.line);if(!c||SEVR[it.sev]<SEVR[c.sev])m.set(it.line,it)});
+  dm=m;setPb(items);dirty=1;draw();
+}
+pb.onclick=()=>{writeMode(ta.value);A.fix()};
+
+/* ---------- find mistakes ---------- */
+const CHECKED_NOTE='<span class="note"><b>What was checked:</b> HTML tags, attributes and structure; CSS properties, values and selectors; JavaScript syntax (using your browser\'s own parser). <b>What was not checked:</b> what your code does when it runs. So "no problems" does not mean "it works" — always try it in Preview.</span>';
+async function fixDialog(){
+  const e=editorData();
+  const o=dlg('Find mistakes','<span class="note" id="fm">Checking…</span>',[['Close']]);
+  let items=null;
+  try{items=await HV.checkAll({html:e.html||'',css:e.css||'',js:e.js||''})}catch(err){}
+  if(!document.body.contains(o))return;
+  const bd=o.querySelector('.bd'),title=o.querySelector('.bx>b');
+  if(!items){bd.innerHTML='<span class="note">The check could not run in this browser.</span>';return}
+  const c={e:0,w:0,i:0};items.forEach(x=>c[x.sev]++);
+  const mist=c.e+c.w;
+  title.textContent=mist?mist+' possible mistake'+(mist>1?'s':''):'Find mistakes';
+  const sum=[];
+  if(c.e)sum.push(c.e+(c.e>1?' errors':' error'));
+  if(c.w)sum.push(c.w+(c.w>1?' warnings':' warning'));
+  if(c.i)sum.push(c.i+(c.i>1?' tips':' tip'));
+  let h='';
+  if(!items.length)h+='<span class="ok">No problems found by these checks.</span>';
+  else h+='<span class="note">'+sum.join(' · ')+' — tap one to jump to it</span>'+items.map(it=>{
+    const where=it.kind===TABN[it.tab]||(it.kind==='HTML'&&it.tab==='html')?it.kind:it.kind+' (in the '+TABN[it.tab]+' tab)';
+    return '<div class="r" tabindex="0" role="button" data-l="'+it.line+'" data-tab="'+it.tab+'"><span class="sv s'+SEVN[it.sev]+'">'+SEVT[it.sev]+'</span> <b>'+E(where)+' · Line '+it.line+'</b> &middot; '+E(it.msg)+'</div>';
+  }).join('');
+  h+=CHECKED_NOTE;
+  bd.innerHTML=h;
+  const go=r=>{const ln=+r.dataset.l,tb=r.dataset.tab;o.remove();switchMode(tb);jump(ln)};
+  bd.querySelectorAll('.r').forEach(r=>{r.onclick=()=>go(r);r.onkeydown=ev=>{if(ev.key==='Enter'||ev.key===' '){ev.preventDefault();go(r)}}});
 }
 
 /* ---------- format code ---------- */
-function format(){
- const t=ta.value,RW=new Set(['script','style','pre','textarea']),tk=[],S=[],o=[],
- T=/<!--[\s\S]*?-->|<![^>]*>|<(\/?)([a-zA-Z][\w:-]*)((?:"[^"]*"|'[^']*'|[^>"'])*)>|[^<]+|</g;
- let m;
- while(m=T.exec(t)){const s=m[0];
-  if(m[2]){const n=m[2].toLowerCase();tk.push({k:m[1]?'c':VOID.has(n)||/\/\s*$/.test(m[3])?'v':'o',n,s:s.replace(/\s*\n\s*/g,' ')});
-   if(!m[1]&&RW.has(n)&&!/\/\s*$/.test(m[3])){const e=new RegExp('</'+n+'\\s*>','ig');e.lastIndex=T.lastIndex;const x=e.exec(t),end=x?x.index:t.length;tk.push({k:'r',n,s:t.slice(T.lastIndex,end)});T.lastIndex=end}}
-  else if(s.length>1&&s[0]=='<')tk.push({k:'x',s});
-  else if(s.trim())tk.push({k:'t',s:s.trim().replace(/\s+/g,' ')})
- }
- for(let i=0;i<tk.length;i++){
-  const a=tk[i],b=tk[i+1],c=tk[i+2],I='  '.repeat(S.length);
-  if(a.k=='c'){const k=S.lastIndexOf(a.n);if(k>=0)S.length=k;o.push('  '.repeat(S.length)+a.s);continue}
-  if(a.k=='r'){const Ls=a.s.replace(/^\s*\n/,'').replace(/\s+$/,'').split('\n');let mi=1e9;Ls.forEach(x=>{if(x.trim())mi=Math.min(mi,x.match(/^\s*/)[0].length)});Ls.forEach(x=>o.push(x.trim()?I+x.slice(mi).replace(/\s+$/,''):''));continue}
-  if(a.k!='o'){o.push(I+a.s);continue}
-  if(OPT.has(a.n)&&S[S.length-1]==a.n)S.pop();
-  const J='  '.repeat(S.length),cl=c&&c.k=='c'&&c.n==a.n;
-  if(b&&b.k=='r'&&(a.n=='pre'||a.n=='textarea')){o.push(J+a.s+b.s+(cl?c.s:''));i+=cl?2:1;continue}
-  if(b&&b.k=='r'&&!b.s.trim()&&cl){o.push(J+a.s+c.s);i+=2;continue}
-  if(b&&b.k=='t'&&cl){o.push(J+a.s+b.s+c.s);i+=2;continue}
-  if(b&&b.k=='c'&&b.n==a.n){o.push(J+a.s+b.s);i++;continue}
-  o.push(J+a.s);S.push(a.n)
- }
- put(o.join('\n')+'\n');toast('Formatted')
+function lineOfPos(t,p){return t.slice(0,Math.max(0,p)).split('\n').length}
+async function fmtRun(){
+  const src=ta.value,md=mode;
+  if(!/\S/.test(src)){toast('Nothing to format');return}
+  const u=IND();
+  const FMT={css:(t,d)=>HV.fmtCSS(t,u,d),js:(t,d)=>HV.fmtJS(t,u,d)};
+  let out,problem='';
+  try{
+    out=md==='html'?HV.htmlFormat(src,u,FMT):md==='css'?HV.fmtCSS(src,u):HV.fmtJS(src,u);
+    // the formatted code must not contain more errors than the original
+    const [a,b]=await Promise.all([HV.checkTab(md,src),HV.checkTab(md,out)]);
+    const ne=l=>l.filter(x=>x.sev==='e'&&x.tab===md).length;
+    if(ne(b)>ne(a))problem='Safety check failed: the formatted code would have more errors than your code.';
+  }catch(err){
+    const ln=err.line||(err.pos!=null?lineOfPos(src,err.pos):0);
+    problem=(err.message||'Unknown problem')+(ln?' (line '+ln+')':'');
+    if(err.fatal||err.line)problem+='. Fix this first — "Find mistakes" can help you find it.';
+  }
+  if(problem){
+    dlg('Could not format',"<span>"+E(problem)+'</span><span class="note">Nothing was changed.</span>',[['Close'],['Find mistakes',()=>{setTimeout(()=>A.fix(),0)},1]]);
+    return;
+  }
+  if(ta.value!==src){toast('The code changed while formatting. Try again.');return}
+  if(out===src){toast('Already formatted');return}
+  put(out);toast('Formatted '+TABN[md]);
+}
+
+/* ---------- share link ---------- */
+function b64u(bytes){let s='';for(let i=0;i<bytes.length;i+=8192)s+=String.fromCharCode.apply(null,bytes.subarray(i,i+8192));return btoa(s).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'')}
+function unb64u(t){t=t.replace(/-/g,'+').replace(/_/g,'/');while(t.length%4)t+='=';const s=atob(t),b=new Uint8Array(s.length);for(let i=0;i<s.length;i++)b[i]=s.charCodeAt(i);return b}
+async function packShare(e){
+  const data={v:1,n:e.name||'Editor',h:e.html||'',c:e.css||'',j:e.js||''};
+  const bytes=new TextEncoder().encode(JSON.stringify(data));
+  if(typeof CompressionStream==='function'){
+    try{
+      const cs=new CompressionStream('deflate-raw'),w=cs.writable.getWriter();
+      w.write(bytes);w.close();
+      return 'z.'+b64u(new Uint8Array(await new Response(cs.readable).arrayBuffer()));
+    }catch(err){}
+  }
+  return 'r.'+b64u(bytes);
+}
+async function unpackShare(kind,t){
+  let bytes=unb64u(t);
+  if(kind==='z'){
+    if(typeof DecompressionStream!=='function')throw new Error('This browser cannot open compressed links');
+    const ds=new DecompressionStream('deflate-raw'),w=ds.writable.getWriter();
+    w.write(bytes);w.close();
+    bytes=new Uint8Array(await new Response(ds.readable).arrayBuffer());
+  }
+  if(bytes.length>3e6)throw new Error('Too large');
+  const d=JSON.parse(new TextDecoder().decode(bytes));
+  if(!d||typeof d!=='object'||['h','c','j'].some(k=>typeof d[k]!=='string'))throw new Error('Bad data');
+  return d;
+}
+async function shareDialog(){
+  const e=editorData();
+  if(![e.html,e.css,e.js].some(x=>x&&x.trim())){toast('There is no code to share yet');return}
+  let url;
+  try{url=location.href.split('#')[0]+'#s='+await packShare(e)}catch(err){toast('Could not make a link');return}
+  const long=url.length>2000;
+  const can=!!navigator.share;
+  const o=dlg('Share this code as a link','<input type="text" id="shu" readonly aria-label="Share link" value="'+E(url).replace(/"/g,'&quot;')+'"><span class="note">Anyone with this link can read and run this code (all three tabs: HTML, CSS and JavaScript). Nothing is uploaded: the code is stored inside the link itself. The link is '+url.length.toLocaleString()+' characters long.'+(long?' Some chat apps cut very long links; if it does not open for someone, send a file instead (Export file).':'')+'</span>',
+    [['Close'],...(can?[['Share…',()=>{navigator.share({title:'HTML Viewer',url}).catch(()=>{});return false}]]:[]),['Copy link',()=>{
+      const done=()=>toast('Link copied');
+      (navigator.clipboard?navigator.clipboard.writeText(url):Promise.reject()).then(done,()=>{const i=$('#shu');i.focus();i.select();try{document.execCommand('copy');done()}catch(x){toast('Press and hold the link to copy it')}});
+      return false;
+    },1]]);
+  const i=o.querySelector('#shu');if(i)i.onfocus=()=>i.select();
+}
+async function openShared(){
+  const m=/^#s=([zr])\.([\w-]+)$/.exec(location.hash||'');
+  if(!m)return;
+  try{history.replaceState(null,'',location.href.split('#')[0])}catch(e){}
+  try{
+    const d=await unpackShare(m[1],m[2]);
+    writeMode(ta.value);
+    const e=makeEditor(('Shared: '+(d.n||'code')).slice(0,40),d.h,d.c,d.j);
+    workspaces.push(e);activeId=e.id;mode=d.h?'html':d.c?'css':'js';
+    loadActive();persist();
+    dlg('Shared code opened','<span>This code came from a link. It was added as a <b>new editor</b> (your other editors were not changed) and it has <b>not</b> been run.</span><span class="note">Read it first. Press Preview only if you trust whoever sent it.</span>',[['OK',null,1]]);
+  }catch(err){toast('This share link could not be read')}
+}
+
+/* ---------- settings, shortcuts, about ---------- */
+function settingsDialog(){
+  const row=(id,label,note)=>'<label class="cb"><input type="checkbox" id="'+id+'"> <span>'+label+(note?'<span class="note">'+note+'</span>':'')+'</span></label>';
+  const o=dlg('Settings','<label class="fl">Text size<select id="s_fs">'+FS.map((f,k)=>'<option value="'+k+'">'+f+'</option>').join('')+'</select></label>'
+   +'<label class="fl">Indent size<select id="s_in"><option value="2">2 spaces</option><option value="4">4 spaces</option></select></label>'
+   +row('s_ac','Suggestions while typing','Shows tag, attribute, CSS and JavaScript suggestions. Ctrl+Space opens them any time.')
+   +row('s_pair','Auto-close brackets, quotes and tags','Also keeps indentation after { ( [ and opening tags.')
+   +row('s_live','Mark problems while typing','Underlines lines that have a mistake and shows a count at the bottom.')
+   +row('s_tab','Tab key indents code','Turn off to use Tab to move between buttons. (Esc, then Tab always moves out of the editor.)'),[['Close',null,1]]);
+  const q=s=>o.querySelector(s);
+  q('#s_fs').value=fi;q('#s_in').value=SET.ind===4?4:2;
+  q('#s_ac').checked=!!SET.ac;q('#s_pair').checked=!!SET.pair;q('#s_live').checked=!!SET.live;q('#s_tab').checked=!!SET.tabk;
+  q('#s_fs').onchange=e=>{fi=+e.target.value;ls('hv.fs',fi);setSz()};
+  q('#s_in').onchange=e=>{SET.ind=+e.target.value;saveSet()};
+  q('#s_ac').onchange=e=>{SET.ac=e.target.checked?1:0;saveSet();acHide()};
+  q('#s_pair').onchange=e=>{SET.pair=e.target.checked?1:0;saveSet()};
+  q('#s_live').onchange=e=>{SET.live=e.target.checked?1:0;saveSet();if(SET.live)lintSoon();else{dm=null;dirty=1;draw();setPb(null)}};
+  q('#s_tab').onchange=e=>{SET.tabk=e.target.checked?1:0;saveSet()};
+}
+function shortcutsDialog(){
+  const rows=[['Preview','Ctrl+Enter'],['Save as a file (Export)','Ctrl+S'],['Find & replace words','Ctrl+H'],['Go to line','Ctrl+G'],['Find mistakes','Alt+Shift+C'],['Format code','Alt+Shift+F'],['Show suggestions','Ctrl+Space'],['Comment / uncomment lines','Ctrl+/'],['Indent / outdent lines','Tab / Shift+Tab'],['Undo / Redo','Ctrl+Z / Ctrl+Shift+Z'],['Leave the editor with the keyboard','Esc, then Tab'],['Close a window or the preview','Esc']];
+  dlg('Keyboard shortcuts','<table class="kt"><tbody>'+rows.map(r=>'<tr><th scope="row">'+E(r[0])+'</th><td><kbd>'+E(KEY(r[1]))+'</kbd></td></tr>').join('')+'</tbody></table><span class="note">These work with a keyboard. On a phone or tablet, use the menu (⋮) instead.</span>',[['Close',null,1]]);
+}
+function aboutDialog(){
+  dlg('About HTML Viewer','<span>Write HTML, CSS and JavaScript, check them for mistakes, format them and preview the result. Everything runs in your browser and your code is never uploaded. A share link contains the code itself, so anyone you give the link to can read it.</span><span>Free to use under the MIT License. It is provided as is, without any warranty.</span><span><a href="about.html" target="_blank" rel="noopener">About this tool</a> · <a href="LICENSE.txt" target="_blank" rel="noopener">License</a> · <a href="https://github.com/sifat8668/HTML-viewer/issues" target="_blank" rel="noopener">Contact / report a problem</a></span>',[['Close',null,1]]);
 }
 
 /* ---------- menu actions ---------- */
@@ -358,7 +2002,7 @@ const A={
   const rg=()=>{const q=$('#fq').value;if(!q){$('#rm').textContent='Type a word first';return}return new RegExp(q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),$('#mc').checked?'g':'gi')};
   const next=()=>{const r=rg();if(!r)return false;const v=ta.value;r.lastIndex=ta.selectionEnd;let x=r.exec(v);if(!x){r.lastIndex=0;x=r.exec(v)}
    if(x){show(x.index,x.index+x[0].length);$('#rm').textContent=''}else $('#rm').textContent='Not found';return false};
-  dlg('Replace words','<input type="text" id="fq" placeholder="Find"><input type="text" id="rq" placeholder="Replace with"><label><input type="checkbox" id="mc"> Match case</label><span id="rm" style="color:#3ddc84"></span>',
+  dlg('Find &amp; replace words','<input type="text" id="fq" placeholder="Find"><input type="text" id="rq" placeholder="Replace with"><label><input type="checkbox" id="mc"> Match case</label><span id="rm" style="color:#3ddc84"></span>',
   [['Close'],['Replace all',()=>{const r=rg();if(!r)return false;let c=0;const t=ta.value.replace(r,()=>(c++,$('#rq').value));
     if(!c){$('#rm').textContent='Not found';return false}put(t);$('#rm').textContent='Replaced '+c;return false}],
   ['Replace',()=>{const r=rg();if(!r)return false;const s=ta.value.slice(ta.selectionStart,ta.selectionEnd);
@@ -366,12 +2010,12 @@ const A={
   ['Find next',next,1]])
  },
  go:()=>dlg('Go to line','<input type="number" id="gl" min="1" placeholder="Line number (1-'+lines.length+')">',[['Cancel'],['Go',()=>{jump(+$('#gl').value)},1]]),
- fix:()=>{
-  const res=lint(),h=res.length?res.map(([l,k,m])=>'<div class="r" data-l="'+l+'" data-mode="'+k.toLowerCase()+'"><b>'+E(k)+' · Line '+l+'</b> &middot; '+E(m)+'</div>').join(''):'<span style="color:#3ddc84">No mistakes found.</span>';
-  const o=dlg(res.length?res.length+' possible mistake'+(res.length>1?'s':''):'Find mistakes',h,[['Close']]);
-  o.querySelectorAll('.r').forEach(e=>e.onclick=()=>{const ln=+e.dataset.l,k=e.dataset.mode;o.remove();if(k==='css'||k==='javascript'||k==='html')switchMode(k==='javascript'?'js':k==='css'?'css':'html');jump(ln)})
- },
- fmt:()=>{if(mode!=='html'){toast('Format is currently available for HTML');return}format()},
+ fix:()=>{fixDialog()},
+ fmt:()=>{fmtRun()},
+ shr:()=>{shareDialog()},
+ set:()=>{settingsDialog()},
+ kbd:()=>{shortcutsDialog()},
+ abt:()=>{aboutDialog()},
  undo:()=>{ta.focus();document.execCommand('undo')},
  redo:()=>{ta.focus();document.execCommand('redo')},
  copy:()=>{writeMode(ta.value);const t=mode==='html'?combinedSource():readMode();(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(()=>toast('Copied all'),()=>{ta.focus();ta.select();document.execCommand('copy');toast('Copied all')})},
@@ -392,14 +2036,14 @@ drag($('#fh'),()=>[FL.offsetLeft,FL.offsetTop],(s,dx,dy)=>{FL.style.left=Math.ma
 drag($('#fz'),()=>[FL.offsetWidth,FL.offsetHeight],(s,dx,dy)=>{FL.style.width=Math.max(150,s[0]+dx)+'px';FL.style.height=Math.max(110,s[1]+dy)+'px'});
 
 /* ---------- wiring ---------- */
-$('#mb').onclick=()=>mn.classList.toggle('on');
+$('#mb').onclick=()=>menuSet(!mn.classList.contains('on'));
 $('#na').onclick=()=>{const name=prompt('Name this editor','Editor '+(workspaces.length+1));if(name!==null)addEditor(name.trim()||'Editor '+(workspaces.length+1))};
 $('#es').onchange=()=>{writeMode(ta.value);activeId=$('#es').value;loadActive();persist()};
 $('#lm').onclick=e=>{const b=e.target.closest('button[data-mode]');if(b)switchMode(b.dataset.mode)};
 addEventListener('popstate',()=>{if($('#pv').classList.contains('on')){previewHistory=false;$('#pv').classList.remove('on');$('#pf').srcdoc=''}});
 $('#keepb').textContent='Keep code on reopen: '+(keepCode?'ON':'OFF');
-mn.onclick=e=>{const b=e.target.closest('button');if(b){writeMode(ta.value);mn.classList.remove('on');A[b.dataset.a]()}};
-document.addEventListener('pointerdown',e=>{if(!e.target.closest('#mn,#mb'))mn.classList.remove('on')});
+mn.onclick=e=>{const b=e.target.closest('button');if(b){writeMode(ta.value);menuSet(false);A[b.dataset.a]()}};
+document.addEventListener('pointerdown',e=>{if(!e.target.closest('#mn,#mb'))menuSet(false)});
 fin.onchange=async()=>{const f=fin.files[0];if(!f)return;try{
  const text=await f.text(),ext=(f.name.split('.').pop()||'html').toLowerCase();
  const e=makeEditor(f.name);
@@ -410,9 +2054,350 @@ ta.addEventListener('scroll',draw,{passive:true});
 ta.addEventListener('input',upd);
 ['keyup','pointerup','focus'].forEach(e=>ta.addEventListener(e,sched));
 ta.addEventListener('pointerdown',()=>{if(mk){mk=null;draw()}});
-ta.addEventListener('keydown',e=>{if(e.key=='Tab'&&!e.shiftKey){e.preventDefault();document.execCommand('insertText',false,'  ')}});
-ta.addEventListener('beforeinput',e=>{if(e.inputType=='insertLineBreak'||e.inputType=='insertParagraph'){
- e.preventDefault();const p=ta.selectionStart,v=ta.value,i=v.slice(v.lastIndexOf('\n',p-1)+1,p).match(/^[ \t]*/)[0];document.execCommand('insertText',false,'\n'+i)}});
+/* ---------- editing helpers: suggestions, auto-close, indent, comments, keyboard ---------- */
+const AC_COMMON='div span p a img ul li button input h1 h2 section header footer nav form label script style link meta table tr td'.split(' ');
+const AC_ATTR_G='class id style title lang dir hidden tabindex contenteditable draggable spellcheck role aria-label aria-hidden aria-describedby data- onclick oninput onchange onsubmit onload onkeydown onkeyup onfocus onblur onmouseover'.split(' ');
+const AC_ATTR={a:'href target rel download',img:'src alt width height loading srcset sizes',input:'type name value placeholder required disabled checked min max step pattern maxlength readonly autofocus multiple accept autocomplete',button:'type disabled name value',form:'action method enctype target autocomplete novalidate',label:'for',select:'name multiple required disabled',option:'value selected disabled',textarea:'name rows cols placeholder required disabled readonly maxlength wrap',link:'rel href type media',meta:'charset name content http-equiv property',script:'src type defer async crossorigin',style:'media type',iframe:'src title width height allow sandbox loading',video:'src controls autoplay loop muted poster preload playsinline width height',audio:'src controls autoplay loop muted preload',source:'src type srcset media',td:'colspan rowspan headers',th:'colspan rowspan scope headers',table:'border cellpadding cellspacing',svg:'viewBox xmlns width height fill stroke',path:'d fill stroke stroke-width',html:'lang',canvas:'width height',details:'open',meter:'value min max low high optimum',progress:'value max',ol:'start type reversed',li:'value',col:'span',track:'src kind srclang label default'};
+const AC_BOOL=new Set('hidden required disabled checked readonly autofocus multiple selected controls autoplay loop muted defer async novalidate open reversed default playsinline'.split(' '));
+const AC_VAL={'input.type':'text password email number tel url search date time datetime-local month week color range checkbox radio file hidden submit reset button image','button.type':'button submit reset','a.target':'_blank _self _parent _top','form.method':'get post','img.loading':'lazy eager','iframe.loading':'lazy eager','a.rel':'noopener noreferrer nofollow','link.rel':'stylesheet icon preload canonical','script.type':'module text/javascript application/json','textarea.wrap':'soft hard off'};
+const AC_CSSV={display:'block inline inline-block flex inline-flex grid inline-grid none contents table flow-root',position:'static relative absolute fixed sticky','flex-direction':'row row-reverse column column-reverse','flex-wrap':'nowrap wrap wrap-reverse','justify-content':'flex-start flex-end center space-between space-around space-evenly start end','align-items':'stretch flex-start flex-end center baseline start end','align-self':'auto stretch flex-start flex-end center baseline','align-content':'stretch flex-start flex-end center space-between space-around','text-align':'left right center justify start end',overflow:'visible hidden scroll auto clip','overflow-x':'visible hidden scroll auto clip','overflow-y':'visible hidden scroll auto clip',cursor:'pointer default text move not-allowed grab grabbing wait help crosshair','font-weight':'normal bold bolder lighter 100 200 300 400 500 600 700 800 900','font-style':'normal italic oblique','text-decoration':'none underline overline line-through','text-transform':'none uppercase lowercase capitalize','white-space':'normal nowrap pre pre-wrap pre-line break-spaces','box-sizing':'border-box content-box',visibility:'visible hidden collapse',float:'none left right',clear:'none left right both','object-fit':'fill contain cover none scale-down','background-size':'auto cover contain','background-repeat':'repeat no-repeat repeat-x repeat-y','background-position':'center top bottom left right','border-style':'none solid dashed dotted double groove ridge','list-style-type':'none disc circle square decimal','pointer-events':'auto none','user-select':'auto none text all','vertical-align':'baseline top middle bottom text-top text-bottom','word-break':'normal break-all keep-all break-word','transition-timing-function':'ease ease-in ease-out ease-in-out linear','animation-fill-mode':'none forwards backwards both','animation-direction':'normal reverse alternate alternate-reverse','flex-flow':'row wrap column nowrap','place-items':'center start end stretch','place-content':'center start end space-between space-around'};
+const AC_PSEUDO='hover focus active visited first-child last-child nth-child() not() is() where() has() before after first-letter first-line placeholder selection checked disabled root focus-visible focus-within empty'.split(' ');
+const AC_AT='media supports keyframes font-face import layer container property'.split(' ');
+const AC_JSKW='const let var function return if else for while do switch case break continue new class extends import export from async await try catch finally throw this typeof instanceof in of true false null undefined default delete void yield'.split(' ');
+const AC_JSGL='document window console Math JSON Date Array Object String Number Boolean Promise Set Map WeakMap Symbol RegExp Error parseInt parseFloat isNaN setTimeout setInterval clearTimeout clearInterval requestAnimationFrame cancelAnimationFrame fetch localStorage sessionStorage alert confirm prompt navigator location history performance URL FormData Blob File FileReader Event CustomEvent AbortController'.split(' ');
+const AC_JSM={document:'getElementById() querySelector() querySelectorAll() createElement() createTextNode() addEventListener() removeEventListener() body head documentElement title cookie readyState getElementsByClassName() getElementsByTagName() createDocumentFragment() activeElement forms images links',console:'log() warn() error() info() table() clear() time() timeEnd() group() groupEnd() assert() dir()',Math:'abs() ceil() floor() round() max() min() pow() sqrt() random() sin() cos() tan() atan2() trunc() sign() hypot() log() exp() PI E',JSON:'stringify() parse()',Object:'keys() values() entries() assign() freeze() create() fromEntries() defineProperty() getPrototypeOf()',Array:'isArray() from() of()',Number:'isInteger() isFinite() parseFloat() parseInt() MAX_SAFE_INTEGER EPSILON',Promise:'all() allSettled() race() resolve() reject() any()',Date:'now() parse() UTC()',localStorage:'getItem() setItem() removeItem() clear() key() length',window:'innerWidth innerHeight scrollTo() open() close() addEventListener() requestAnimationFrame() setTimeout() setInterval() location history navigator localStorage','*':'length push() pop() shift() unshift() slice() splice() map() filter() reduce() forEach() find() findIndex() includes() indexOf() join() split() replace() trim() toUpperCase() toLowerCase() startsWith() endsWith() padStart() repeat() concat() sort() reverse() some() every() flat() addEventListener() querySelector() querySelectorAll() classList style textContent innerHTML value checked dataset setAttribute() getAttribute() appendChild() append() remove() focus() click()'};
+const ac={on:0,items:[],sel:0,from:0,to:0,nav:0};
+let acSkip=false,tabFree=false;
+const acEl=document.createElement('div');
+acEl.id='ac';acEl.setAttribute('role','listbox');acEl.setAttribute('aria-label','Suggestions');acEl.hidden=true;ed.append(acEl);
+
+function stAtCaret(){
+  const p=ta.selectionStart,lc=at(p),l=lc[0],c=lc[1];
+  while(sts.length<=l)sts.push(nx(lines[sts.length-1]||'',sts[sts.length-1]));
+  return hi((lines[l]||'').slice(0,c),sts[l])[1]>>2;
+}
+function inStrOrCmt(line){
+  let q='';
+  for(let i=0;i<line.length;i++){
+    const c=line[i];
+    if(q){if(c==='\\')i++;else if(c===q)q='';continue}
+    if(c==='"'||c==="'"||c==='`'){q=c;continue}
+    if(c==='/'&&line[i+1]==='/')return true;
+  }
+  return q!=='';
+}
+const acFilter=(list,pre)=>{const l=pre.toLowerCase();return list.filter(x=>x.toLowerCase().startsWith(l)&&x.toLowerCase()!==l)};
+function acMember(name,pre,detail){
+  const call=name.endsWith('()'),base=call?name.slice(0,-2):name;
+  return {t:base,i:call?base+'()':base,b:call?1:0,d:detail};
+}
+function acCss(before,p,force,inBlock){
+  const lb=before.lastIndexOf('{'),rb=before.lastIndexOf('}');
+  if(inBlock||lb>rb){
+    const sc=before.lastIndexOf(';'),seg=before.slice((inBlock?sc:Math.max(lb,sc))+1);
+    const vm=/([\w-]+)\s*:\s*([\w-]*)$/.exec(seg);
+    if(vm){
+      const prop=vm[1].toLowerCase(),pre=vm[2];
+      const vals=(AC_CSSV[prop]||'').split(' ').filter(Boolean).concat(['inherit','initial','unset']);
+      if(!AC_CSSV[prop]&&!pre&&!force)return null;
+      const items=acFilter(vals,pre).map(v=>({t:v,i:v,d:'value'}));
+      return items.length?{items,from:p-pre.length,to:p}:null;
+    }
+    const wm=/(?:^|[\s;{])([\w-]*)$/.exec(seg);
+    if(!wm)return null;
+    const pre=wm[1];
+    if(!pre&&!force)return null;
+    const items=acFilter(HV.cssPropList(),pre).map(x=>({t:x,i:x+': ',d:'property'}));
+    return items.length?{items,from:p-pre.length,to:p}:null;
+  }
+  const am=/@([\w-]*)$/.exec(before);
+  if(am)return {items:acFilter(AC_AT,am[1]).map(x=>({t:'@'+x,i:'@'+x,d:'rule'})).map(x=>x),from:p-am[1].length-1,to:p};
+  const pm=/(:{1,2})([\w-]*)$/.exec(before);
+  if(pm){
+    const items=acFilter(AC_PSEUDO,pm[2]).map(x=>acMember(x,'','selector'));
+    return items.length?{items:items.map(x=>({t:pm[1]+x.t,i:pm[1]+x.i,b:x.b,d:x.d})),from:p-pm[1].length-pm[2].length,to:p}:null;
+  }
+  const wm=/([a-zA-Z][\w-]*)$/.exec(before);
+  if(wm&&wm[1].length>=2&&!/[#.]\w*$/.test(before.slice(0,before.length-wm[1].length)+'x')){
+    const items=acFilter(HV.htmlTags(),wm[1]).map(x=>({t:x,i:x,d:'tag'}));
+    return items.length?{items,from:p-wm[1].length,to:p}:null;
+  }
+  return null;
+}
+function acJs(before,p,force,v){
+  const line=before.slice(before.lastIndexOf('\n')+1);
+  if(inStrOrCmt(line))return null;
+  const mm=/([A-Za-z_$][\w$]*)\.([\w$]*)$/.exec(line);
+  if(mm){
+    const list=(AC_JSM[mm[1]]||AC_JSM['*']).split(' ');
+    const items=acFilter(list,mm[2]).map(x=>acMember(x,mm[2],'member'));
+    return items.length?{items,from:p-mm[2].length,to:p}:null;
+  }
+  if(/\.\s*$/.test(line))return null;
+  const wm=/[A-Za-z_$][\w$]*$/.exec(line);
+  if(!wm)return null;
+  const pre=wm[0];
+  if(pre.length<2&&!force)return null;
+  const seen=new Set();
+  const items=[];
+  const add=(arr,d)=>{for(const x of acFilter(arr,pre)){if(!seen.has(x)){seen.add(x);items.push({t:x,i:x,d})}}};
+  add(AC_JSKW,'keyword');add(AC_JSGL,'global');
+  const words=new Set(),chunk=v.slice(Math.max(0,p-60000),p+60000),re=/[A-Za-z_$][\w$]{2,}/g;let m;
+  while((m=re.exec(chunk))&&words.size<800)words.add(m[0]);
+  words.delete(pre);
+  add(Array.from(words),'in this code');
+  return items.length?{items:items.slice(0,40),from:p-pre.length,to:p}:null;
+}
+function acContext(force){
+  const p=ta.selectionStart;
+  if(ta.selectionEnd!==p)return null;
+  const v=ta.value,before=v.slice(Math.max(0,p-600),p);
+  let m=0;
+  if(mode==='html')m=stAtCaret();
+  if(mode==='css'||(mode==='html'&&m===6))return acCss(before,p,force,false);
+  if(mode==='js'||(mode==='html'&&m===5))return acJs(before,p,force,v);
+  if(mode!=='html'||m===1)return null;
+  if(m===0||m===2){
+    const t=/<(\/?)([a-zA-Z][\w:-]*)?$/.exec(before);
+    if(t){
+      const pre=t[2]||'';
+      if(t[1]){
+        const names=HV.openNames(v.slice(0,p-t[0].length)).reverse();
+        const items=[];const seen=new Set();
+        names.forEach(n=>{if(!seen.has(n.toLowerCase())&&n.toLowerCase().startsWith(pre.toLowerCase())){seen.add(n.toLowerCase());items.push({t:'/'+n,i:n+'>',d:'close tag'})}});
+        return items.length?{items,from:p-pre.length,to:p}:null;
+      }
+      let names=acFilter(HV.htmlTags(),pre);
+      if(!pre)names=AC_COMMON.concat(names.filter(x=>AC_COMMON.indexOf(x)<0));
+      const items=names.map(x=>({t:x,i:x,d:'tag'}));
+      return items.length?{items,from:p-pre.length,to:p}:null;
+    }
+  }
+  if(m===2){
+    const tm=/<([a-zA-Z][\w:-]*)(?:\s(?:"[^"]*"|'[^']*'|[^<>"'])*)?$/.exec(before);
+    const tag=(tm?tm[1]:'').toLowerCase();
+    const vm=/([\w:@.-]+)\s*=\s*$/.exec(before);
+    if(vm){
+      const list=(AC_VAL[tag+'.'+vm[1].toLowerCase()]||'').split(' ').filter(Boolean);
+      return list.length?{items:list.map(x=>({t:x,i:'"'+x+'"',d:'value'})),from:p,to:p}:null;
+    }
+    const wm=/[\w:@.-]*$/.exec(before)[0];
+    if(!wm&&!force)return null;
+    const all=((AC_ATTR[tag]||'').split(' ').filter(Boolean)).concat(AC_ATTR_G);
+    const items=acFilter(Array.from(new Set(all)),wm).map(x=>{
+      const bare=AC_BOOL.has(x)||x.endsWith('-');
+      return {t:x,i:bare?x:x+'=""',b:bare?0:1,d:'attribute'};
+    });
+    return items.length?{items,from:p-wm.length,to:p}:null;
+  }
+  if(m===3||m===4){
+    const sm=/\bstyle\s*=\s*["']([^"']*)$/.exec(before);
+    return sm?acCss(sm[1],p,force,true):null;
+  }
+  return null;
+}
+function acHide(){
+  if(!ac.on)return;
+  ac.on=0;acEl.hidden=true;
+  ta.setAttribute('aria-expanded','false');ta.removeAttribute('aria-activedescendant');
+}
+function acMark(){
+  Array.from(acEl.children).forEach((d,k)=>{const on=k===ac.sel;d.classList.toggle('on',on);d.setAttribute('aria-selected',on?'true':'false');if(on){ta.setAttribute('aria-activedescendant',d.id);d.scrollIntoView({block:'nearest'})}});
+}
+function acShow(c){
+  ac.items=c.items.slice(0,40);ac.from=c.from;ac.to=c.to;ac.sel=0;ac.nav=0;ac.on=1;
+  acEl.innerHTML=ac.items.map((it,k)=>'<div class="ai" role="option" id="ao'+k+'" data-i="'+k+'"><span>'+E(it.t)+'</span>'+(it.d?'<small>'+E(it.d)+'</small>':'')+'</div>').join('');
+  acEl.hidden=false;ta.setAttribute('aria-expanded','true');
+  const p=ta.selectionStart,lc=at(p),l=lc[0],col=lc[1];
+  const x=(col+dg)*CW+22-ta.scrollLeft,yb=(l+1)*LH-ta.scrollTop,ya=l*LH-ta.scrollTop;
+  const w=acEl.offsetWidth,h=acEl.offsetHeight,vw=ed.clientWidth,vh=ed.clientHeight;
+  let top=yb+2;
+  if(top+h>vh-4&&ya-h-2>0)top=ya-h-2;
+  top=Math.max(2,Math.min(top,vh-h-2));
+  acEl.style.left=Math.max(4,Math.min(x,vw-w-4))+'px';acEl.style.top=top+'px';
+  acMark();
+}
+function acAccept(i){
+  const it=ac.items[i==null?ac.sel:i];
+  if(!it)return;
+  const from=ac.from,to=ac.to;
+  acHide();
+  ta.focus();ta.setSelectionRange(from,to);
+  acSkip=true;
+  document.execCommand('insertText',false,it.i);
+  if(it.b){const q=ta.selectionStart-it.b;ta.setSelectionRange(q,q)}
+}
+function acForce(){
+  const c=acContext(true);
+  if(c&&c.items.length)acShow(c);else{acHide();toast('No suggestions here')}
+}
+acEl.addEventListener('pointerdown',e=>e.preventDefault());
+acEl.addEventListener('click',e=>{const d=e.target.closest('.ai');if(d)acAccept(+d.dataset.i)});
+ta.setAttribute('aria-autocomplete','list');ta.setAttribute('aria-controls','ac');ta.setAttribute('aria-expanded','false');
+ta.addEventListener('blur',acHide);
+ta.addEventListener('scroll',acHide,{passive:true});
+ta.addEventListener('input',e=>{
+  if(acSkip){acSkip=false;return}
+  if(!SET.ac)return;
+  const t=e.inputType||'';
+  if(!/^insert(Text|CompositionText)$/.test(t)&&t!=='deleteContentBackward'){acHide();return}
+  const c=acContext(false);
+  if(c&&c.items.length)acShow(c);else acHide();
+});
+
+/* auto-close brackets, quotes and tags */
+function pairCtx(){
+  if(mode!=='html')return 'code';
+  const m=stAtCaret();
+  return m===5||m===6?'code':m===2?'tag':'text';
+}
+function autoTag(e,p,v){
+  const b=v.slice(Math.max(0,p-600),p);
+  const m=/<([a-zA-Z][\w:-]*)(?:\s(?:"[^"]*"|'[^']*'|[^<>"'])*)?$/.exec(b);
+  if(!m||/\/\s*$/.test(b))return;
+  const name=m[1];
+  if(HV.VOIDS.has(name.toLowerCase()))return;
+  if(v.slice(p).toLowerCase().startsWith('</'+name.toLowerCase()+'>'))return;
+  e.preventDefault();
+  acSkip=true;
+  document.execCommand('insertText',false,'></'+name+'>');
+  ta.setSelectionRange(p+1,p+1);
+}
+function autoPair(e){
+  const ch=e.data,p=ta.selectionStart,q=ta.selectionEnd,v=ta.value,next=v[q]||'',prev=v[p-1]||'';
+  const OPEN={'(':')','[':']','{':'}','"':'"',"'":"'",'`':'`'};
+  const ctx=pairCtx();
+  if(ch==='>'){if(mode==='html'&&ctx==='tag'&&p===q)autoTag(e,p,v);return}
+  if(ctx==='text')return;
+  if(p===q&&next===ch&&(ch===')'||ch===']'||ch==='}'||ch==='"'||ch==="'"||ch==='`')){e.preventDefault();ta.setSelectionRange(p+1,p+1);return}
+  if(!OPEN[ch])return;
+  const quote=ch==='"'||ch==="'"||ch==='`';
+  if(ctx==='tag'&&!(ch==='"'||ch==="'"))return;
+  if(quote&&p===q&&(/[\w$]/.test(prev)||/[\w$]/.test(next)))return;
+  e.preventDefault();
+  acSkip=true;
+  if(p===q){document.execCommand('insertText',false,ch+OPEN[ch]);ta.setSelectionRange(p+1,p+1)}
+  else{const sel=v.slice(p,q);document.execCommand('insertText',false,ch+sel+OPEN[ch]);ta.setSelectionRange(p+1,p+1+sel.length)}
+}
+function smartEnter(){
+  const p=ta.selectionStart,q=ta.selectionEnd,v=ta.value;
+  const before=v.slice(v.lastIndexOf('\n',p-1)+1,p);
+  const indent=/^[ \t]*/.exec(before)[0];
+  let extra='',split=false;
+  if(SET.pair&&p===q){
+    const prev=v[p-1],next=v[q],u=IND(),closers={'{':'}','(':')','[':']'};
+    const ctx=pairCtx();
+    if(ctx==='code'&&closers[prev]){extra=u;split=next===closers[prev]}
+    else if(mode==='html'&&ctx==='text'&&prev==='>'){
+      const m=/<([a-zA-Z][\w:-]*)(?:\s(?:"[^"]*"|'[^']*'|[^<>"'])*)?>$/.exec(before);
+      if(m&&!/\/>$/.test(before)&&!HV.VOIDS.has(m[1].toLowerCase())){extra=u;split=v.slice(q).toLowerCase().startsWith('</'+m[1].toLowerCase())}
+    }
+  }
+  const text='\n'+indent+extra+(split?'\n'+indent:'');
+  document.execCommand('insertText',false,text);
+  if(split){const pos=ta.selectionStart-(1+indent.length);ta.setSelectionRange(pos,pos)}
+}
+ta.addEventListener('beforeinput',e=>{
+  if(e.inputType==='insertLineBreak'||e.inputType==='insertParagraph'){e.preventDefault();acHide();smartEnter();return}
+  if(SET.pair&&e.cancelable&&!e.isComposing&&e.inputType==='insertText'&&e.data&&e.data.length===1)autoPair(e);
+});
+
+/* indent, comment */
+function indentKey(shift){
+  const v=ta.value,s=ta.selectionStart,e=ta.selectionEnd,u=IND();
+  if(s===e&&!shift){document.execCommand('insertText',false,u);return}
+  const ls=v.lastIndexOf('\n',s-1)+1;
+  let le=v.indexOf('\n',e>s&&v[e-1]==='\n'?e-1:e);if(le<0)le=v.length;
+  const block=v.slice(ls,le);
+  const out=shift?block.replace(new RegExp('^(?: {1,'+u.length+'}|\\t)','gm'),''):block.replace(/^(?=.)/gm,u);
+  if(out===block)return;
+  ta.setSelectionRange(ls,le);
+  document.execCommand('insertText',false,out);
+  if(s===e){const pos=Math.max(ls,s+(out.length-block.length));ta.setSelectionRange(pos,pos)}
+  else ta.setSelectionRange(ls,ls+out.length);
+}
+function toggleComment(){
+  const v=ta.value,s=ta.selectionStart,e=ta.selectionEnd;
+  const ls=v.lastIndexOf('\n',s-1)+1;
+  let le=v.indexOf('\n',e>s&&v[e-1]==='\n'?e-1:e);if(le<0)le=v.length;
+  const block=v.slice(ls,le),rows=block.split('\n');
+  let kind=mode;
+  if(mode==='html'){const m=stAtCaret();kind=m===5?'js':m===6?'css':'html'}
+  const wrap={js:['// ',''],css:['/* ',' */'],html:['<\!-- ',' -->'],}[kind];
+  const re={js:/^(\s*)\/\/ ?/,css:/^(\s*)\/\* ?(.*?) ?\*\/\s*$/,html:/^(\s*)<\!-- ?(.*?) ?-->\s*$/}[kind];
+  const body=rows.filter(r=>r.trim());
+  const all=body.length>0&&body.every(r=>re.test(r));
+  if(!all&&kind==='css'&&block.indexOf('*/')>=0){toast('This line already has a CSS comment inside');return}
+  const out=rows.map(r=>{
+    if(!r.trim())return r;
+    if(all)return kind==='js'?r.replace(re,'$1'):r.replace(re,'$1$2');
+    const ind=/^\s*/.exec(r)[0];
+    return ind+wrap[0]+r.slice(ind.length)+wrap[1];
+  }).join('\n');
+  ta.setSelectionRange(ls,le);
+  document.execCommand('insertText',false,out);
+  ta.setSelectionRange(ls,ls+out.length);
+}
+
+/* keyboard */
+ta.addEventListener('keydown',e=>{
+  const k=e.key,mod=e.ctrlKey||e.metaKey;
+  if(ac.on){
+    if(k==='ArrowDown'||k==='ArrowUp'){e.preventDefault();ac.sel=(ac.sel+(k==='ArrowDown'?1:ac.items.length-1))%ac.items.length;ac.nav=1;acMark();return}
+    if(k==='Tab'||(k==='Enter'&&ac.nav)){e.preventDefault();acAccept();return}
+    if(k==='Escape'){e.preventDefault();acHide();return}
+  }
+  if(k==='Escape'){tabFree=true;return}
+  if(k==='Tab'){
+    if(tabFree||!SET.tabk){tabFree=false;return}
+    e.preventDefault();indentKey(e.shiftKey);return;
+  }
+  if(mod&&k==='/'){e.preventDefault();toggleComment();return}
+  if(mod&&e.code==='Space'){e.preventDefault();acForce();return}
+  if(k!=='Shift'&&k!=='Control'&&k!=='Alt'&&k!=='Meta')tabFree=false;
+});
+const runAct=n=>{writeMode(ta.value);menuSet(false);A[n]()};
+document.addEventListener('keydown',e=>{
+  if(e.defaultPrevented)return;
+  const k=e.key,mod=e.ctrlKey||e.metaKey;
+  if(k==='Escape'){
+    if(document.querySelector('.ov'))return;
+    if(mn.classList.contains('on')){menuSet(false);$('#mb').focus();return}
+    if($('#pv').classList.contains('on'))closeMainPreview();
+    return;
+  }
+  if(document.querySelector('.ov'))return;
+  const inEd=e.target===ta;
+  if(mod&&!e.altKey&&k==='Enter'){e.preventDefault();if(!$('#pv').classList.contains('on'))runAct('pv');return}
+  if(mod&&!e.altKey&&!e.shiftKey&&(k==='s'||k==='S')){e.preventDefault();runAct('exp');return}
+  if(inEd&&mod&&!e.altKey&&!e.shiftKey&&(k==='h'||k==='H'||k==='f'||k==='F')){e.preventDefault();runAct('rep');return}
+  if(inEd&&mod&&!e.altKey&&!e.shiftKey&&(k==='g'||k==='G')){e.preventDefault();runAct('go');return}
+  if(e.altKey&&e.shiftKey&&!mod){
+    if(e.code==='KeyF'){e.preventDefault();runAct('fmt');return}
+    if(e.code==='KeyC'){e.preventDefault();runAct('fix');return}
+  }
+});
+
+/* menu and tabs: keyboard + screen reader support */
+function menuSet(on){
+  mn.classList.toggle('on',on);
+  $('#mb').setAttribute('aria-expanded',on?'true':'false');
+  if(on){const f=mn.querySelector('button:not([hidden])');if(f)f.focus({preventScroll:true})}
+}
+mn.addEventListener('keydown',e=>{
+  const bs=Array.from(mn.querySelectorAll('button:not([hidden])')),i=bs.indexOf(document.activeElement);
+  if(e.key==='ArrowDown'){e.preventDefault();bs[(i+1)%bs.length].focus()}
+  else if(e.key==='ArrowUp'){e.preventDefault();bs[(i-1+bs.length)%bs.length].focus()}
+  else if(e.key==='Home'){e.preventDefault();bs[0].focus()}
+  else if(e.key==='End'){e.preventDefault();bs[bs.length-1].focus()}
+  else if(e.key==='Tab')menuSet(false);
+});
+$('#lm').addEventListener('keydown',e=>{
+  if(e.key!=='ArrowRight'&&e.key!=='ArrowLeft')return;
+  const order=['html','css','js'],i=order.indexOf(mode),n=order[(i+(e.key==='ArrowRight'?1:2))%3];
+  e.preventDefault();switchMode(n);const b=$('#lm button[data-mode="'+n+'"]');if(b)b.focus();
+});
+$('.sk').onclick=e=>{e.preventDefault();ta.focus()};
 new ResizeObserver(()=>{dirty=1;draw()}).observe(ed);
 addEventListener('visibilitychange',()=>{if(document.hidden){clearTimeout(sv);save()}});
 addEventListener('beforeinstallprompt',e=>{e.preventDefault();ip=e;$('#ins').hidden=false});
@@ -425,6 +2410,7 @@ try{
  activeId=workspaces.some(x=>x.id===ls('hv.active'))?ls('hv.active'):workspaces[0].id;
  mode=['html','css','js'].includes(ls('hv.mode'))?ls('hv.mode'):'html';
  renderEditors();ta.value=readMode();setSz();upd();stat();
+openShared();
 </script>
 </body>
 </html>
