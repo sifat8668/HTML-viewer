@@ -1,33 +1,43 @@
-// After you change any file later, change v1 to v2 (v3...) so phones fetch the update.
-const C = 'html-viewer-v1';
-const FILES = ['./', 'index.html', 'manifest.json', 'icon.png', 'icons/icon-192.png', 'icons/icon-512.png'];
+/* HTML Viewer service worker.
+   Opens instantly and works offline: files come from the cache first and are
+   refreshed in the background whenever you are online. */
+const CACHE = 'hv-v2-20261125';
+const CORE = ['./', 'index.html', 'manifest.json', 'icon.png', 'icons/icon-192.png', 'icons/icon-512.png'];
 
 self.addEventListener('install', e => {
-  e.waitUntil(caches.open(C).then(c => c.addAll(FILES)).then(() => self.skipWaiting()));
+  e.waitUntil(
+    caches.open(CACHE)
+      .then(c => Promise.all(CORE.map(u => c.add(u).catch(() => {}))))
+      .then(() => self.skipWaiting())
+  );
 });
 
 self.addEventListener('activate', e => {
   e.waitUntil(
     caches.keys()
-      .then(keys => Promise.all(keys.filter(k => k !== C).map(k => caches.delete(k))))
+      .then(keys => Promise.all(keys.filter(k => k.startsWith('hv-') && k !== CACHE).map(k => caches.delete(k))))
       .then(() => self.clients.claim())
   );
 });
 
-// Open instantly from cache, refresh the cache quietly in the background.
 self.addEventListener('fetch', e => {
   const r = e.request;
   if (r.method !== 'GET' || new URL(r.url).origin !== location.origin) return;
   e.respondWith(
-    caches.match(r, { ignoreSearch: true }).then(hit => {
+    caches.open(CACHE).then(async c => {
+      const hit = await c.match(r, { ignoreSearch: true });
       const net = fetch(r)
-        .then(res => {
-          if (res.ok) { const copy = res.clone(); caches.open(C).then(c => c.put(r, copy)); }
-          return res;
-        })
-        .catch(() => hit || caches.match('index.html'));
-      e.waitUntil(net.catch(() => {}));
-      return hit || net;
+        .then(res => { if (res && res.ok) c.put(r, res.clone()); return res; })
+        .catch(() => null);
+      e.waitUntil(net);
+      if (hit) return hit;
+      const res = await net;
+      if (res) return res;
+      if (r.mode === 'navigate') {
+        const home = await c.match('index.html');
+        if (home) return home;
+      }
+      return Response.error();
     })
   );
 });

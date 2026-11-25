@@ -6,6 +6,7 @@
 <title>HTML Viewer – HTML, CSS and JavaScript editor with live preview</title>
 <meta name="theme-color" content="#071009">
 <meta name="color-scheme" content="dark">
+<meta name="referrer" content="no-referrer">
 <meta name="description" content="Write HTML, CSS and JavaScript, check them for mistakes, format them and preview the result. Runs in your browser.">
 <meta property="og:title" content="HTML Viewer">
 <meta property="og:description" content="Write HTML, CSS and JavaScript, check them for mistakes, format them and preview the result.">
@@ -118,6 +119,37 @@ u.e3{text-decoration-color:#6bb6ff}
 .kt kbd{padding:1px 6px;border:1px solid var(--b);border-radius:4px;font:12px ui-monospace,Menlo,Consolas,monospace;color:var(--l)}
 .bd a{color:var(--l)}
 @media (prefers-reduced-motion:reduce){#ts{transition:none}}
+/* ---- v2: preview tools, developer tools, split view ---- */
+.bt{flex-wrap:wrap}
+#pv .tb,#xpd .tb{flex:none;display:flex;flex-wrap:wrap;align-items:center;gap:4px;padding:4px 6px;background:var(--p);border-bottom:1px solid var(--b);font-size:11px;color:var(--t)}
+.tb select,.tb input[type=number]{background:var(--bg);color:var(--t);border:1px solid var(--b);border-radius:6px;padding:4px;font:11px system-ui,sans-serif}
+.tb input[type=number]{width:58px}
+.tb button{min-height:28px;padding:4px 8px;border:1px solid var(--b);border-radius:6px;background:none;color:var(--l);font-size:11px}
+.tb button[aria-pressed=true]{background:var(--g);color:#06150a;border-color:var(--g);font-weight:700}
+.tb label{display:flex;align-items:center;gap:3px}
+#xwrap{flex:1;min-height:0;overflow:auto;background:#16241b}
+#xsz{position:relative;margin:0 auto}
+#pv #pf{position:absolute;top:0;left:0;flex:none;transform-origin:0 0}
+#xpd{display:none;flex:none;height:42%;min-height:130px;flex-direction:column;border-top:2px solid var(--g);background:var(--p)}
+#xpd.on{display:flex}
+#xcl{flex:1;min-height:0;overflow:auto;padding:4px;font:11px/1.45 ui-monospace,Menlo,Consolas,monospace}
+.cr{padding:2px 4px;border-bottom:1px solid #0004;white-space:pre-wrap;word-break:break-word}
+.cr.e{color:#ff9a90;background:#3a1512}.cr.w{color:#ffd58a}.cr.lk{cursor:pointer;text-decoration:underline dotted}
+#xci{flex:none;margin:4px;padding:6px;background:var(--bg);color:var(--t);border:1px solid var(--b);border-radius:6px;font:12px ui-monospace,Menlo,Consolas,monospace}
+#xin{flex:1;min-height:0;overflow:auto;padding:6px;font:11px/1.5 ui-monospace,Menlo,Consolas,monospace}
+#xih{white-space:pre-wrap;word-break:break-all;color:var(--l);margin:4px 0}
+#xir div,#xic div{padding:1px 0;border-bottom:1px solid #0003;word-break:break-word}
+.bm{position:absolute;top:0;left:0;pointer-events:none;background:#54a96d55;outline:1px solid var(--l);display:none}
+.rb{display:block;width:100%;margin:3px 0;padding:10px;text-align:left;border:1px solid var(--b);border-radius:8px;background:none;color:var(--t);font:13px system-ui,sans-serif}
+.st th,.st td{padding:3px 8px;text-align:right}.st th:first-child{text-align:left}
+#xdv{display:none;position:fixed;z-index:26;background:var(--g);opacity:.35;touch-action:none}
+body.sp.pvon #pv{inset:auto;z-index:15}
+body.sp.pvon.sr #pv{top:0;right:0;bottom:0;width:var(--sp)}
+body.sp.pvon.sr #app{width:calc(100% - var(--sp))}
+body.sp.pvon:not(.sr) #pv{left:0;right:0;bottom:0;height:var(--sp)}
+body.sp.pvon:not(.sr) #app{height:calc(100dvh - var(--sp))}
+body.sp.pvon.sr #xdv{display:block;top:0;bottom:0;width:12px;right:calc(var(--sp) - 6px);cursor:col-resize}
+body.sp.pvon:not(.sr) #xdv{display:block;left:0;right:0;height:12px;bottom:calc(var(--sp) - 6px);cursor:row-resize}
 </style>
 </head>
 <body>
@@ -134,17 +166,26 @@ u.e3{text-decoration-color:#6bb6ff}
 <button data-a="exp">Export file<kbd>Ctrl+S</kbd></button>
 <button data-a="shr">Share link<small>Make a link that opens this code for anyone</small></button>
 <hr>
+<button data-a="ren">Rename this editor</button>
+<button data-a="dup">Duplicate this editor</button>
+<button data-a="cls">Close this editor</button>
+<hr>
 <button data-a="pv">Preview<kbd>Ctrl+Enter</kbd></button>
 <button data-a="fl">Floating preview</button>
+<button data-a="spl">Split view preview<small>Edit and preview side by side, drag the bar to resize</small><kbd>Alt+Shift+P</kbd></button>
 <hr>
-<button data-a="rep">Find &amp; replace words<small>Search the current tab and replace what you find</small><kbd>Ctrl+H</kbd></button>
+<button data-a="rep">Find &amp; replace<small>Plain text or regular expressions, whole word, match case</small><kbd>Ctrl+H</kbd></button>
 <button data-a="go">Go to line<kbd>Ctrl+G</kbd></button>
 <button data-a="fix">Find mistakes (HTML, CSS, JS)<small>Checks tags, CSS properties and JavaScript syntax in all three tabs</small><kbd>Alt+Shift+C</kbd></button>
 <button data-a="fmt">Format code (HTML, CSS, JS)<small>Tidies the tab you are on: HTML, CSS or JavaScript</small><kbd>Alt+Shift+F</kbd></button>
+<button data-a="min">Minify code<small>Removes comments and extra spaces from this tab</small><kbd>Alt+Shift+M</kbd></button>
+<button data-a="sta">Code statistics<small>Lines, size, tags and more</small><kbd>Alt+Shift+I</kbd></button>
+<button data-a="rcn">Recent files<kbd>Alt+Shift+R</kbd></button>
 <hr>
 <button data-a="undo">Undo<kbd>Ctrl+Z</kbd></button>
 <button data-a="redo">Redo<kbd>Ctrl+Shift+Z</kbd></button>
-<button data-a="copy">Copy all</button>\n<button data-a="keep" id="keepb">Keep code on reopen: OFF</button>
+<button data-a="copy">Copy all</button>
+<button data-a="keep" id="keepb">Keep code on reopen: OFF</button>
 <button data-a="sz" id="szb">Text size</button>
 <button data-a="set">Settings<small>Indent size, suggestions, auto-closing and more</small></button>
 <button data-a="kbd">Keyboard shortcuts</button>
@@ -153,8 +194,8 @@ u.e3{text-decoration-color:#6bb6ff}
 <button data-a="inst" id="ins" hidden>Install app</button>
 </div>
 <input type="file" id="fin" hidden accept=".html,.htm,.xhtml,.txt,.css,.js,.xml,.svg,text/*">
-<div id="pv" role="dialog" aria-label="Preview"><div class="hd"><span>Preview</span><button id="px">Close</button></div><iframe id="pf" title="Preview of your page" sandbox="allow-scripts allow-forms allow-modals allow-popups allow-downloads allow-pointer-lock"></iframe></div>
-<div id="fl" role="group" aria-label="Floating preview"><div class="hd" id="fh"><span>Floating preview</span><span><button id="fr">Reload</button><button id="fx">Close</button></span></div><iframe id="ff" title="Floating preview of your page" sandbox="allow-scripts allow-forms allow-modals allow-popups allow-downloads allow-pointer-lock"></iframe><div id="fz"></div></div>
+<div id="pv" role="dialog" aria-label="Preview"><div class="hd"><span>Preview</span><button id="px">Close</button></div><iframe id="pf" title="Preview of your page" sandbox="allow-scripts allow-forms allow-modals allow-popups allow-downloads allow-pointer-lock" referrerpolicy="no-referrer"></iframe></div>
+<div id="fl" role="group" aria-label="Floating preview"><div class="hd" id="fh"><span>Floating preview</span><span><button id="fr">Reload</button><button id="fx">Close</button></span></div><iframe id="ff" title="Floating preview of your page" sandbox="allow-scripts allow-forms allow-modals allow-popups allow-downloads allow-pointer-lock" referrerpolicy="no-referrer"></iframe><div id="fz"></div></div>
 <div id="ts" role="status" aria-live="polite"></div>
 <script>
 "use strict";
@@ -1694,7 +1735,7 @@ async function checkHTMLSource(src){
   if(!/\S/.test(src))return items;
   const P=htmlParse(src);
   const idx=lineIndex(src);const L=pos=>lineOf(idx,Math.max(0,Math.min(pos,src.length)));
-  const add=(sev,pos,msg,kind,line)=>items.push({line:line||L(pos),sev,msg,kind:kind||'HTML',tab:'html'});
+  const add=(sev,pos,msg,kind,line)=>items.push({line:line||L(pos),col:line?1:Math.max(1,pos-src.lastIndexOf('\n',Math.max(0,pos)-1)),sev,msg,kind:kind||'HTML',tab:'html'});
   P.errs.forEach(e=>add(e.sev,e.pos,e.msg.replace(/\u0000(\d+)\u0000/g,(m,q)=>L(+q))));
   if(!P.hasDoctype)add('w',0,'Missing <!DOCTYPE html> at the top: without it the browser uses "quirks mode", which can change how the page looks','HTML',1);
   const startTags=P.toks.filter(t=>t.t==='start');
@@ -1778,7 +1819,7 @@ async function checkJSSource(src){
   const m=/<\/script/i.exec(src);
   if(m)items.push({line:lineOf(idx,m.index),sev:'e',msg:'"<\/script" inside JavaScript ends the script early and breaks the page (write <\\/script instead)',kind:'JavaScript',tab:'js'});
   const r=await jsParse(src);
-  if(r)items.push({line:r.line,sev:'e',msg:'Syntax error: '+r.msg+' (the browser stops at the first error, so fix it and check again)',kind:'JavaScript',tab:'js'});
+  if(r)items.push({line:r.line,col:r.col,sev:'e',msg:'Syntax error: '+r.msg+' (the browser stops at the first error, so fix it and check again)',kind:'JavaScript',tab:'js'});
   return items;
 }
 
@@ -1866,7 +1907,7 @@ async function fixDialog(){
   if(!items.length)h+='<span class="ok">No problems found by these checks.</span>';
   else h+='<span class="note">'+sum.join(' · ')+' — tap one to jump to it</span>'+items.map(it=>{
     const where=it.kind===TABN[it.tab]||(it.kind==='HTML'&&it.tab==='html')?it.kind:it.kind+' (in the '+TABN[it.tab]+' tab)';
-    return '<div class="r" tabindex="0" role="button" data-l="'+it.line+'" data-tab="'+it.tab+'"><span class="sv s'+SEVN[it.sev]+'">'+SEVT[it.sev]+'</span> <b>'+E(where)+' · Line '+it.line+'</b> &middot; '+E(it.msg)+'</div>';
+    return '<div class="r" tabindex="0" role="button" data-l="'+it.line+'" data-tab="'+it.tab+'"><span class="sv s'+SEVN[it.sev]+'">'+SEVT[it.sev]+'</span> <b>'+E(where)+' · Line '+it.line+(it.col?', column '+it.col:'')+'</b> &middot; '+E(it.msg)+'</div>';
   }).join('');
   h+=CHECKED_NOTE;
   bd.innerHTML=h;
@@ -1999,15 +2040,24 @@ const A={
  pv:openMainPreview,
  fl:()=>{writeMode(ta.value);FL.classList.add('on');fu()},
  rep:()=>{
-  const rg=()=>{const q=$('#fq').value;if(!q){$('#rm').textContent='Type a word first';return}return new RegExp(q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),$('#mc').checked?'g':'gi')};
-  const next=()=>{const r=rg();if(!r)return false;const v=ta.value;r.lastIndex=ta.selectionEnd;let x=r.exec(v);if(!x){r.lastIndex=0;x=r.exec(v)}
-   if(x){show(x.index,x.index+x[0].length);$('#rm').textContent=''}else $('#rm').textContent='Not found';return false};
-  dlg('Find &amp; replace words','<input type="text" id="fq" placeholder="Find"><input type="text" id="rq" placeholder="Replace with"><label><input type="checkbox" id="mc"> Match case</label><span id="rm" style="color:#3ddc84"></span>',
-  [['Close'],['Replace all',()=>{const r=rg();if(!r)return false;let c=0;const t=ta.value.replace(r,()=>(c++,$('#rq').value));
-    if(!c){$('#rm').textContent='Not found';return false}put(t);$('#rm').textContent='Replaced '+c;return false}],
-  ['Replace',()=>{const r=rg();if(!r)return false;const s=ta.value.slice(ta.selectionStart,ta.selectionEnd);
-    if(s&&new RegExp('^'+r.source+'$',r.flags.slice(1)).test(s)){ta.focus();document.execCommand('insertText',false,$('#rq').value)}return next()}],
-  ['Find next',next,1]])
+  const flags=()=>($('#mc').checked?'gm':'gim');
+  const rg=()=>{const q=$('#fq').value,m=$('#rm');if(!q){m.textContent='Type something to find';return}
+   let src=$('#rx').checked?q:q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');if($('#ww').checked)src='\\b(?:'+src+')\\b';
+   try{const r=new RegExp(src,flags());if(new RegExp('^(?:'+src+')$').test('')){m.textContent='That pattern matches empty text. Make it more specific.';return}return r}catch(e){m.textContent='Invalid pattern: '+String(e.message).replace(/^Invalid regular expression:\s*/,'');return}};
+  const all=r=>{const v=ta.value,a=[];let x;r.lastIndex=0;while((x=r.exec(v))&&a.length<5e4)a.push([x.index,x.index+x[0].length]);return a};
+  const go=d=>{const r=rg();if(!r)return false;const a=all(r);if(!a.length){$('#rm').textContent='Not found';return false}
+   const s=ta.selectionStart,e=ta.selectionEnd;let k=-1;
+   if(d>0){k=a.findIndex(m=>m[0]>=e);if(k<0)k=0}else{for(let i=a.length-1;i>=0;i--)if(a[i][1]<=s){k=i;break}if(k<0)k=a.length-1}
+   show(a[k][0],a[k][1]);$('#rm').textContent=(k+1)+' of '+a.length;return false};
+  const expand=(t,m)=>$('#rx').checked?t.replace(/\$(\d+|&)/g,(x,k)=>k==='&'?m[0]:(m[+k]===undefined?'':m[+k])):t;
+  dlg('Find &amp; replace','<input type="text" id="fq" placeholder="Find" aria-label="Find"><input type="text" id="rq" placeholder="Replace with" aria-label="Replace with"><label><input type="checkbox" id="mc"> Match case</label><label><input type="checkbox" id="ww"> Whole word</label><label><input type="checkbox" id="rx"> Regular expression</label><span id="rm" style="color:#3ddc84" role="status"></span>',
+  [['Close'],
+   ['Replace all',()=>{const r=rg();if(!r)return false;const v=ta.value,c=all(r).length;if(!c){$('#rm').textContent='Not found';return false}
+     put($('#rx').checked?v.replace(r,$('#rq').value):v.replace(r,()=>$('#rq').value));$('#rm').textContent='Replaced '+c;return false}],
+   ['Replace',()=>{const r=rg();if(!r)return false;const y=new RegExp(r.source,r.flags.replace('g','')+'y');y.lastIndex=ta.selectionStart;const m=y.exec(ta.value);
+     if(m&&ta.selectionEnd>ta.selectionStart&&m.index===ta.selectionStart&&m[0].length===ta.selectionEnd-ta.selectionStart){ta.focus();document.execCommand('insertText',false,expand($('#rq').value,m))}return go(1)}],
+   ['Previous',()=>go(-1)],
+   ['Next',()=>go(1),1]])
  },
  go:()=>dlg('Go to line','<input type="number" id="gl" min="1" placeholder="Line number (1-'+lines.length+')">',[['Cancel'],['Go',()=>{jump(+$('#gl').value)},1]]),
  fix:()=>{fixDialog()},
@@ -2411,6 +2461,308 @@ try{
  mode=['html','css','js'].includes(ls('hv.mode'))?ls('hv.mode'):'html';
  renderEditors();ta.value=readMode();setSz();upd();stat();
 openShared();
+/* ===== v2: reliability, preview tools, developer tools ===== */
+(()=>{
+const SS=(k,v)=>{try{return v===undefined?sessionStorage.getItem(k):sessionStorage.setItem(k,v)}catch(e){}};
+const J=(s,d)=>{try{const v=JSON.parse(s);return v==null?d:v}catch(e){return d}};
+const B=document.body,PV=$('#pv'),PF=$('#pf'),HD=PV.querySelector('.hd'),isOn=()=>PV.classList.contains('on'),isSp=()=>B.classList.contains('sp');
+let chg=0;
+/*PURE-START*/
+const CMT=/<\!--[\s\S]*?--\>/g;
+function protect(s,re){const a=[];return[s.replace(re,m=>{a.push(m);return '\u0001'+(a.length-1)+'\u0002'}),t=>t.replace(/\u0001(\d+)\u0002/g,(m,i)=>a[i])]}
+function minCSS(s){const[p,r]=protect(s,/"(?:[^"\\\n]|\\.)*"|'(?:[^'\\\n]|\\.)*'|url\([^)]*\)/g);return r(p.replace(/\/\*[\s\S]*?\*\//g,'').replace(/\s+/g,' ').replace(/\s*([{};,>])\s*/g,'$1').replace(/;}/g,'}').trim())}
+function minHTML(s){const keep=[];const t=s.replace(/<\!--(?!\[if)[\s\S]*?--\>/g,'').replace(/(<(pre|textarea|script|style)\b[^>]*>)([\s\S]*?)(<\/\2\s*>)/gi,(m,a,b,c,d)=>{keep.push(a+(b.toLowerCase()==='style'?minCSS(c):c)+d);return '\u0001'+(keep.length-1)+'\u0002'});return t.replace(/\s+/g,' ').trim().replace(/\u0001(\d+)\u0002/g,(m,i)=>keep[i])}
+function spans(s){
+ const R=[],n=s.length;let i=0,a=0,p='';
+ const flush=e=>{if(e>a)R.push(['k',a,e])};
+ while(i<n){
+  const c=s[i],d=s[i+1];let j=-1,t='';
+  if(c==='/'&&d==='/'){j=s.indexOf('\n',i);if(j<0)j=n;t='c'}
+  else if(c==='/'&&d==='*'){j=s.indexOf('*/',i+2);j=j<0?n:j+2;t='c'}
+  else if(c==='"'||c==="'"){j=i+1;while(j<n&&s[j]!==c&&s[j]!=='\n'){if(s[j]==='\\')j++;j++}j=Math.min(n,j+1);t='s'}
+  else if(c==='`'){const q=['`'];j=i+1;while(j<n&&q.length){const x=s[j],u=q[q.length-1];if(x==='\\'){j+=2;continue}if(u==='`'){if(x==='`')q.pop();else if(x==='$'&&s[j+1]==='{'){q.push('{');j++}}else if(x==='`')q.push('`');else if(x==='{')q.push('{');else if(x==='}')q.pop();j++}j=Math.min(n,j);t='s'}
+  else if(c==='/'&&(p===''||/[(,=:[!&|?{};+\-*%<>~^]/.test(p)||/(?:^|[^\w$.])(?:return|typeof|case|in|of|delete|void|throw|new|else|do)$/.test(s.slice(Math.max(0,i-12),i).trimEnd()))){
+   j=i+1;let k=0;while(j<n&&s[j]!=='\n'&&(s[j]!=='/'||k)){if(s[j]==='\\')j++;else if(s[j]==='[')k=1;else if(s[j]===']')k=0;j++}j=Math.min(n,j+1);while(j<n&&/[a-z]/i.test(s[j]))j++;t='s'}
+  if(t){flush(i);R.push([t,i,j]);a=i=j;if(t==='s')p='a';continue}
+  if(!/\s/.test(c))p=c;
+  i++}
+ flush(n);return R}
+function strip(s){return spans(s).map(([t,a,b])=>t==='k'?s.slice(a,b):s.slice(a,b).replace(/[^\n]/g,' ')).join('')}
+function minJS(s){let out=[],cur='';for(const [t,a,b] of spans(s)){const x=s.slice(a,b);if(t==='s'){out.push(cur,x);cur=''}else cur+=t==='c'?(x.startsWith('//')?'':(x.includes('\n')?'\n':' ')):x}out.push(cur);return out.map((x,i)=>i%2?x:x.replace(/[ \t\r]*\n[ \t\r\n]*/g,'\n').replace(/[ \t\r]+/g,' ')).join('').trim()}
+function undef(src,html){
+ const out=[];
+ if(!/\S/.test(src)||src.length>3e5||/<script[^>]+\bsrc\s*=/i.test(html))return out;
+ const code=strip(src),RES=new Set('if for while switch catch function return typeof new delete void in of instanceof else do try finally throw case default class extends super import export async await yield with let var const static get set this null true false undefined arguments NaN Infinity from as'.split(' '));
+ const info=Object.create(null),re=/[A-Za-z_$][\w$]*/g,NA=/[^\x00-\x7f]/;let m;
+ while((m=re.exec(code))){
+  const X=m[0],a=m.index,e=a+X.length;
+  if(RES.has(X)||/\d/.test(code[a-1]||'')||NA.test(code[a-1]||'')||NA.test(code[e]||''))continue;
+  let b=a-1;while(b>=0&&/\s/.test(code[b]))b--;
+  let f=e;while(f<code.length&&/\s/.test(code[f]))f++;
+  const pc=code[b]||'',nc=code[f]||'',o=info[X]||(info[X]={calls:0,other:0,line:0});
+  if(pc==='.'){if(/\b(?:window|globalThis|self)\s*\.$/.test(code.slice(Math.max(0,b-14),b+1)))o.other++;continue}
+  const pw=(/([A-Za-z_$][\w$]*)$/.exec(code.slice(Math.max(0,b-12),b+1))||[])[1]||'';
+  let call=nc==='('&&!/^(?:function|class|get|set|static|async)$/.test(pw);
+  if(call){let d=0,k=f;for(;k<code.length;k++){const x=code[k];if(x==='(')d++;else if(x===')'&&--d===0)break}let z=k+1;while(z<code.length&&/\s/.test(code[z]))z++;if(code[z]==='{')call=false}
+  if(call){if(!o.calls++)o.line=src.slice(0,a).split('\n').length}else o.other++}
+ for(const X in info){const o=info[X];
+  if(o.calls&&!o.other&&!(X in window)&&!src.includes("'"+X+"'")&&!src.includes('"'+X+'"')&&!new RegExp('(^|[^\\w$.])'+X.replace(/\$/g,'\\$')+'(?![\\w$])').test(html))
+   out.push({line:o.line,sev:'w',msg:'"'+X+'" is called but never defined in your JavaScript. Check the spelling, or define it.',kind:'JavaScript',tab:'js'})}
+ return out}
+/*PURE-END*/
+
+/* ---------- code that runs inside the preview (console, errors, inspector) ---------- */
+function boot(){
+ var P=function(o){o.hv=1;try{parent.postMessage(o,'*')}catch(x){}};
+ var S=function(a){return [].map.call(a,function(x){try{return typeof x==='string'?x:x instanceof Error?(x.stack||String(x)):typeof x==='function'?String(x):typeof x==='undefined'?'undefined':JSON.stringify(x)}catch(e){return String(x)}}).join(' ')};
+ ['log','info','warn','error','debug'].forEach(function(k){var o=console[k];console[k]=function(){P({t:'c',k:k==='debug'||k==='info'?'log':k,m:S(arguments)});if(o)o.apply(console,arguments)}});
+ addEventListener('error',function(e){var t=e.target;if(t&&t!==window&&t.tagName){P({t:'c',k:'warn',m:'Could not load <'+t.tagName.toLowerCase()+'> '+(t.src||t.href||'')});return}P({t:'c',k:'error',m:e.message,l:e.lineno,c:e.colno})},true);
+ addEventListener('unhandledrejection',function(e){P({t:'c',k:'error',m:'Unhandled promise rejection: '+S([e.reason])})});
+ var box=document.createElement('div'),on=0,cur=null;
+ box.setAttribute('data-hv','');
+ box.style.cssText='position:fixed;pointer-events:none;z-index:2147483647;outline:2px solid #54a96d;background:rgba(84,169,109,.25);display:none';
+ function hl(el){var s=box.style;if(!el||!el.getBoundingClientRect||el===box){s.display='none';return}var r=el.getBoundingClientRect();s.display='block';s.left=r.left+'px';s.top=r.top+'px';s.width=r.width+'px';s.height=r.height+'px'}
+ function pick(el){
+  if(!el||el.nodeType!==1)return;cur=el;hl(el);
+  var cs=getComputedStyle(el),css={},tag=el.tagName.toLowerCase(),q=el,path=[],rules=[];
+  'display position width height margin padding border color background-color font-size font-family line-height z-index overflow opacity flex-direction justify-content align-items gap grid-template-columns'.split(' ').forEach(function(p){css[p]=cs.getPropertyValue(p)});
+  var same=[].filter.call(document.getElementsByTagName(tag),function(x){return !x.hasAttribute('data-hv')});
+  while(q&&q.nodeType===1&&path.length<8){path.unshift(q.tagName.toLowerCase()+(q.id?'#'+q.id:'')+(q.classList.length?'.'+q.classList[0]:''));q=q.parentElement}
+  try{[].forEach.call(document.styleSheets,function(sh){var rs;try{rs=sh.cssRules}catch(e){return}[].forEach.call(rs||[],function(r){if(r.selectorText&&rules.length<12){try{if(el.matches(r.selectorText))rules.push(r.selectorText+' { '+r.style.cssText.slice(0,200)+' }')}catch(e){}}})})}catch(e){}
+  P({t:'s',tag:tag,n:same.indexOf(el),path:path.join(' > '),html:el.outerHTML.slice(0,300),css:css,rules:rules})
+ }
+ addEventListener('click',function(e){if(!on)return;e.preventDefault();e.stopPropagation();pick(e.target)},true);
+ addEventListener('mouseover',function(e){if(on)hl(e.target)},true);
+ addEventListener('message',function(e){var d=e.data;if(!d||d.hv!==1)return;
+  if(d.t==='i')on=d.on?1:0;
+  else if(d.t==='p'){if(cur&&cur.parentElement&&cur.parentElement!==document.documentElement)pick(cur.parentElement)}
+  else if(d.t==='e'){try{var r=(0,eval)(d.c);P({t:'c',k:'log',m:'\u2190 '+S([r])})}catch(x){P({t:'c',k:'error',m:String(x)})}}});
+ document.addEventListener('DOMContentLoaded',function(){document.documentElement.appendChild(box)});
+ P({t:'r'})
+}
+const BOOT='<script data-hv>('+boot.toString()+')()<\/script>',NL=BOOT.split('\n').length-1;
+
+/* ---------- preview toolbar, zoom, sizes, split view, full screen ---------- */
+const TB=document.createElement('div');TB.className='tb';TB.setAttribute('role','toolbar');TB.setAttribute('aria-label','Preview controls');
+TB.innerHTML='<select id="xz" aria-label="Preview size"><option value="f">Fit screen</option><option value="375x667">Phone 375×667</option><option value="768x1024">Tablet 768×1024</option><option value="1280x800">Desktop 1280×800</option><option value="c">Custom size</option></select><input id="xw" type="number" min="100" max="4000" inputmode="numeric" aria-label="Width in pixels"><span aria-hidden="true">×</span><input id="xh" type="number" min="100" max="4000" inputmode="numeric" aria-label="Height in pixels"><button type="button" id="xr" title="Swap width and height">Rotate</button><button type="button" id="xm" aria-label="Zoom out">−</button><span id="xzv" aria-live="polite"></span><button type="button" id="xp" aria-label="Zoom in">+</button><button type="button" id="xa" title="Fit the page to the available space">Fit</button><label><input type="checkbox" id="xau"> Auto-refresh</label><button type="button" id="xsp" aria-pressed="false">Split view</button><button type="button" id="xfs">Full screen</button><button type="button" id="xrf">Refresh</button><button type="button" id="xdt" aria-pressed="false">Dev tools</button>';
+HD.after(TB);
+const WR=document.createElement('div'),SZ=document.createElement('div');WR.id='xwrap';SZ.id='xsz';PF.before(WR);SZ.append(PF);WR.append(SZ);
+const PD=document.createElement('div');PD.id='xpd';
+PD.innerHTML='<div class="tb"><button type="button" data-t="c" aria-pressed="true">Console <b id="xcn"></b></button><button type="button" data-t="i" aria-pressed="false">Inspector</button><select id="xcf" aria-label="Show messages"><option value="">All messages</option><option value="error">Errors only</option><option value="warn">Warnings only</option></select><button type="button" id="xcc">Clear</button><button type="button" id="xpk" aria-pressed="false">Pick element</button></div><div id="xcl" role="log" tabindex="0" aria-label="Console output"></div><input id="xci" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Run JavaScript in the preview, then press Enter" aria-label="Console input"><div id="xin" hidden><div id="xia">Tap “Pick element”, then tap something in the preview.</div><pre id="xih"></pre><div id="xir"></div><div id="xic"></div><div class="tb"><button type="button" id="xij">Show in code</button><button type="button" id="xiu">Select parent</button></div></div>';
+PV.append(PD);
+const DV=document.createElement('div');DV.id='xdv';DV.tabIndex=0;DV.setAttribute('role','separator');DV.setAttribute('aria-label','Resize editor and preview. Use the arrow keys.');B.append(DV);
+
+const PS=Object.assign({z:'f',w:375,h:667,k:1,au:1,sp:0,r:50},J(ls('hv.pvp'),{}));
+const cl=(v,lo,hi,d)=>{v=Math.round(+v);return isNaN(v)?d:Math.max(lo,Math.min(hi,v))};
+PS.w=cl(PS.w,100,4000,375);PS.h=cl(PS.h,100,4000,667);PS.r=cl(PS.r,20,75,50);PS.k=Math.max(.25,Math.min(3,+PS.k||1));
+if(![...$('#xz').options].some(o=>o.value===PS.z))PS.z='f';
+const keepPS=()=>ls('hv.pvp',JSON.stringify(PS));
+const fitK=()=>{PS.k=Math.max(.1,Math.min(1,+(WR.clientWidth/PS.w).toFixed(2),+(WR.clientHeight/PS.h).toFixed(2)))};
+function pvSize(){
+ const f=PS.z==='f',W=f?Math.max(100,WR.clientWidth/PS.k):PS.w,H=f?Math.max(100,WR.clientHeight/PS.k):PS.h;
+ PF.style.width=W+'px';PF.style.height=H+'px';PF.style.transform='scale('+PS.k+')';
+ SZ.style.width=W*PS.k+'px';SZ.style.height=H*PS.k+'px';
+ $('#xzv').textContent=Math.round(PS.k*100)+'%';$('#xz').value=PS.z;$('#xw').value=PS.w;$('#xh').value=PS.h;
+ $('#xw').disabled=$('#xh').disabled=PS.z!=='c';keepPS()
+}
+function layout(){
+ B.classList.toggle('sp',!!PS.sp);B.classList.toggle('sr',innerWidth>innerHeight*1.15);
+ DE.style.setProperty('--sp',PS.r+'%');$('#xsp').setAttribute('aria-pressed',PS.sp?'true':'false');$('#xsp').textContent=PS.sp?'Overlay view':'Split view';
+ dirty=1;draw();pvSize()
+}
+$('#xz').onchange=e=>{const v=e.target.value;PS.z=v;if(v!=='f'&&v!=='c'){const[w,h]=v.split('x').map(Number);PS.w=w;PS.h=h}if(v!=='f')fitK();pvSize()};
+$('#xw').onchange=$('#xh').onchange=()=>{PS.w=cl($('#xw').value,100,4000,PS.w);PS.h=cl($('#xh').value,100,4000,PS.h);fitK();pvSize()};
+$('#xr').onclick=()=>{[PS.w,PS.h]=[PS.h,PS.w];PS.z='c';fitK();pvSize()};
+$('#xm').onclick=()=>{PS.k=Math.max(.25,+(PS.k-.1).toFixed(2));pvSize()};
+$('#xp').onclick=()=>{PS.k=Math.min(3,+(PS.k+.1).toFixed(2));pvSize()};
+$('#xa').onclick=()=>{if(PS.z==='f')PS.k=1;else fitK();pvSize()};
+$('#xau').checked=!!PS.au;$('#xau').onchange=e=>{PS.au=e.target.checked?1:0;keepPS()};
+$('#xsp').onclick=()=>{PS.sp=PS.sp?0:1;keepPS();layout()};
+$('#xfs').onclick=()=>{if(document.fullscreenElement)return document.exitFullscreen();const r=PV.requestFullscreen&&PV.requestFullscreen();if(!r)toast('Full screen is not available here');else r.catch(()=>toast('Full screen is not available here'))};
+$('#xrf').onclick=()=>{writeMode(ta.value);pvGo()};
+$('#xdt').onclick=()=>{const on=!PD.classList.contains('on');PD.classList.toggle('on',on);$('#xdt').setAttribute('aria-pressed',on?'true':'false');pvSize()};
+DV.onpointerdown=e=>{DV.setPointerCapture(e.pointerId);DV.dataset.d=1};
+DV.onpointermove=e=>{if(!DV.dataset.d)return;const r=B.classList.contains('sr')?(innerWidth-e.clientX)/innerWidth:(innerHeight-e.clientY)/innerHeight;PS.r=cl(r*100,20,75,50);DE.style.setProperty('--sp',PS.r+'%')};
+DV.onpointerup=DV.onpointercancel=()=>{delete DV.dataset.d;keepPS();dirty=1;draw();pvSize()};
+DV.onkeydown=e=>{const k=e.key;if(k==='ArrowLeft'||k==='ArrowUp')PS.r=cl(PS.r+5,20,75,50);else if(k==='ArrowRight'||k==='ArrowDown')PS.r=cl(PS.r-5,20,75,50);else return;e.preventDefault();DE.style.setProperty('--sp',PS.r+'%');keepPS()};
+new ResizeObserver(()=>{if(isOn())pvSize()}).observe(WR);
+addEventListener('resize',()=>{B.classList.toggle('sr',innerWidth>innerHeight*1.15)});
+new MutationObserver(()=>{const o=isOn();B.classList.toggle('pvon',o);if(o){pvSize();dirty=1;draw()}else{try{if(document.fullscreenElement)document.exitFullscreen()}catch(e){}insp(false)}}).observe(PV,{attributes:true,attributeFilter:['class']});
+
+/* ---------- opening, refreshing and closing the preview ---------- */
+let jsOff=-1,jsLen=0;
+function pvSrc(){
+ const e=editorData();let s=combinedSource(e);jsOff=-1;
+ if(e.js){const i=s.lastIndexOf('<script>\n'+e.js);if(i>=0){jsOff=s.slice(0,i).split('\n').length+NL;jsLen=e.js.split('\n').length}}
+ const m=s.match(/^\s*<!doctype[^>]*>/i);return m?s.slice(0,m[0].length)+BOOT+s.slice(m[0].length):BOOT+s
+}
+function pvGo(){conClear();PF.srcdoc=pvSrc()}
+const _close=closeMainPreview;
+closeMainPreview=function(){if(isSp())return;_close()};
+A.pv=openMainPreview=function(){
+ writeMode(ta.value);pvGo();
+ if(isOn())return;
+ PV.classList.add('on');history.pushState({htmlViewerPreview:true},'','#preview');previewHistory=true;if(!isSp())$('#px').focus()
+};
+let rt;
+ta.addEventListener('input',()=>{chg=1;if(PS.au&&isOn()&&isSp()){clearTimeout(rt);rt=setTimeout(()=>{writeMode(ta.value);pvGo()},700)}});
+$('#es').addEventListener('change',()=>{if(PS.au&&isOn()&&isSp())pvGo()});
+document.addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&e.key==='Enter'&&isOn()&&isSp()&&!document.querySelector('.ov')){e.preventDefault();writeMode(ta.value);pvGo()}});
+function goTo(m,line,a,b){if(!isSp())_close();if(mode!==m)switchMode(m);ta.focus({preventScroll:true});if(a!=null)show(a,b);else jump(line)}
+
+/* ---------- console ---------- */
+const LOG=$('#xcl');let nE=0,nW=0,sel=null;
+function badge(){$('#xcn').textContent=(nE||nW)?'('+nE+' errors, '+nW+' warnings)':'';$('#xdt').textContent='Dev tools'+(nE?' ('+nE+')':'');$('#xdt').style.color=nE?'#ff8a80':''}
+function conClear(){LOG.textContent='';nE=nW=0;badge()}
+function filt(){const f=$('#xcf').value;LOG.querySelectorAll('.cr').forEach(r=>{r.hidden=!!f&&r.dataset.k!==f})}
+function conAdd(d){
+ const r=document.createElement('div'),k=d.k==='error'?'e':d.k==='warn'?'w':'';r.className='cr '+k;r.dataset.k=d.k;
+ let line=0;if(d.l&&jsOff>0){const n=d.l-jsOff;if(n>=1&&n<=jsLen)line=n}
+ r.textContent=(d.k==='error'?'✖ ':d.k==='warn'?'⚠ ':'')+d.m+(d.l?(line?'  — JavaScript tab, line '+line+(d.c?', column '+d.c:''):'  — page line '+d.l+(d.c?', column '+d.c:'')):'');
+ if(line){r.tabIndex=0;r.title='Go to this line';r.dataset.l=line;r.classList.add('lk')}
+ if(d.k==='error')nE++;else if(d.k==='warn')nW++;
+ LOG.append(r);while(LOG.children.length>500)LOG.firstChild.remove();
+ filt();badge();LOG.scrollTop=LOG.scrollHeight
+}
+$('#xcf').onchange=filt;$('#xcc').onclick=conClear;
+LOG.onclick=e=>{const r=e.target.closest('.lk');if(r)goTo('js',+r.dataset.l)};
+LOG.onkeydown=e=>{if(e.key==='Enter'){const r=e.target.closest('.lk');if(r)goTo('js',+r.dataset.l)}};
+$('#xci').onkeydown=e=>{if(e.key!=='Enter')return;const v=e.target.value.trim();if(!v)return;conAdd({k:'log',m:'→ '+v});e.target.value='';if(PF.contentWindow)PF.contentWindow.postMessage({hv:1,t:'e',c:v},'*')};
+
+/* ---------- element inspector ---------- */
+function tab(t){PD.classList.add('on');$('#xdt').setAttribute('aria-pressed','true');$('#xcl').hidden=$('#xci').hidden=t!=='c';$('#xin').hidden=t!=='i';PD.querySelectorAll('[data-t]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.t===t?'true':'false'))}
+PD.querySelector('.tb').addEventListener('click',e=>{const b=e.target.closest('[data-t]');if(b){tab(b.dataset.t);pvSize()}});
+function insp(on){$('#xpk').setAttribute('aria-pressed',on?'true':'false');if(PF.contentWindow)PF.contentWindow.postMessage({hv:1,t:'i',on:on},'*')}
+$('#xpk').onclick=()=>{const on=$('#xpk').getAttribute('aria-pressed')!=='true';if(on){tab('i');pvSize()}insp(on)};
+$('#xiu').onclick=()=>{if(PF.contentWindow)PF.contentWindow.postMessage({hv:1,t:'p'},'*')};
+$('#xij').onclick=()=>{if(sel)locate(sel.tag,sel.n)};
+function inspShow(d){
+ sel={tag:String(d.tag||'').replace(/[^\w-]/g,''),n:d.n|0};
+ $('#xia').textContent=String(d.path||'');$('#xih').textContent=String(d.html||'');
+ const R=$('#xir'),C=$('#xic');R.textContent='';C.textContent='';
+ const add=(el,t,bold)=>{const x=document.createElement(bold?'b':'div');x.textContent=t;el.append(x)};
+ add(R,'CSS rules that apply (from your CSS and style tags)',1);
+ if(Array.isArray(d.rules)&&d.rules.length)d.rules.forEach(r=>add(R,String(r)));else add(R,'None found');
+ add(C,'Computed values',1);const css=Object(d.css);Object.keys(css).forEach(k=>add(C,k+': '+css[k]));
+ tab('i');pvSize();insp(false)
+}
+function locate(tag,n){
+ const s=(editorData().html||'').replace(CMT,m=>m.replace(/[^\n]/g,' ')).replace(/(<(script|style|textarea)\b[^>]*>)([\s\S]*?)(<\/\2\s*>)/gi,(m,a,b,c,d)=>a+c.replace(/[^\n]/g,' ')+d);
+ const re=new RegExp('<'+tag+'(?=[\\s/>])','gi');let m,i=0,p=-1;
+ while((m=re.exec(s))){if(i++===n){p=m.index;break}}
+ if(p<0&&/^(html|head|body)$/.test(tag)){m=new RegExp('<'+tag+'(?=[\\s/>])','i').exec(s);if(m)p=m.index}
+ if(p<0){toast('That element is not in the HTML tab (JavaScript may have created it)');return}
+ goTo('html',null,p,p+tag.length+1)
+}
+addEventListener('message',e=>{
+ if(e.source!==PF.contentWindow)return;const d=e.data;if(!d||d.hv!==1)return;
+ if(d.t==='r')conClear();else if(d.t==='c')conAdd({k:String(d.k),m:String(d.m),l:d.l|0,c:d.c|0});else if(d.t==='s')inspShow(d)
+});
+
+/* ---------- editor management, naming, clear ---------- */
+const askName=(title,def,cb)=>dlg(title,'<input type="text" id="enm" maxlength="60" aria-label="Name" value="'+E(def).replace(/"/g,'&quot;')+'">',[['Cancel'],['OK',()=>{cb($('#enm').value.trim()||def)},1]]);
+$('#na').onclick=()=>askName('Name this editor','Editor '+(workspaces.length+1),n=>addEditor(n));
+A.ren=()=>askName('Rename this editor',editorData().name,n=>{editorData().name=n;renderEditors();persist()});
+A.dup=()=>{writeMode(ta.value);const s=editorData(),e=makeEditor(s.name+' copy',s.html,s.css,s.js);workspaces.push(e);activeId=e.id;loadActive();persist();toast('Editor duplicated')};
+A.cls=()=>{if(workspaces.length<2){toast('This is your only editor. Use Clear all to start over.');return}
+ const s=editorData();dlg('Close “'+E(s.name)+'”?','<p>The code in this editor will be removed. This cannot be undone.</p>',[['Cancel',null,1],['Close editor',()=>{const i=workspaces.indexOf(s);workspaces.splice(i,1);activeId=workspaces[Math.max(0,i-1)].id;loadActive();persist();toast('Editor closed')}]])};
+A.clr=()=>dlg('Clear everything?','<p>This removes all editors and all code. '+(chg?'You have changes that were not exported. ':'')+'It cannot be undone. Export first if you want a copy.</p>',[['Cancel',null,1],['Clear all',()=>{workspaces=[makeEditor('Editor 1')];activeId=workspaces[0].id;mode='html';loadActive();persist();SS('hv.rec','');chg=0;toast('All editors cleared')}]]);
+
+/* ---------- autosave recovery, leave-page warning ---------- */
+const _save=save;
+save=function(){_save();if(workspaces.some(w=>w.html||w.css||w.js))SS('hv.rec',JSON.stringify({w:workspaces,a:activeId,m:mode}))};
+addEventListener('beforeunload',e=>{if(chg&&!keepCode&&workspaces.some(w=>w.html||w.css||w.js)){e.preventDefault();e.returnValue=''}});
+document.addEventListener('click',e=>{const b=e.target.closest('.ov .pr');if(b&&/^Export/.test((b.closest('.bx').querySelector('b')||{}).textContent||''))chg=0},true);
+try{
+ const r=J(SS('hv.rec'),null),blank=workspaces.length===1&&!workspaces[0].html&&!workspaces[0].css&&!workspaces[0].js;
+ if(r&&Array.isArray(r.w)&&blank&&(!location.hash||location.hash==='#preview')){
+  const w=r.w.filter(x=>x&&typeof x.id==='string'&&typeof x.name==='string');
+  if(w.length&&w.some(x=>x.html||x.css||x.js)){workspaces=w;activeId=w.some(x=>x.id===r.a)?r.a:w[0].id;mode=['html','css','js'].includes(r.m)?r.m:'html';renderEditors();loadActive();toast('Recovered your unsaved work')}
+ }
+}catch(e){}
+
+/* ---------- safer import, recent files ---------- */
+const rcGet=()=>J(keepCode?ls('hv.recent'):SS('hv.recent'),[]).filter(x=>x&&typeof x.n==='string'&&typeof x.c==='string'&&['html','css','js'].includes(x.m));
+function rcAdd(n,m,c){if(c.length>3e5)return;const l=rcGet().filter(x=>x.n!==n);l.unshift({n,m,c});const j=JSON.stringify(l.slice(0,8));try{keepCode?ls('hv.recent',j):SS('hv.recent',j)}catch(e){}}
+function openAs(name,m,text){const e=makeEditor(name);e[m]=text;writeMode(ta.value);workspaces.push(e);activeId=e.id;mode=m;loadActive();persist()}
+fin.onchange=async()=>{const f=fin.files[0];if(!f)return;try{
+ if(f.size>5e6&&!confirm('This file is '+(f.size/1e6).toFixed(1)+' MB. Large files can make the editor slow. Open it anyway?'))return;
+ const text=await f.text(),h=text.slice(0,8192);
+ if(h.includes('\0')||(h.match(/\uFFFD/g)||[]).length>8){toast('That looks like a binary file, not text');return}
+ const ext=(f.name.split('.').pop()||'html').toLowerCase(),m=ext==='css'?'css':ext==='js'?'js':'html';
+ openAs(f.name,m,text);rcAdd(f.name,m,text);toast('Imported into new editor: '+f.name)
+}catch(x){toast('Could not read that file')}finally{fin.value=''}};
+A.rcn=()=>{const l=rcGet();
+ if(!l.length){dlg('Recent files','<p>No files yet. Files you import show up here'+(keepCode?'.':' for this browser session. Turn on “Keep code on reopen” to remember them longer.')+'</p>',[['Close',null,1]]);return}
+ const o=dlg('Recent files','<div id="rcl"></div>',[['Close',null,1]]),box=o.querySelector('#rcl');
+ l.forEach(x=>{const b=document.createElement('button');b.type='button';b.className='rb';b.textContent=x.n+'  ('+(x.c.length/1024).toFixed(1)+' KB)';b.onclick=()=>{o.remove();openAs(x.n,x.m,x.c);toast('Opened '+x.n)};box.append(b)})};
+
+/* ---------- code statistics and minify ---------- */
+A.sta=()=>{const e=editorData(),rows=['html','css','js'].map(m=>{const s=e[m]||'';return '<tr><th scope="row">'+m.toUpperCase()+'</th><td>'+(s?s.split('\n').length:0)+'</td><td>'+s.length+'</td><td>'+(s.match(/\S+/g)||[]).length+'</td><td>'+new Blob([s]).size+'</td></tr>'}).join('');
+ const h=e.html||'',tags=(h.match(/<[a-zA-Z][^>]*>/g)||[]).length,ids=(h.match(/\sid\s*=/gi)||[]).length,imgs=(h.match(/<img\b/gi)||[]).length,fn=((e.js||'').match(/\bfunction\b|=>/g)||[]).length,rules=((e.css||'').match(/\{/g)||[]).length;
+ dlg('Code statistics (this editor)','<table class="kt st"><thead><tr><th></th><th>Lines</th><th>Chars</th><th>Words</th><th>Bytes</th></tr></thead><tbody>'+rows+'</tbody></table><span class="note">HTML tags: '+tags+' · ids: '+ids+' · images: '+imgs+' · CSS blocks: '+rules+' · JS functions: '+fn+'</span>',[['Close',null,1]])};
+A.min=async()=>{const s=ta.value;if(!s.trim()){toast('Nothing to minify');return}
+ let o;try{o=mode==='css'?minCSS(s):mode==='js'?minJS(s):minHTML(s)}catch(e){toast('Could not minify this code');return}
+ if(mode==='js'&&await HV.jsParse(o)){toast('Minify stopped: the code has a syntax error, so nothing changed');return}
+ if(o.length>=s.length){toast('Already compact');return}
+ ta.focus();ta.select();if(!document.execCommand('insertText',false,o)){ta.value=o;ta.dispatchEvent(new Event('input'))}
+ toast('Minified: '+(s.length/1024).toFixed(1)+' KB → '+(o.length/1024).toFixed(1)+' KB (Undo restores it)')};
+A.spl=()=>{PS.sp=PS.sp?0:1;keepPS();layout();if(PS.sp&&!isOn())A.pv()};
+
+/* ---------- checks: undefined functions, large files ---------- */
+const TO={html:0,css:1,js:2},SO=(a,b)=>TO[a.tab]-TO[b.tab]||a.line-b.line||SEVR[a.sev]-SEVR[b.sev];
+const _ct=HV.checkTab,_ca=HV.checkAll;
+HV.checkTab=async(t,x)=>{const r=await _ct(t,x);if(t!=='js'||r.some(i=>i.sev==='e'))return r;try{return r.concat(undef(x,editorData().html||'')).sort(SO)}catch(e){return r}};
+HV.checkAll=async e=>{const r=await _ca(e);if(r.some(i=>i.tab==='js'&&i.sev==='e'))return r;try{return r.concat(undef(e.js||'',e.html||'')).sort(SO)}catch(x){return r}};
+const _ls=lintSoon;let big=0;
+lintSoon=function(){if(ta.value.length>3e5){clearTimeout(lt);if(!big){big=1;toast('Large file: live checking is paused. Use Find mistakes when you need it.')}setPb(null);return}big=0;_ls()};
+
+/* ---------- bracket and tag matching ---------- */
+const BM=[0,1].map(()=>{const b=document.createElement('div');b.className='bm';ed.append(b);return b});let bmv=[null,null],bt;
+function bmDraw(){BM.forEach((b,i)=>{const v=bmv[i];if(!v){b.style.display='none';return}b.style.cssText='display:block;width:'+v[2]*CW+'px;height:'+LH+'px;transform:translate('+((v[1]+dg)*CW+22-ta.scrollLeft)+'px,'+(v[0]*LH-ta.scrollTop)+'px)'})}
+function bmFind(){
+ bmv=[null,null];const v=ta.value;
+ if(ta.selectionStart===ta.selectionEnd&&v.length<3e5){
+  const p=ta.selectionStart,PR={'(':')','[':']','{':'}'},CLS={')':'(',']':'[','}':'{'};
+  const i=(PR[v[p-1]]||CLS[v[p-1]])?p-1:(PR[v[p]]||CLS[v[p]])?p:-1;
+  if(i>=0){
+   const c=v[i],open=!!PR[c],t=open?PR[c]:CLS[c],st=open?1:-1;let d=0,j=i,hit=-1;
+   for(let n=0;j>=0&&j<v.length&&n<50000;j+=st,n++){const x=v[j];if(x===c)d++;else if(x===t&&--d===0){hit=j;break}}
+   if(hit>=0)bmv=[at(i).concat(1),at(hit).concat(1)]
+  }else if(mode==='html'){
+   const s=v.replace(CMT,x=>x.replace(/[^\n]/g,' ')).replace(/(<(script|style)\b[^>]*>)([\s\S]*?)(<\/\2\s*>)/gi,(x,a,b,c,d)=>a+c.replace(/[^\n]/g,' ')+d);
+   const rx=/<(\/?)([A-Za-z][\w:-]*)\b[^>]*?(\/?)>/g,T=[];let m,cur=-1;
+   while((m=rx.exec(s))){T.push({n:m[2].toLowerCase(),c:!!m[1],vd:VOID.has(m[2].toLowerCase())||!!m[3],L:m[2].length,o:m.index+1+(m[1]?1:0)});if(m.index<=p&&p<=m.index+m[0].length)cur=T.length-1}
+   if(cur>=0&&!T[cur].vd){const t=T[cur],dir=t.c?-1:1;let d=0;for(let k=cur;k>=0&&k<T.length;k+=dir){const u=T[k];if(u.n!==t.n||u.vd)continue;d+=u.c===t.c?1:-1;if(d===0){if(k!==cur)bmv=[at(t.o).concat(t.L),at(u.o).concat(u.L)];break}}}
+  }
+ }
+ bmDraw()}
+const bmSoon=()=>{clearTimeout(bt);bt=setTimeout(bmFind,70)};
+['keyup','pointerup','input','focus'].forEach(ev=>ta.addEventListener(ev,bmSoon));
+ta.addEventListener('scroll',()=>requestAnimationFrame(bmDraw),{passive:true});
+ta.addEventListener('blur',()=>{bmv=[null,null];bmDraw()});
+$('#lm').addEventListener('click',bmSoon);$('#es').addEventListener('change',bmSoon);
+
+/* ---------- floating preview stays on screen ---------- */
+function flClamp(){const w=Math.min(FL.offsetWidth,innerWidth),h=Math.min(FL.offsetHeight,innerHeight);const l=Math.max(0,Math.min(FL.offsetLeft,innerWidth-w)),t=Math.max(0,Math.min(FL.offsetTop,innerHeight-h));FL.style.left=l+'px';FL.style.top=t+'px';FL.style.maxWidth=innerWidth+'px';FL.style.maxHeight=innerHeight+'px';ls('hv.fl',JSON.stringify([l,t,FL.offsetWidth,FL.offsetHeight]))}
+new MutationObserver(()=>{if(!FL.classList.contains('on'))return;const s=J(ls('hv.fl'),null);if(Array.isArray(s)&&s.length===4&&s.every(Number.isFinite)){FL.style.left=s[0]+'px';FL.style.top=s[1]+'px';FL.style.width=Math.max(150,s[2])+'px';FL.style.height=Math.max(110,s[3])+'px'}flClamp()}).observe(FL,{attributes:true,attributeFilter:['class']});
+['#fh','#fz'].forEach(q=>$(q).addEventListener('pointerup',()=>setTimeout(flClamp,0)));
+addEventListener('resize',()=>{if(FL.classList.contains('on'))flClamp()});
+
+/* ---------- shortcuts, install, offline ---------- */
+document.addEventListener('keydown',e=>{if(e.defaultPrevented||document.querySelector('.ov'))return;if(e.altKey&&e.shiftKey&&!e.ctrlKey&&!e.metaKey){const n={KeyM:'min',KeyI:'sta',KeyR:'rcn',KeyP:'spl'}[e.code];if(n){e.preventDefault();runAct(n)}}});
+const _k=A.kbd;
+A.kbd=()=>{_k();const t=document.querySelector('.ov .kt tbody');if(t)[['Split view preview','Alt+Shift+P'],['Minify code','Alt+Shift+M'],['Code statistics','Alt+Shift+I'],['Recent files','Alt+Shift+R']].forEach(r=>{const tr=document.createElement('tr');tr.innerHTML='<th scope="row">'+r[0]+'</th><td><kbd>'+E(KEY(r[1]))+'</kbd></td>';t.append(tr)})};
+const _in=A.inst;
+A.inst=()=>ip?_in():dlg('Install on iPhone or iPad','<p>Tap the Share button in Safari, then choose “Add to Home Screen”. After that the editor opens like an app and works offline.</p>',[['OK',null,1]]);
+if(/iphone|ipad|ipod/i.test(navigator.userAgent)&&!navigator.standalone)$('#ins').hidden=false;
+if(matchMedia('(display-mode: standalone)').matches)$('#ins').hidden=true;
+addEventListener('offline',()=>toast('You are offline. Everything still works.'));
+addEventListener('online',()=>toast('Back online'));
+if('serviceWorker' in navigator)navigator.serviceWorker.ready.then(r=>r.addEventListener('updatefound',()=>{const w=r.installing;if(w)w.addEventListener('statechange',()=>{if(w.state==='installed'&&navigator.serviceWorker.controller)toast('Update ready. Reload to use it.')})})).catch(()=>{});
+layout();badge();
+})();
+
 </script>
 </body>
 </html>
